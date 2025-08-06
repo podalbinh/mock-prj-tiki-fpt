@@ -1,10 +1,11 @@
 import { lazy, Suspense, type JSX } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
+import UserLayout from "@/layouts/user/UserLayout";
 
 // Lazy load pages
-const LoginPage = lazy(() => import("@/pages/Login"));
-// const HomePage = lazy(() => import("@/pages/App"));
+// const LoginPage = lazy(() => import("@/pages/Login"));
+const HomePage = lazy(() => import("@/pages/HomePage"));
 
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
@@ -15,13 +16,16 @@ const withSuspense = (
 );
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: withSuspense(HomePage),
-  // },
   {
-    path: "/login",
-    element: withSuspense(LoginPage),
+    path: "/",
+    element: <UserLayout />,
+    children: [
+      {
+        path: "/",
+        index: true,
+        element: withSuspense(HomePage),
+      },
+    ],
   },
 ]);
 
