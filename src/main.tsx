@@ -4,11 +4,15 @@ import "./index.css";
 import { GlobalLoadingWrapper } from "@/components/wrapper/GlobalLoadingWrapper";
 import { RouterProvider } from "react-router-dom";
 import router from "./config/routes.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store/index.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GlobalLoadingWrapper>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </GlobalLoadingWrapper>
   </StrictMode>
 );

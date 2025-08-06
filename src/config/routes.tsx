@@ -27,6 +27,20 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+    element: withSuspense(lazy(() => import("@/layouts/admin/AdminLayout"))),
+    children: [
+      {
+        path: "/admin/dashboard",
+        element: <div>FAKE DASHBOARD</div>,
+      },
+    ],
+  },
+  {
+    path: "/admin/login",
+    element: withSuspense(lazy(() => import("@/pages/LoginAdmin"))),
+  },
 ]);
 
 export default router;
