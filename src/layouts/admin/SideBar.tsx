@@ -6,8 +6,6 @@ import {
   AppstoreOutlined,
   UserOutlined,
   ShoppingCartOutlined,
-  BarChartOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -22,7 +20,7 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
 
   const menuItems = [
     {
-      key: "/admin",
+      key: "/admin/dashboard",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },
@@ -85,16 +83,6 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
           label: "Đơn hàng chờ xử lý",
         },
       ],
-    },
-    {
-      key: "/admin/reports",
-      icon: <BarChartOutlined />,
-      label: "Báo cáo thống kê",
-    },
-    {
-      key: "/admin/settings",
-      icon: <SettingOutlined />,
-      label: "Cài đặt hệ thống",
     },
   ];
 

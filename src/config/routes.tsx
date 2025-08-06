@@ -33,7 +33,44 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/dashboard",
+        index: true,
         element: <div>FAKE DASHBOARD</div>,
+      },
+      {
+        path: "/admin/dashboard",
+        element: <div>Dashboard</div>,
+      },
+      {
+        path: "/admin/products",
+        element: <div>Danh sách sản phẩm</div>,
+      },
+      {
+        path: "/admin/products/create",
+        element: <div>Thêm sản phẩm</div>,
+      },
+      {
+        path: "/admin/categories",
+        element: <div>Danh sách danh mục</div>,
+      },
+      {
+        path: "/admin/categories/create",
+        element: <div>Thêm danh mục</div>,
+      },
+      {
+        path: "/admin/users",
+        element: <div>Danh sách người dùng</div>,
+      },
+      {
+        path: "/admin/users/create",
+        element: <div>Thêm người dùng</div>,
+      },
+      {
+        path: "/admin/orders",
+        element: <div>Danh sách đơn hàng</div>,
+      },
+      {
+        path: "/admin/orders/pending",
+        element: <div>Đơn hàng chờ xử lý</div>,
       },
     ],
   },
