@@ -1,12 +1,7 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
+import type { User } from "@/constant/interfaces";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export interface User {
-  id: number;
-  email: string;
-  role: "admin" | "user";
-}
 
 interface AuthState {
   user: User | null;
