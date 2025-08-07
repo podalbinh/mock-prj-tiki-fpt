@@ -2,6 +2,7 @@ import { lazy, Suspense, type JSX } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
+import { userLoader } from "./loaders/userLoader";
 
 // Lazy load pages
 // const LoginPage = lazy(() => import("@/pages/Login"));
@@ -58,7 +59,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/users",
-        element: <div>Danh sách người dùng</div>,
+        element: withSuspense(lazy(() => import("@/pages/UserManagement"))),
+        loader: userLoader,
       },
       {
         path: "/admin/users/create",

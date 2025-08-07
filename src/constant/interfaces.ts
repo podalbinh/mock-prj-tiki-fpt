@@ -21,7 +21,7 @@ export interface QuantitySold {
 }
 
 export interface Book {
-  id: string;
+  id: number;
   name: string;
   authors: Author[];
   description: string;

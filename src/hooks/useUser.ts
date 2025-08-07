@@ -8,7 +8,7 @@ export const useUser = () => {
     return response;
   };
 
-  const getUserById = async (id: string) => {
+  const getUserById = async (id: number) => {
     const response = await Request.get<User>(API_ENDPOINTS.USER_BY_ID(id));
     return response;
   };
@@ -18,7 +18,7 @@ export const useUser = () => {
     return response;
   };
 
-  const updateUser = async (id: string, userData: Partial<User>) => {
+  const updateUser = async (id: number, userData: Partial<User>) => {
     const response = await Request.put<User>(
       API_ENDPOINTS.USER_BY_ID(id),
       userData
@@ -26,7 +26,7 @@ export const useUser = () => {
     return response;
   };
 
-  const deleteUser = async (id: string) => {
+  const deleteUser = async (id: number) => {
     await Request.delete(API_ENDPOINTS.USER_BY_ID(id));
   };
 
