@@ -1,6 +1,9 @@
 export interface User {
   id: number;
   email: string;
+  fullName?: string;
+  dateOfBirth?: string;
+  password?: string;
   role: "admin" | "user";
 }
 
@@ -21,7 +24,7 @@ export interface QuantitySold {
 }
 
 export interface Book {
-  id: string;
+  id: number;
   name: string;
   authors: Author[];
   description: string;

@@ -1,9 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import "@/styles/index.css";
+import 'antd/dist/reset.css'
 import { GlobalLoadingWrapper } from "@/components/wrapper/GlobalLoadingWrapper";
 import { RouterProvider } from "react-router-dom";
-import router from "./config/routes.tsx";
+import router from "./routes/routes.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/index.ts";
 
