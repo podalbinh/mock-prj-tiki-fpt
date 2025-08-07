@@ -20,7 +20,7 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
 
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/admin",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },

@@ -2,6 +2,7 @@ import { lazy, Suspense, type JSX } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
+import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
@@ -33,19 +34,14 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <RequireRoleWrapper role="admin">
-        {withSuspense(lazy(() => import("@/layouts/admin/AdminLayout")))}
+        <AdminLayout />
       </RequireRoleWrapper>
     ),
     errorElement: <Error404 />,
     children: [
       {
-        path: "/admin/dashboard",
         index: true,
-        element: <div>FAKE DASHBOARD</div>,
-      },
-      {
-        path: "/admin/dashboard",
-        element: <div>Dashboard</div>,
+        element: withSuspense(lazy(() => import("@/pages/AdminDashboard"))),
       },
       {
         path: "/admin/products",
