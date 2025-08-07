@@ -4,10 +4,8 @@ export const API_ENDPOINTS = {
   REGISTER: "/register",
 
   // User API endpoints
-  GET_USERS: "/users",
-  GET_USER_BY_ID: (id: string) => `/users/${id}`,
-  UPDATE_USER: (id: string) => `/users/${id}`,
-  DELETE_USER: (id: string) => `/users/${id}`,
+  USERS: "/users",
+  USER_BY_ID: (id: string) => `/users/${id}`,
 
   // Book API endpoints
   GET_BOOKS: "/books",
