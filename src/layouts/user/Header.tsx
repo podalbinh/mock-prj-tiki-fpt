@@ -9,8 +9,13 @@ import returnPolicy from "@/assets/return.svg";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
+import {LoginModal} from "@/components/forms/LoginModalForm";
+import { useModal } from '@/hooks/useModal'
 
 const Header = () => {
+  const { openLoginModal } = useModal()
+
+
   return (
     <div className="flex flex-col shadow-sm">
       <div className="flex gap-4 px-6 py-3">
@@ -22,10 +27,13 @@ const Header = () => {
             <HomeOutlined className="text-[20px] p-1" />
             Trang chủ
           </Link>
-          <Link to="/profile" className="mx-4 max-h-min">
+          <button
+            onClick={openLoginModal}
+            className="mx-4 max-h-min flex items-center"
+          >
             <UserOutlined className="text-[20px] p-1" />
             Tài khoản
-          </Link>
+          </button>
           <Link to="/cart" className="border-l-2 max-h-min px-4">
             <CartWithBadge />
           </Link>
@@ -58,6 +66,7 @@ const Header = () => {
           <span>Giá siêu rẻ</span>
         </div>
       </div>
+        <LoginModal />
     </div>
   );
 };
