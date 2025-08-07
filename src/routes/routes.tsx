@@ -3,9 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
 import { userLoader } from "./loaders/userLoader";
+import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
+import Error403 from "@/pages/403";
+import Error404 from "@/pages/404";
 
-// Lazy load pages
-// const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
 
 const withSuspense = (
@@ -20,9 +21,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <UserLayout />,
+    errorElement: <Error404 />,
     children: [
       {
-        path: "/",
         index: true,
         element: withSuspense(HomePage),
       },
@@ -30,7 +31,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: withSuspense(lazy(() => import("@/layouts/admin/AdminLayout"))),
+    element: (
+      <RequireRoleWrapper role="admin">
+        {withSuspense(lazy(() => import("@/layouts/admin/AdminLayout")))}
+      </RequireRoleWrapper>
+    ),
+    errorElement: <Error404 />,
     children: [
       {
         path: "/admin/dashboard",
@@ -63,10 +69,6 @@ const router = createBrowserRouter([
         loader: userLoader,
       },
       {
-        path: "/admin/users/create",
-        element: <div>Thêm người dùng</div>,
-      },
-      {
         path: "/admin/orders",
         element: <div>Danh sách đơn hàng</div>,
       },
@@ -79,6 +81,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/login",
     element: withSuspense(lazy(() => import("@/pages/LoginAdmin"))),
+  },
+  {
+    path: "/403",
+    element: <Error403 />,
   },
 ]);
 

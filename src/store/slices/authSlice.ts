@@ -7,12 +7,14 @@ interface AuthState {
   user: User | null;
   token: string | null;
   error: string | null;
+  isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem("authToken"),
   error: null,
+  isLoading: true,
 };
 
 // Login
@@ -30,6 +32,7 @@ export const login = createAsyncThunk(
       const { user, accessToken } = response;
 
       localStorage.setItem("authToken", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
       return { user, token: accessToken };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -47,7 +50,9 @@ export const checkAuth = createAsyncThunk(
     try {
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("No token");
-      return token;
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) throw new Error("No user data");
+      return user as User;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -86,13 +91,18 @@ const authSlice = createSlice({
       })
 
       // Check auth
+      .addCase(checkAuth.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.token = action.payload;
+        state.user = action.payload;
+        state.isLoading = false;
       })
       .addCase(checkAuth.rejected, (state) => {
         state.user = null;
         state.token = null;
-      })
+        state.isLoading = false;
+      })  
 
       // Logout
       .addCase(logout.fulfilled, (state) => {
@@ -113,3 +123,4 @@ export const selectIsAuthenticated = (state: { auth: AuthState }) =>
 export const selectIsAdmin = (state: { auth: AuthState }) =>
   state.auth.user?.role === "admin";
 export const selectError = (state: { auth: AuthState }) => state.auth.error;
+export const selectIsLoading = (state: { auth: AuthState }) => state.auth.isLoading;

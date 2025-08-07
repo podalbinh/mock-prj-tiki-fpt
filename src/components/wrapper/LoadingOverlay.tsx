@@ -14,7 +14,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
-      <div className="p-6 shadow-xl flex flex-col items-center space-y-4 max-w-xs w-full mx-4">
+      <div className="p-6 flex flex-col items-center space-y-4 max-w-xs w-full mx-4">
         {/* Spinner */}
         <div className="loader"></div>
 
