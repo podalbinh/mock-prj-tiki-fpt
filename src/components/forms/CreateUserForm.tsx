@@ -7,7 +7,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import type { FormProps } from "antd";
-import { formatDate } from "@/utils/dateHelper";
+import { formatDate, parseDate } from "@/utils/dateHelper";
 import type { User } from "@/constant/interfaces";
 
 const { Option } = Select;
@@ -16,12 +16,16 @@ interface CreateUserFormProps {
   onSubmit?: (values: User) => void;
   onCancel?: () => void;
   loading?: boolean;
+  defaultValues?: User;
+  isUpdating?: boolean;
 }
 
 export default function CreateUserForm({
   onSubmit,
   onCancel,
   loading = false,
+  defaultValues,
+  isUpdating = false,
 }: CreateUserFormProps) {
   const [form] = Form.useForm();
 
@@ -33,9 +37,7 @@ export default function CreateUserForm({
     onSubmit?.(formattedValues);
   };
 
-  const handleFinishFailed: FormProps<User>["onFinishFailed"] = (
-    errorInfo
-  ) => {
+  const handleFinishFailed: FormProps<User>["onFinishFailed"] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
@@ -43,7 +45,7 @@ export default function CreateUserForm({
     { value: "admin", label: "Admin" },
     { value: "user", label: "User" },
   ];
-
+  console.log("defaultValues", defaultValues);
   return (
     <div className="w-full max-w-md mx-auto">
       <Form
@@ -54,6 +56,12 @@ export default function CreateUserForm({
         onFinishFailed={handleFinishFailed}
         autoComplete="off"
         className="space-y-4"
+        initialValues={{
+          ...defaultValues,
+          dateOfBirth: defaultValues?.dateOfBirth
+            ? parseDate(defaultValues.dateOfBirth)
+            : undefined,
+        }}
       >
         <Form.Item
           label={
@@ -125,23 +133,27 @@ export default function CreateUserForm({
           />
         </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="text-sm font-medium text-gray-700">Mật khẩu</span>
-          }
-          name="password"
-          rules={[
-            { required: true, message: "Vui lòng nhập mật khẩu!" },
-            { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
-            { max: 20, message: "Mật khẩu không được vượt quá 20 ký tự!" },
-          ]}
-        >
-          <Input.Password
-            prefix={<LockOutlined className="text-gray-400" />}
-            placeholder="Nhập mật khẩu"
-            className="h-10"
-          />
-        </Form.Item>
+        {!isUpdating && (
+          <Form.Item
+            label={
+              <span className="text-sm font-medium text-gray-700">
+                Mật khẩu
+              </span>
+            }
+            name="password"
+            rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu!" },
+              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+              { max: 20, message: "Mật khẩu không được vượt quá 20 ký tự!" },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="text-gray-400" />}
+              placeholder="Nhập mật khẩu"
+              className="h-10"
+            />
+          </Form.Item>
+        )}
 
         <Form.Item className="mb-0 pt-4">
           <Space className="w-full justify-end">

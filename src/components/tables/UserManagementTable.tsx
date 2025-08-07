@@ -2,9 +2,9 @@ import { useCallback, useRef, useState } from "react";
 import AdminTable from "@/components/common/Table";
 import type { CustomTableColumn } from "@/components/common/Table";
 import type { User } from "@/constant/interfaces";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRevalidator } from "react-router-dom";
 import ModalFormCreateUser from "../modals/ModalFormCreateUser";
-import { Button, message } from "antd";
+import { App, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useUser } from "@/hooks/useUser";
 import ModalConfirm from "../modals/ModalConfirm";
@@ -13,27 +13,43 @@ const columns: CustomTableColumn<User>[] = [
   { key: "fullName", title: "Full Name", dataIndex: "fullName" },
   { key: "email", title: "Email", dataIndex: "email" },
   { key: "dateOfBirth", title: "Date of Birth", dataIndex: "dateOfBirth" },
-  { key: "role", title: "Vai trò", dataIndex: "role", align: "center" },
+  { key: "role", title: "Role", dataIndex: "role", align: "center" },
 ];
 
 const UserManagementTable = () => {
   const users = useLoaderData() as User[];
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const { createUser, deleteUser } = useUser();
+  const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+  const [isEditing, setIsEditing] = useState(false);
+  const { createUser, deleteUser, updateUser } = useUser();
+  const revalidator = useRevalidator();
+  const { message } = App.useApp();
 
   const userToDeleteRef = useRef<User | null>(null);
 
-  //TODO: Implement edit and delete functionality
-  const handleEdit = useCallback(async (user: User) => {
-    //const { id, ...userData } = user;
-    //await updateUser(id, userData);
-    console.log("Chỉnh sửa:", user);
-  }, []);
+  const handleEdit = (user: User) => {
+    setEditingUser(user);
+    setIsEditing(true);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    if (isEditing) {
+      setEditingUser(undefined);
+      setIsEditing(false);
+    }
+    setOpenModal(false);
+  };
 
   const handleDelete = useCallback((user: User) => {
     userToDeleteRef.current = user;
     setOpenModalDelete(true);
+  }, []);
+
+  const handleCancelDelete = useCallback(() => {
+    userToDeleteRef.current = null;
+    setOpenModalDelete(false);
   }, []);
 
   const handleConfirmDelete = useCallback(async () => {
@@ -43,7 +59,7 @@ const UserManagementTable = () => {
     try {
       await deleteUser(user.id);
       message.success("Xóa người dùng thành công!");
-      // bạn nên trigger revalidate ở đây (VD: bằng useFetcher.load hoặc navigate để reload)
+      revalidator.revalidate(); // Triggers data reload via React Router's data APIs
     } catch (error) {
       console.error("Xóa người dùng thất bại:", error);
       message.error("Xóa người dùng thất bại!");
@@ -56,16 +72,25 @@ const UserManagementTable = () => {
   const handleSubmitForm = useCallback(
     async (values: User) => {
       try {
-        await createUser(values);
-        message.success("Tạo người dùng thành công!");
+        if (isEditing && editingUser) {
+          await updateUser(editingUser.id, {
+            ...values,
+            password: editingUser.password,
+          });
+          message.success("Cập nhật người dùng thành công!");
+        } else {
+          await createUser(values);
+          message.success("Tạo người dùng thành công!");
+        }
+        revalidator.revalidate();
       } catch (error) {
-        console.error("Error creating user:", error);
-        message.error("Tạo người dùng thất bại!");
+        console.error("Error:", error);
+        message.error("Hành động thất bại!");
       } finally {
         setOpenModal(false);
       }
     },
-    [createUser]
+    [createUser, isEditing, updateUser, message, revalidator]
   );
 
   return (
@@ -96,15 +121,16 @@ const UserManagementTable = () => {
 
       <ModalFormCreateUser
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={handleCloseModal}
         handleSubmit={handleSubmitForm}
+        defaultValues={editingUser}
       />
 
       <ModalConfirm
         title="Xác nhận xóa người dùng"
         description="Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác."
         onOk={handleConfirmDelete}
-        onCancel={() => setOpenModalDelete(false)}
+        onCancel={handleCancelDelete}
         open={openModalDelete}
       />
     </>
