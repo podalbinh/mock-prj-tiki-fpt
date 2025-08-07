@@ -25,7 +25,6 @@ export interface CustomTableProps<
   pagination?: TableProps<T>["pagination"];
   size?: "small" | "middle" | "large";
   className?: string;
-  title?: string;
   showSelection?: boolean;
   onSelectionChange?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
 }
@@ -47,7 +46,6 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
   },
   size = "middle",
   className = "",
-  title,
   showSelection = false,
   onSelectionChange,
 }: CustomTableProps<T>) => {
@@ -121,26 +119,18 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
     : undefined;
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm ${className}`}>
-      {title && (
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        </div>
-      )}
-
-      <div className="p-6">
-        <Table<T>
-          dataSource={data}
-          columns={finalColumns}
-          loading={loading}
-          rowKey={rowKey}
-          pagination={pagination}
-          size={size}
-          rowSelection={rowSelection}
-          className="ant-table-custom"
-          scroll={{ x: "max-content" }}
-        />
-      </div>
+    <div className={`p-6 ${className}`}>
+      <Table<T>
+        dataSource={data}
+        columns={finalColumns}
+        loading={loading}
+        rowKey={rowKey}
+        pagination={pagination}
+        size={size}
+        rowSelection={rowSelection}
+        className="ant-table-custom"
+        scroll={{ x: "max-content" }}
+      />
     </div>
   );
 };
