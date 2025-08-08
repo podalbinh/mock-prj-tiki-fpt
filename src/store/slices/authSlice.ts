@@ -57,6 +57,7 @@ export const checkAuth = createAsyncThunk(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
       console.error("Token không hợp lệ:", error);
       return rejectWithValue("Token không hợp lệ");
     }
@@ -66,6 +67,7 @@ export const checkAuth = createAsyncThunk(
 // Logout
 export const logout = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("user");
 });
 
 const authSlice = createSlice({
