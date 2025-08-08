@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
 import {LoginModal} from "@/components/forms/LoginModalForm";
 import { useModal } from '@/hooks/useModal'
+import { SignupModal } from "@/components/forms/SignUpModalForm";
 
 const Header = () => {
   const { openLoginModal } = useModal()
@@ -67,6 +68,7 @@ const Header = () => {
         </div>
       </div>
         <LoginModal />
+        <SignupModal />
     </div>
   );
 };
