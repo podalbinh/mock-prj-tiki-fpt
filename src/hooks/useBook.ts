@@ -13,15 +13,17 @@ export const useBook = () => {
         return response;
     };
 
-    const createBook = async (userData: Partial<Book>) => {
-        const response = await Request.post<Book>(API_ENDPOINTS.CREATE_BOOK, userData);
+    const createBook = async (bookData: Partial<Book>) => {
+        console.log(bookData);
+        const response = await Request.post<Book>(API_ENDPOINTS.CREATE_BOOK, bookData);
+        console.log(response);
         return response;
     };
 
-    const updateBook = async (id: number, userData: Partial<Book>) => {
+    const updateBook = async (id: number, bookData: Partial<Book>) => {
         const response = await Request.put<Book>(
             API_ENDPOINTS.UPDATE_BOOK(id),
-            userData
+            bookData
         );
         return response;
     };
