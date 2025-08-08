@@ -2,11 +2,13 @@ import { lazy, Suspense, type JSX } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
+import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
 import { orderLoader } from "./loaders/orderLoader";
+import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
+import Error403 from "@/pages/403";
+import Error404 from "@/pages/404";
 
-// Lazy load pages
-// const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
 
 const withSuspense = (
@@ -21,9 +23,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <UserLayout />,
+    errorElement: <Error404 />,
     children: [
       {
-        path: "/",
         index: true,
         element: withSuspense(HomePage),
       },
@@ -31,16 +33,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: withSuspense(lazy(() => import("@/layouts/admin/AdminLayout"))),
+    element: (
+      <RequireRoleWrapper role="admin">
+        <AdminLayout />
+      </RequireRoleWrapper>
+    ),
+    errorElement: <Error404 />,
     children: [
       {
-        path: "/admin/dashboard",
         index: true,
-        element: <div>FAKE DASHBOARD</div>,
-      },
-      {
-        path: "/admin/dashboard",
-        element: <div>Dashboard</div>,
+        element: withSuspense(lazy(() => import("@/pages/AdminDashboard"))),
       },
       {
         path: "/admin/products",
@@ -64,10 +66,6 @@ const router = createBrowserRouter([
         loader: userLoader,
       },
       {
-        path: "/admin/users/create",
-        element: <div>Thêm người dùng</div>,
-      },
-      {
         path: "/admin/orders",
         element: withSuspense(lazy(() => import("@/pages/OrderManagement"))),
         loader: orderLoader,
@@ -81,6 +79,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/login",
     element: withSuspense(lazy(() => import("@/pages/LoginAdmin"))),
+  },
+  {
+    path: "/403",
+    element: <Error403 />,
   },
 ]);
 

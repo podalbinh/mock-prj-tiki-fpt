@@ -25,7 +25,7 @@ export default function AdminLoginForm() {
       const success = await login(values.email, values.password);
 
       if (success) {
-        navigate("/admin/dashboard", { replace: true });
+        navigate("/admin", { replace: true });
       } else {
         setError("Email hoặc mật khẩu không đúng");
       }

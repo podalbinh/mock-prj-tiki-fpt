@@ -10,7 +10,7 @@ const LoginAdmin = () => {
   useEffect(() => {
     // If user is already authenticated, redirect to admin dashboard
     if (isAuthenticated) {
-      navigate("/admin/dashboard", { replace: true });
+      navigate("/admin", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 

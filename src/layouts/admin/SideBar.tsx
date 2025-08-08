@@ -20,7 +20,7 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
 
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/admin",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },
@@ -55,19 +55,9 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       ],
     },
     {
-      key: "users",
+      key: "/admin/users",
       icon: <UserOutlined />,
       label: "Quản lý người dùng",
-      children: [
-        {
-          key: "/admin/users",
-          label: "Danh sách người dùng",
-        },
-        {
-          key: "/admin/users/create",
-          label: "Thêm người dùng",
-        },
-      ],
     },
     {
       key: "orders",
