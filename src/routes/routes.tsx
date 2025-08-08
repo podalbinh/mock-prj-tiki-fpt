@@ -73,8 +73,9 @@ const router = createBrowserRouter([
         loader: orderLoader,
       },
       {
-        path: "/admin/orders/pending",
-        element: <div>Đơn hàng chờ xử lý</div>,
+        path: "/admin/orders/statistics",
+        element: withSuspense(lazy(() => import("@/pages/OrderStatistics"))),
+        loader: orderLoader,
       },
     ],
   },
