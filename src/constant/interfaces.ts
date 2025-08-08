@@ -35,3 +35,19 @@ export interface Book {
   categories: Category;
   quantity_sold: QuantitySold;
 }
+
+export interface Item {
+  id: number;
+  quantity:number;
+  name: string;
+  price: number;
+}
+ 
+export interface Order {
+  id: number;
+  shop:string;
+  customer_name: string;
+  products: Item[];
+  total_price: number;
+  status: string;
+}

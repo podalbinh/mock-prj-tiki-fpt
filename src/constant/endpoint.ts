@@ -24,6 +24,9 @@ export const API_ENDPOINTS = {
   // Category API endpoints
   GET_CATEGORIES: "/categories",
   CREATE_CATEGORY: "/categories",
+
+  // Order API endpoints
+  ORDERS: "/orders",
 };
 
 export const PUBLIC_API_ENDPOINTS = [

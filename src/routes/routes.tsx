@@ -4,6 +4,7 @@ import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
 import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
+import { orderLoader } from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
@@ -66,7 +67,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/orders",
-        element: <div>Danh sách đơn hàng</div>,
+        element: withSuspense(lazy(() => import("@/pages/OrderManagement"))),
+        loader: orderLoader,
       },
       {
         path: "/admin/orders/pending",
