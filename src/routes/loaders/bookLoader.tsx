@@ -7,7 +7,7 @@ export async function bookLoader(): Promise<Book[]> {
         const response = await Request.get<Book[]>(API_ENDPOINTS.GET_BOOKS);
         return response;
     } catch (error) {
-        console.error("Failed to load users:", error);
-        throw new Response("Failed to load users", { status: 500 });
+        console.error("Failed to load books:", error);
+        throw new Response("Failed to load books", { status: 500 });
     }
 }

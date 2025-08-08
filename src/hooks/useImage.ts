@@ -1,4 +1,4 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { storage } from "../config/firebaseConfig";
 
 export const useImage = () => {
@@ -18,5 +18,22 @@ export const useImage = () => {
         return urls;
     };
 
-    return { uploadImage, uploadMultipleImages };
+    const deleteImageByUrl = async (url: string): Promise<void> => {
+        try {
+            // Giải mã URL để lấy đường dẫn gốc
+            const decodedUrl = decodeURIComponent(url);
+            const match = decodedUrl.match(/\/o\/(.*?)\?/);
+            if (!match || !match[1]) {
+                throw new Error("Không thể phân tích đường dẫn từ URL.");
+            }
+            const filePath = match[1]; // Ví dụ: images/abc.png
+            const imageRef = ref(storage, filePath);
+            await deleteObject(imageRef);
+            console.log("Ảnh đã được xoá thành công.");
+        } catch (error) {
+            console.error("Lỗi khi xoá ảnh:", error);
+        }
+    };
+
+    return { uploadImage, uploadMultipleImages, deleteImageByUrl };
 };

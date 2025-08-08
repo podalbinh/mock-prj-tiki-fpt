@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
 import AdminTable, {type CustomTableColumn} from "@/components/common/Table";
 import type {Book} from "@/constant/interfaces";
-import { useLoaderData } from "react-router-dom";
-import { Button, message } from "antd";
+import {useLoaderData, useRevalidator} from "react-router-dom";
+import {App, Button} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalConfirm from "../modals/ModalConfirm";
 import {useBook} from "@/hooks/useBook.ts";
@@ -66,20 +66,37 @@ const BookManagementTable = () => {
     const books = useLoaderData() as Book[];
     const [openModal, setOpenModal] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
-    const {createBook, deleteBook } = useBook();
+    const [editingBook, setEditingBook] = useState<Book | undefined>(undefined);
+    const [isEditing, setIsEditing] = useState(false);
+    const {createBook, deleteBook, updateBook } = useBook();
+    const revalidator = useRevalidator();
+    const { message } = App.useApp();
 
     const userToDeleteRef = useRef<Book | null>(null);
 
     //TODO: Implement edit and delete functionality
     const handleEdit = useCallback(async (book: Book) => {
-        //const { id, ...userData } = user;
-        //await updateUser(id, userData);
-        console.log("Chỉnh sửa:", book);
+        setEditingBook(book);
+        setIsEditing(true);
+        setOpenModal(true);
     }, []);
+
+    const handleCloseModal = () => {
+        if (isEditing) {
+            setEditingBook(undefined);
+            setIsEditing(false);
+        }
+        setOpenModal(false);
+    };
 
     const handleDelete = useCallback((book: Book) => {
         userToDeleteRef.current = book;
         setOpenModalDelete(true);
+    }, []);
+
+    const handleCancelDelete = useCallback(() => {
+        userToDeleteRef.current = null;
+        setOpenModalDelete(false);
     }, []);
 
     const handleConfirmDelete = useCallback(async () => {
@@ -89,7 +106,7 @@ const BookManagementTable = () => {
         try {
             await deleteBook(book.id);
             message.success("Xóa sách thành công!");
-            // bạn nên trigger revalidate ở đây (VD: bằng useFetcher.load hoặc navigate để reload)
+            revalidator.revalidate();
         } catch (error) {
             console.error("Xóa sách thất bại:", error);
             message.error("Xóa sách thất bại!");
@@ -102,16 +119,36 @@ const BookManagementTable = () => {
     const handleSubmitForm = useCallback(
         async (values: Book) => {
             try {
-                await createBook(values);
-                message.success("Tạo sách mới thành công!");
+                if (isEditing && editingBook) {
+                    await updateBook(editingBook.id, {
+                        ...editingBook,
+                        list_price: values.list_price,
+                        short_description: values.short_description,
+                        description: values.description,
+                        images: values.images,
+                    });
+                    setIsEditing(false);
+                    setEditingBook(undefined)
+                    message.success("Cập nhật sách thành công!");
+                } else {
+                    await createBook(values);
+                    message.success("Tạo sách mới thành công!");
+                }
+
+                revalidator.revalidate();
             } catch (error) {
-                console.error("Error creating book:", error);
-                message.error("Tạo sách mới thất bại!");
+                if (isEditing && editingBook) {
+                    console.error("Error update book:", error);
+                    message.error("Cập nhật sách thất bại!");
+                } else {
+                    console.error("Error creating book:", error);
+                    message.error("Tạo sách mới thất bại!");
+                }
             } finally {
                 setOpenModal(false);
             }
         },
-        [createBook]
+        [createBook, isEditing, updateBook, message, revalidator]
     );
 
     return (
@@ -142,15 +179,16 @@ const BookManagementTable = () => {
 
             <ModalFormCreateBook
                 isOpen={openModal}
-                onClose={() => setOpenModal(false)}
+                onClose={handleCloseModal}
                 handleSubmit={handleSubmitForm}
+                defaultValues={editingBook}
             />
 
             <ModalConfirm
                 title="Xác nhận xóa sách"
                 description="Bạn có chắc chắn muốn xóa sách này? Hành động này không thể hoàn tác."
                 onOk={handleConfirmDelete}
-                onCancel={() => setOpenModalDelete(false)}
+                onCancel={handleCancelDelete}
                 open={openModalDelete}
             />
         </>

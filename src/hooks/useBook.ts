@@ -14,9 +14,7 @@ export const useBook = () => {
     };
 
     const createBook = async (bookData: Partial<Book>) => {
-        console.log(bookData);
         const response = await Request.post<Book>(API_ENDPOINTS.CREATE_BOOK, bookData);
-        console.log(response);
         return response;
     };
 
