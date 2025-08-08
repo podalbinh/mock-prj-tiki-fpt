@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
 import { userLoader } from "./loaders/userLoader";
+import { orderLoader } from "./loaders/orderLoader";
 
 // Lazy load pages
 // const LoginPage = lazy(() => import("@/pages/Login"));
@@ -68,7 +69,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/orders",
-        element: <div>Danh sách đơn hàng</div>,
+        element: withSuspense(lazy(() => import("@/pages/OrderManagement"))),
+        loader: orderLoader,
       },
       {
         path: "/admin/orders/pending",
