@@ -6,6 +6,7 @@ interface ModalFormCreateUserProps {
   isOpen: boolean;
   onClose: () => void;
   handleSubmit: (values: User) => void;
+  defaultValues?: User;
   loading?: boolean;
 }
 
@@ -13,9 +14,9 @@ export default function ModalFormCreateUser({
   isOpen,
   onClose,
   handleSubmit,
+  defaultValues,
   loading = false,
 }: ModalFormCreateUserProps) {
-
   return (
     <Modal
       title={
@@ -29,12 +30,15 @@ export default function ModalFormCreateUser({
       width={500}
       centered
       className="rounded-lg"
+      destroyOnHidden
     >
       <div className="pt-4">
         <CreateUserForm
           onSubmit={handleSubmit}
           onCancel={onClose}
           loading={loading}
+          isUpdating={!!defaultValues}
+          defaultValues={defaultValues}
         />
       </div>
     </Modal>

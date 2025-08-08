@@ -1,4 +1,3 @@
-import { PUBLIC_API_ENDPOINTS } from "@/constant/endpoint";
 import axios from "axios";
 
 // Tạo axios instance đơn giản
@@ -14,9 +13,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
-    const endpoint = config.url?.replace(config.baseURL || "", "") || "";
-
-    if (token && !PUBLIC_API_ENDPOINTS.includes(endpoint)) {
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
