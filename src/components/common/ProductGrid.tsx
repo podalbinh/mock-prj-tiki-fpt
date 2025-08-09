@@ -226,7 +226,7 @@ export default function ProductGrid() {
             </div>
 
             {/* Sort */}
-            <div className="flex items-center gap-3 px-4">
+            <div className="flex items-center gap-3 px-4 mb-6">
                 <span className="text-[14px] leading-[21px] text-[#808089]">Sắp xếp</span>
                 <Select
                     size="middle"
@@ -241,7 +241,7 @@ export default function ProductGrid() {
             </div>
 
             {/* Product Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-2 bg-[#F7F7FA]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F7F7FA] mt-4">
                 {displayed.map((product) => (
                     <div
                         key={product.id}
