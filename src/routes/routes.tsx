@@ -8,6 +8,7 @@ import { orderLoader } from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
+import { categoryLoader } from "./loaders/categoryLoader";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 
@@ -54,7 +55,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/categories",
-        element: <div>Danh sách danh mục</div>,
+        element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
+        loader: categoryLoader,
       },
       {
         path: "/admin/categories/create",

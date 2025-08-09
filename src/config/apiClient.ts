@@ -1,9 +1,8 @@
-import { PUBLIC_API_ENDPOINTS } from "@/constant/endpoint";
 import axios from "axios";
 
 // Tạo axios instance đơn giản
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -14,9 +13,8 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
-    const endpoint = config.url?.replace(config.baseURL || "", "") || "";
 
-    if (token && !PUBLIC_API_ENDPOINTS.includes(endpoint)) {
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
