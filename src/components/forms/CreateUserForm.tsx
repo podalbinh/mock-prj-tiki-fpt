@@ -42,8 +42,8 @@ export default function CreateUserForm({
   };
 
   const roleOptions = [
-    { value: "admin", label: "Admin" },
-    { value: "user", label: "User" },
+    { value: "ADMIN", label: "Admin" },
+    { value: "USER", label: "User" },
   ];
   console.log("defaultValues", defaultValues);
   return (

@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 interface RequireRoleProps {
   children: JSX.Element;
-  role: "admin" | "user";
+  role: "ADMIN" | "USER";
 }
 
 const RequireRole = ({ children, role }: RequireRoleProps) => {

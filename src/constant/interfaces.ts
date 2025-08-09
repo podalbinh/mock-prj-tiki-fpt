@@ -4,7 +4,7 @@ export interface User {
   fullName?: string;
   dateOfBirth?: string;
   password?: string;
-  role: "admin" | "user";
+  role: "ADMIN" | "USER";
 }
 
 export interface Author {
