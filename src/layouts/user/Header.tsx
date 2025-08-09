@@ -6,9 +6,10 @@ import shipping from "@/assets/shipping.svg";
 import refund from "@/assets/refund.svg";
 import returnPolicy from "@/assets/return.svg";
 
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
+import { Input } from "antd";
 
 const Header = () => {
   return (
@@ -16,7 +17,24 @@ const Header = () => {
       <div className="flex gap-4 px-6 py-3">
         <img src={logo} alt="Logo" />
         {/* Todo: Tạo thanh search như design */}
-        <div className="flex-grow p-4 text-center border">Search</div>
+        <form className="w-full">
+        <Input
+          // value={}
+          // onChange={}
+          placeholder="100% hàng thật"
+          prefix={<SearchOutlined className="text-gray-400" size={16} aria-hidden="true" />}
+          // nút bên phải
+          addonAfter={
+            <button type="submit" className="search-addon" aria-label="Tìm kiếm">
+              Tìm kiếm
+            </button>
+          }
+          // cho phép clear nếu muốn
+          allowClear
+          className="antd-search-input"
+          // antd Input cần ref khác kiểu, nhưng ta chỉ focus qua inputRef khi rỗng
+        />
+      </form>
         <div className="flex gap-1">
           <Link to="/home" className="mx-4 max-h-min">
             <HomeOutlined className="text-[20px] p-1" />
