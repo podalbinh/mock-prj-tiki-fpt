@@ -1,9 +1,13 @@
 export interface User {
   id: number;
   email: string;
+  password: string;
   fullName?: string;
-  dateOfBirth?: string;
-  password?: string;
+  phone?: string;
+  avatar?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
   role: "ADMIN" | "USER";
 }
 
@@ -38,14 +42,14 @@ export interface Book {
 
 export interface Item {
   id: number;
-  quantity:number;
+  quantity: number;
   name: string;
   price: number;
 }
- 
+
 export interface Order {
   id: number;
-  shop:string;
+  shop: string;
   customer_name: string;
   products: Item[];
   total_price: number;
