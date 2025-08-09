@@ -4,16 +4,109 @@ import type { CustomTableColumn } from "@/components/common/Table";
 import type { User } from "@/constant/interfaces";
 import { useLoaderData, useRevalidator } from "react-router-dom";
 import ModalFormCreateUser from "../modals/ModalFormCreateUser";
-import { App, Button } from "antd";
+import { App, Button, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useUser } from "@/hooks/useUser";
 import ModalConfirm from "../modals/ModalConfirm";
+import { isNilOrEmpty } from "@/utils/dataHelper";
+import TableColumnNoData from "../common/TableColumnNoData";
+import { formatDateTime } from "@/utils/dateHelper";
+import { set } from "lodash";
 
-const columns: CustomTableColumn<User>[] = [
-  { key: "fullName", title: "Full Name", dataIndex: "fullName" },
-  { key: "email", title: "Email", dataIndex: "email" },
-  { key: "dateOfBirth", title: "Date of Birth", dataIndex: "dateOfBirth" },
-  { key: "role", title: "Role", dataIndex: "role", align: "center" },
+const userColumns: CustomTableColumn<User>[] = [
+  {
+    key: "id",
+    title: "ID",
+    dataIndex: "id",
+    align: "center",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        <span className="font-medium">{value}</span>
+      ),
+  },
+  {
+    key: "fullName",
+    title: "Full Name",
+    dataIndex: "fullName",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        value
+      ),
+  },
+  {
+    key: "email",
+    title: "Email",
+    dataIndex: "email",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        <span className="break-all">{value}</span>
+      ),
+  },
+  {
+    key: "phone",
+    title: "Phone",
+    dataIndex: "phone",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        value
+      ),
+  },
+  {
+    key: "isActive",
+    title: "Active",
+    dataIndex: "isActive",
+    align: "center",
+    render: (value) =>
+      value ? (
+        <Tag color="green">Active</Tag>
+      ) : (
+        <Tag color="default">Inactive</Tag>
+      ),
+  },
+  {
+    key: "role",
+    title: "Role",
+    dataIndex: "role",
+    align: "center",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : value === "ADMIN" ? (
+        <Tag color="red">ADMIN</Tag>
+      ) : (
+        <Tag color="blue">USER</Tag>
+      ),
+  },
+  {
+    key: "createdAt",
+    title: "Created At",
+    dataIndex: "createdAt",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        formatDateTime(value as string)
+      ),
+  },
+  {
+    key: "updatedAt",
+    title: "Updated At",
+    dataIndex: "updatedAt",
+    render: (value) =>
+      isNilOrEmpty(value) ? (
+        <TableColumnNoData />
+      ) : (
+        formatDateTime(value as string)
+      ),
+  },
 ];
 
 const UserManagementTable = () => {
@@ -77,6 +170,7 @@ const UserManagementTable = () => {
             ...values,
             password: editingUser.password,
           });
+          setEditingUser(undefined);
           message.success("Cập nhật người dùng thành công!");
         } else {
           await createUser(values);
@@ -113,7 +207,7 @@ const UserManagementTable = () => {
         </div>
         <AdminTable<User>
           data={users}
-          columns={columns}
+          columns={userColumns}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
