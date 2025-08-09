@@ -1,31 +1,35 @@
 export const API_ENDPOINTS = {
   // Authentication API endpoints
-  LOGIN: "/login",
-  REGISTER: "/register",
+  LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
+  ME: "/auth/me",
 
   // User API endpoints
-  GET_USERS: "/users",
-  GET_USER_BY_ID: (id: string) => `/users/${id}`,
-  UPDATE_USER: (id: string) => `/users/${id}`,
-  DELETE_USER: (id: string) => `/users/${id}`,
+  USERS: "/users",
+  USER_BY_ID: (id: number) => `/users/${id}`,
 
   // Book API endpoints
   GET_BOOKS: "/books",
-  GET_BOOK_BY_ID: (id: string) => `/books/${id}`,
+  GET_BOOK_BY_ID: (id: number) => `/books/${id}`,
   CREATE_BOOK: "/books",
-  UPDATE_BOOK: (id: string) => `/books/${id}`,
-  DELETE_BOOK: (id: string) => `/books/${id}`,
+  UPDATE_BOOK: (id: number) => `/books/${id}`,
+  DELETE_BOOK: (id: number) => `/books/${id}`,
 
   // Product API endpoints
   GET_PRODUCTS: "/products",
-  GET_PRODUCT_BY_ID: (id: string) => `/products/${id}`,
+  GET_PRODUCT_BY_ID: (id: number) => `/products/${id}`,
   CREATE_PRODUCT: "/products",
-  UPDATE_PRODUCT: (id: string) => `/products/${id}`,
-  DELETE_PRODUCT: (id: string) => `/products/${id}`,
+  UPDATE_PRODUCT: (id: number) => `/products/${id}`,
+  DELETE_PRODUCT: (id: number) => `/products/${id}`,
 
   // Category API endpoints
   GET_CATEGORIES: "/categories",
   CREATE_CATEGORY: "/categories",
+  UPDATE_CATEGORY: (id: number) => `/categories/${id}`,
+  DELETE_CATEGORY: (id: number) => `/categories/${id}`,
+
+  // Order API endpoints
+  ORDERS: "/orders",
 };
 
 export const PUBLIC_API_ENDPOINTS = [

@@ -1,0 +1,111 @@
+import React, { useMemo } from "react";
+import { Card, Statistic, Row, Col } from "antd";
+import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import type { Order } from "@/constant/interfaces";
+import { useLoaderData } from "react-router-dom";
+
+
+const COLORS = ["#4CAF50", "#FFC107", "#F44336"];
+
+const OrderDashboard = () => {
+
+  const orders = useLoaderData() as Order[];
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.total_price || 0), 0);
+  const pendingOrders = orders.filter((o) => o.status === "pending").length;
+
+  const pieData = useMemo(() => {
+    const statusCount: Record<string, number> = {};
+    orders.forEach((o) => {
+      statusCount[o.status] = (statusCount[o.status] || 0) + 1;
+    });
+    return Object.keys(statusCount).map((status) => ({
+      name: status,
+      value: statusCount[status],
+    }));
+  }, [orders]);
+
+  const barData = useMemo(() => {
+    const shopRevenue: Record<string, number> = {};
+    orders.forEach((o) => {
+      shopRevenue[o.shop] = (shopRevenue[o.shop] || 0) + (o.total_price || 0);
+    });
+    return Object.keys(shopRevenue).map((shop) => ({
+      shop,
+      revenue: shopRevenue[shop],
+    }));
+  }, [orders]);
+
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg">
+      {/* Cards thống kê */}
+      <Row gutter={16} className="mb-6">
+        <Col span={8}>
+          <Card bordered={false} className="shadow-sm">
+            <Statistic title="Tổng số đơn" value={totalOrders} />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card bordered={false} className="shadow-sm">
+            <Statistic
+              title="Tổng doanh thu"
+              value={totalRevenue}
+              precision={0}
+              suffix="₫"
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card bordered={false} className="shadow-sm">
+            <Statistic title="Đơn đang chờ" value={pendingOrders} />
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        {/* Pie Chart */}
+        <Col span={12}>
+          <Card title="Tỷ lệ đơn hàng theo trạng thái" bordered={false} className="shadow-sm">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label
+                >
+                  {pieData.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
+
+        {/* Bar Chart */}
+        <Col span={12}>
+          <Card title="Doanh thu theo shop" bordered={false} className="shadow-sm">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="shop" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="revenue" fill="#1890ff" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+export default OrderDashboard;

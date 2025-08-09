@@ -20,7 +20,7 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
 
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/admin",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },
@@ -40,34 +40,14 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       ],
     },
     {
-      key: "categories",
+      key: "/admin/categories",
       icon: <AppstoreOutlined />,
       label: "Quản lý danh mục",
-      children: [
-        {
-          key: "/admin/categories",
-          label: "Danh sách danh mục",
-        },
-        {
-          key: "/admin/categories/create",
-          label: "Thêm danh mục",
-        },
-      ],
     },
     {
-      key: "users",
+      key: "/admin/users",
       icon: <UserOutlined />,
       label: "Quản lý người dùng",
-      children: [
-        {
-          key: "/admin/users",
-          label: "Danh sách người dùng",
-        },
-        {
-          key: "/admin/users/create",
-          label: "Thêm người dùng",
-        },
-      ],
     },
     {
       key: "orders",
@@ -75,12 +55,12 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       label: "Quản lý đơn hàng",
       children: [
         {
-          key: "/admin/orders",
-          label: "Danh sách đơn hàng",
+          key: "/admin/orders/statistics",
+          label: "Thống kê đơn hàng",
         },
         {
-          key: "/admin/orders/pending",
-          label: "Đơn hàng chờ xử lý",
+          key: "/admin/orders",
+          label: "Danh sách đơn hàng",
         },
       ],
     },

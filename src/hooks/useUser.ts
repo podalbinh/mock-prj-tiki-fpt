@@ -1,33 +1,34 @@
-import { useState } from "react";
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
+import type { User } from "@/constant/interfaces";
 
 export const useUser = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const register = async (email: string, password: string, confirmPassword: string): Promise<string> => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await Request.post<{ message: string }>(
-          API_ENDPOINTS.REGISTER,
-          { email, password, confirmPassword }
-      );
-      return response.message || "Đăng ký thành công";
-    } catch (err: any) {
-      const errorMessage = err?.message || "Có lỗi xảy ra khi đăng ký";
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  const getAllUsers = async () => {
+    const response = await Request.get<User[]>(API_ENDPOINTS.USERS);
+    return response;
   };
 
-  return {
-    register,
-    loading,
-    error,
-    setError,
+  const getUserById = async (id: number) => {
+    const response = await Request.get<User>(API_ENDPOINTS.USER_BY_ID(id));
+    return response;
   };
+
+  const createUser = async (userData: Partial<User>) => {
+    const response = await Request.post<User>(API_ENDPOINTS.USERS, userData);
+    return response;
+  };
+
+  const updateUser = async (id: number, userData: Partial<User>) => {
+    const response = await Request.put<User>(
+      API_ENDPOINTS.USER_BY_ID(id),
+      userData
+    );
+    return response;
+  };
+
+  const deleteUser = async (id: number) => {
+    await Request.delete(API_ENDPOINTS.USER_BY_ID(id));
+  };
+
+  return { getAllUsers, getUserById, createUser, updateUser, deleteUser };
 };

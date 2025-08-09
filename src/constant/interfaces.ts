@@ -1,7 +1,14 @@
 export interface User {
   id: number;
   email: string;
-  role: "admin" | "user";
+  password: string;
+  fullName?: string;
+  phone?: string;
+  avatar?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
+  role: "ADMIN" | "USER";
 }
 
 export interface Author {
@@ -21,7 +28,7 @@ export interface QuantitySold {
 }
 
 export interface Book {
-  id: string;
+  id: number;
   name: string;
   authors: Author[];
   description: string;
@@ -33,6 +40,21 @@ export interface Book {
   quantity_sold: QuantitySold;
 }
 
+export interface Item {
+  id: number;
+  quantity: number;
+  name: string;
+  price: number;
+}
+
+export interface Order {
+  id: number;
+  shop: string;
+  customer_name: string;
+  products: Item[];
+  total_price: number;
+  status: string;
+}
 export interface RegisterRequest{
   email: string;
   password: string;

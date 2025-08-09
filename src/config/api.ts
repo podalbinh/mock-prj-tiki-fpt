@@ -1,6 +1,11 @@
 import apiClient from "./apiClient";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
+export type CustomResponse<T = unknown> = {
+  code: number;
+  data: T;
+};
+
 // Request class chứa tất cả HTTP methods
 export class Request {
   // Generic API call method
@@ -8,8 +13,8 @@ export class Request {
     config: AxiosRequestConfig
   ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await apiClient(config);
-      return response.data;
+      const response: AxiosResponse<CustomResponse<T>> = await apiClient(config);
+      return response.data.data;
     } catch (error: unknown) {
       const axiosError = error as {
         response?: {
