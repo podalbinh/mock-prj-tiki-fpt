@@ -47,6 +47,13 @@ h6 {
   isolation: isolate;
 }
 
+/* Hide browser default password field icons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+
 /* Custom tweaks to match design proportions */
 .ant-card-body {
   /* keep rounded look consistent */
@@ -66,3 +73,4 @@ h6 {
 .filter-bar .ant-divider-vertical {
   border-inline-start-color: #EBEBF0 !important;
 }
+

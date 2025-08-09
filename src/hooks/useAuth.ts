@@ -9,7 +9,9 @@ import {
   selectIsAuthenticated,
   selectIsAdmin,
   selectError,
+  selectIsLoading,
 } from "@/store/slices/authSlice";
+import { useNavigate } from "react-router";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -18,11 +20,16 @@ export const useAuth = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
   const error = useAppSelector(selectError);
+  const isLoading = useAppSelector(selectIsLoading);
+  const navigate = useNavigate();
 
   // Auto check auth on mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (token && !user) {
+    if (!token) {
+      navigate("/admin/login");
+    }
+    if (!user) {
       dispatch(checkAuth());
     }
   }, [dispatch, user]);
@@ -45,8 +52,10 @@ export const useAuth = () => {
     isAuthenticated,
     isAdmin,
     error,
+    isLoading,
     login: handleLogin,
     logout: handleLogout,
     clearError: clearAuthError,
   };
 };
+
