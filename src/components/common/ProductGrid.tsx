@@ -192,8 +192,8 @@ export default function ProductGrid() {
     }, [sentinelRef.current, loading, hasMore, displayed.length, sortedProducts]);
 
     return (
-        <Card bodyStyle={{ padding: 0 }}>
-            <div className="px-4 pt-4 mb-4">
+        <Card className="[&_.ant-card-body]:!p-0" classNames={{ body: '!p-0' }}>
+            <div className="px-4">
                 <h3 className="text-[16px] leading-6 font-semibold text-[#27272A]">Tất cả sản phẩm</h3>
             </div>
 
@@ -205,18 +205,18 @@ export default function ProductGrid() {
                         <span>Giao siêu tốc 2H</span>
                     </span>
                 </Checkbox>
-                <Divider type="vertical" className="!h-6" style={{ borderInlineStartColor: '#EBEBF0' }} />
+                <Divider type="vertical" className="!h-6 !border-[#EBEBF0]" />
                 <Checkbox>
                     <span className="flex items-center gap-2 text-sm">
                         <img src="src/assets/top-deal.png" alt="TOP DEAL" className="h-4" />
                         <span>Siêu rẻ</span>
                     </span>
                 </Checkbox>
-                <Divider type="vertical" className="!h-6" style={{ borderInlineStartColor: '#EBEBF0' }} />
+                <Divider type="vertical" className="!h-6 !border-[#EBEBF0]" />
                 <Checkbox>
                     <img src="src/assets/freeship-extra.png" alt="FREESHIP XTRA" className="h-4" />
                 </Checkbox>
-                <Divider type="vertical" className="!h-6" style={{ borderInlineStartColor: '#EBEBF0' }} />
+                <Divider type="vertical" className="!h-6 !border-[#EBEBF0]" />
                 <Checkbox>
                     <span className="flex items-center gap-2 text-sm">
                         <Rate disabled defaultValue={4} className="text-xs" />
@@ -226,14 +226,13 @@ export default function ProductGrid() {
             </div>
 
             {/* Sort */}
-            <div className="flex items-center gap-3 px-4 mb-6">
+            <div className="flex items-center gap-3 px-4">
                 <span className="text-[14px] leading-[21px] text-[#808089]">Sắp xếp</span>
                 <Select
                     size="middle"
                     value={sort}
                     onChange={(val) => setSort(val as typeof sort)}
-                    className="sort-select"
-                    style={{ width: 140 }}
+                    className="sort-select w-[140px]"
                 >
                     <Option value="popular">Phổ biến</Option>
                     <Option value="price-asc">Giá thấp đến cao</Option>
@@ -242,13 +241,11 @@ export default function ProductGrid() {
             </div>
 
             {/* Product Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-2"
-            style={{ background: '#F7F7FA' }}
-            >
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-2 bg-[#F7F7FA]">
                 {displayed.map((product) => (
                     <div
                         key={product.id}
-                        className="rounded-lg pt-2"
+                        className="rounded-lg"
                     >
                         <ProductCard product={product} formatPrice={formatPrice} />
                     </div>
@@ -263,6 +260,7 @@ export default function ProductGrid() {
                     <span className="text-xs text-gray-400">Đã hiển thị tất cả sản phẩm</span>
                 )}
             </div>
+
         </Card>
     );
 }

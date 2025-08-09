@@ -45,23 +45,10 @@ const FeaturedCollections: React.FC = () => {
   const renderCard = (cardData: CardData, index: number) => (
     <div
       key={index}
-      className="relative flex bg-white"
-      style={{
-        boxSizing: 'border-box',
-        position: 'relative',
-        height: '186px',
-        background: '#FFFFFF',
-        border: '1px solid rgba(0, 0, 0, 0.05)',
-        borderRadius: '8px',
-        minWidth: 585,
-        maxWidth: 585,
-        margin: '0',
-        overflow: 'hidden',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
-      }}
+      className="relative flex bg-white box-border h-[186px] border border-black/5 rounded-lg min-w-[585px] max-w-[585px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
     >
       {/* Logo section bên trái */}
-      <div className="w-[186px] h-[186px] flex items-center justify-center bg-gradient-to-br  h-full">
+      <div className="w-[186px] h-[186px] flex items-center justify-center">
         <img
           src={cardData.logo}
           alt="Logo"

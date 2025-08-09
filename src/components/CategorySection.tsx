@@ -12,8 +12,7 @@ export default function CategorySection() {
         <Card
             title="Khám phá theo danh mục"
             className="mb-6"
-            headStyle={{ borderBottom: "none" }}
-            bodyStyle={{ paddingTop: "0px" }} // chỉnh khoảng cách top
+            classNames={{ header: '!border-b-0', body: '!pt-0' }}
         >
             <div className="grid sm:grid-cols-6 gap-1 justify-items-left">
                 {categories.map((category) => (

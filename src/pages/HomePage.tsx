@@ -19,7 +19,7 @@ const HomePage = () => {
               <div className="flex flex-col lg:flex-row gap-6">
                 <Sidebar />
                 <main className="flex-1">
-                  <div className="bg-white rounded-lg p-4 mb-6">
+                  <div className="bg-white rounded-lg">
                     <h1 className="text-2xl font-semibold text-black">
                       Nhà Sách Tiki
                     </h1>

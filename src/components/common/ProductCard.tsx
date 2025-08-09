@@ -26,9 +26,8 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
     <Card
       hoverable
       bordered
-      className="rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-      bodyStyle={{ padding: 12 }}
-      style={{ borderColor: '#EBEBF0', background: '#FFFFFF' }}
+      className="rounded-lg overflow-hidden hover:shadow-md transition-shadow !border-[#EBEBF0] !bg-white"
+      classNames={{ body: 'p-3' }}
       cover={
         <div className="relative">
           <img
@@ -93,7 +92,7 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
           <p className="text-[#808089] text-xs mb-2">Đã bán {product.sold}</p>
         )}
 
-        <Divider className="my-4" style={{ borderTopColor: '#EBEBF0' }} />
+        <Divider className="my-4 !border-t-[#EBEBF0]" />
 
         <div className="flex items-center text-[#808089] text-xs">
           {product.hasTikiNow ? (
