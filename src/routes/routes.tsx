@@ -34,7 +34,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <RequireRoleWrapper role="admin">
+      <RequireRoleWrapper role="ADMIN">
         <AdminLayout />
       </RequireRoleWrapper>
     ),

@@ -1,7 +1,8 @@
 export const API_ENDPOINTS = {
   // Authentication API endpoints
-  LOGIN: "/login",
-  REGISTER: "/register",
+  LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
+  ME: "/auth/me",
 
   // User API endpoints
   USERS: "/users",
