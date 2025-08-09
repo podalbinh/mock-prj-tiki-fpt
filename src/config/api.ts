@@ -1,21 +1,14 @@
-import apiClient from './apiClient';
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-
-// API Response type
-export interface ApiResponse<T = unknown> {
-  data: T;
-  message?: string;
-  success: boolean;
-}
+import apiClient from "./apiClient";
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
 // Request class chứa tất cả HTTP methods
 export class Request {
   // Generic API call method
   private static async apiCall<T = unknown>(
     config: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     try {
-      const response: AxiosResponse<ApiResponse<T>> = await apiClient(config);
+      const response: AxiosResponse<T> = await apiClient(config);
       return response.data;
     } catch (error: unknown) {
       const axiosError = error as {
@@ -25,9 +18,12 @@ export class Request {
         };
         message?: string;
       };
-      
+
       throw {
-        message: axiosError.response?.data?.message || axiosError.message || 'Có lỗi xảy ra',
+        message:
+          axiosError.response?.data?.message ||
+          axiosError.message ||
+          "Có lỗi xảy ra",
         status: axiosError.response?.status,
         data: axiosError.response?.data,
       };
@@ -36,11 +32,11 @@ export class Request {
 
   // GET method
   static get<T = unknown>(
-    url: string, 
+    url: string,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     return this.apiCall<T>({
-      method: 'GET',
+      method: "GET",
       url,
       ...config,
     });
@@ -48,12 +44,12 @@ export class Request {
 
   // POST method
   static post<T = unknown>(
-    url: string, 
-    data?: unknown, 
+    url: string,
+    data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     return this.apiCall<T>({
-      method: 'POST',
+      method: "POST",
       url,
       data,
       ...config,
@@ -62,12 +58,12 @@ export class Request {
 
   // PUT method
   static put<T = unknown>(
-    url: string, 
-    data?: unknown, 
+    url: string,
+    data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     return this.apiCall<T>({
-      method: 'PUT',
+      method: "PUT",
       url,
       data,
       ...config,
@@ -76,11 +72,11 @@ export class Request {
 
   // DELETE method
   static delete<T = unknown>(
-    url: string, 
+    url: string,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     return this.apiCall<T>({
-      method: 'DELETE',
+      method: "DELETE",
       url,
       ...config,
     });
@@ -88,12 +84,12 @@ export class Request {
 
   // PATCH method (bonus)
   static patch<T = unknown>(
-    url: string, 
-    data?: unknown, 
+    url: string,
+    data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     return this.apiCall<T>({
-      method: 'PATCH',
+      method: "PATCH",
       url,
       data,
       ...config,
