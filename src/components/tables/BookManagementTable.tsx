@@ -7,6 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import ModalConfirm from "../modals/ModalConfirm";
 import {useBook} from "@/hooks/useBook.ts";
 import ModalFormCreateBook from "@/components/modals/ModalFormCreateBook.tsx";
+import {useImage} from "@/hooks/useImage.ts";
 
 const columns: CustomTableColumn<Book>[] = [
     {
@@ -69,6 +70,7 @@ const BookManagementTable = () => {
     const [editingBook, setEditingBook] = useState<Book | undefined>(undefined);
     const [isEditing, setIsEditing] = useState(false);
     const {createBook, deleteBook, updateBook } = useBook();
+    const {deleteImageByUrl} = useImage();
     const revalidator = useRevalidator();
     const { message } = App.useApp();
 
@@ -85,6 +87,7 @@ const BookManagementTable = () => {
         if (isEditing) {
             setEditingBook(undefined);
             setIsEditing(false);
+
         }
         setOpenModal(false);
     };
@@ -104,6 +107,9 @@ const BookManagementTable = () => {
         if (!book) return;
 
         try {
+            book.images.map((img) => {
+                deleteImageByUrl(img.base_url);
+            });
             await deleteBook(book.id);
             message.success("Xóa sách thành công!");
             revalidator.revalidate();

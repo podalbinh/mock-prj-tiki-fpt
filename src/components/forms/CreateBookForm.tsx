@@ -6,6 +6,7 @@ import type {Attribute, Author, Book, Category, Specification} from "@/constant/
 import { useState, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {useImage} from "@/hooks/useImage.ts";
+import {useCategory} from "@/hooks/useCategory.ts";
 
 const { Option } = Select;
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -28,6 +29,7 @@ export default function CreateBookForm({
                                        }: CreateBookFormProps) {
     const [form] = Form.useForm();
     const { uploadMultipleImages } = useImage();
+    const { getAllCategories } = useCategory();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -49,25 +51,21 @@ export default function CreateBookForm({
         { code: "number_of_page", name: "Số trang" },
         { code: "manufacturer", name: "Nhà xuất bản" },
     ];
-
-    const categoriesOption = [
-        {id: 1, name: "Sách tiếng Việt"},
-        {id: 2, name: "Sách kỹ năng làm việc"},
-        {id: 3, name: "Truyện ngắn - Tản văn - Tạp Văn"},
-        {id: 4, name: "Tác phẩm kinh điển"},
-        {id: 5, name: "Sách tư duy - Kỹ năng sống"},
-        {id: 6, name: "English Books"},
-        {id: 7, name: "Grammar, vocabulary & skills"},
-        {id: 8, name: "Fiction - Literature"},
-    ]
+    const [categoriesOption, setCategoriesOption] = useState<Category[]>([]);
 
     useEffect(() => {
+        // Lấy Categories
+        (async () => {
+            const data = await getAllCategories();
+            setCategoriesOption(data);
+        })();
+
         if (isUpdating && defaultValues) {
             // Đặt lại GT một số trường khi update
             form.setFieldsValue({
                 ...defaultValues,
                 authors: defaultValues.authors?.map((a) => a.name).join(", "),
-                categories: defaultValues.categories?.id,
+                categories: defaultValues.categories?.name,
             });
 
             // Map ảnh từ defaultValues vào fileList để hiển thị
@@ -76,9 +74,12 @@ export default function CreateBookForm({
                 name: `image-${index}`,
                 status: 'done',
                 url: img.base_url,
-            })) || [];
+            })) || [getAllCategories];
 
             setFileList(files);
+        } else {
+            setFileList([]);
+            form.resetFields();
         }
     }, [defaultValues, isUpdating]);
 
@@ -149,7 +150,7 @@ export default function CreateBookForm({
         }
 
         // Lấy Category
-        const category = categoriesOption.find((c) => c.id === formValues?.categories) as Category;
+        const category = categoriesOption.find((c) => c.name === formValues?.categories) as Category;
 
         // Tập hợp thành phần lại tạo thành sách
         const book: Partial<Book> = {
@@ -242,7 +243,7 @@ export default function CreateBookForm({
                         disabled={isUpdating}
                     >
                         {categoriesOption.map((option) => (
-                            <Option key={option.id} value={option.id}>
+                            <Option key={option.id} value={option.name}>
                                 {option.name}
                             </Option>
                         ))}
@@ -355,13 +356,25 @@ export default function CreateBookForm({
                     }}
                     rules={[{ required: true, message: "Vui lòng tải lên ít nhất 1 ảnh!" }]}
                 >
+                    <Image.PreviewGroup/>
                     <Upload
                         listType="picture-card"
                         onPreview={handlePreview}
-                        beforeUpload={() => false} // Ngăn upload tự động
-                        onChange={({ fileList }) => {
-                            setFileList(fileList);
-                            form.setFieldsValue({ images: fileList });
+                        // beforeUpload={() => false} // Ngăn upload tự động
+                        onChange={({ fileList: newFileList }) => {
+                            const updatedList = newFileList.map(file => {
+                                // Nếu chưa có link (ảnh mới) → tạo thumbUrl tạm
+                                if (!file.url && !file.thumbUrl && file.originFileObj) {
+                                    return {
+                                        ...file,
+                                        thumbUrl: URL.createObjectURL(file.originFileObj),
+                                    };
+                                }
+                                return file; // Ảnh cũ giữ nguyên
+                            });
+
+                            setFileList(updatedList);
+                            form.setFieldsValue({ images: updatedList });
                         }}
                         fileList={fileList}
                     >
@@ -376,7 +389,7 @@ export default function CreateBookForm({
                                 src={previewImage}
                             />
                         )}
-                        {fileList.length >= 8 ? null : uploadButton}
+                        {uploadButton}
                     </Upload>
                 </Form.Item>
 

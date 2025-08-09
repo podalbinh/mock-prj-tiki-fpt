@@ -1,12 +1,11 @@
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
-import { storage } from "../config/firebaseConfig";
+import {deleteObject, getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "../config/firebaseConfig";
 
 export const useImage = () => {
     const uploadImage = async (file: File): Promise<string> => {
         const imageRef = ref(storage, `images/${Date.now()}-${file.name}`);
         await uploadBytes(imageRef, file);
-        const downloadURL = await getDownloadURL(imageRef);
-        return downloadURL;
+        return await getDownloadURL(imageRef);
     };
 
     const uploadMultipleImages = async (files: File[]) => {
@@ -35,5 +34,17 @@ export const useImage = () => {
         }
     };
 
-    return { uploadImage, uploadMultipleImages, deleteImageByUrl };
+    const urlToBase64 = async (url: string) => {
+        const res = await fetch(url);
+        const blob = await res.blob();
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
+
+
+    return { uploadImage, uploadMultipleImages, deleteImageByUrl, urlToBase64 };
 };
