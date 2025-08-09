@@ -55,12 +55,12 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       label: "Quản lý đơn hàng",
       children: [
         {
-          key: "/admin/orders",
-          label: "Danh sách đơn hàng",
+          key: "/admin/orders/statistics",
+          label: "Thống kê đơn hàng",
         },
         {
-          key: "/admin/orders/pending",
-          label: "Đơn hàng chờ xử lý",
+          key: "/admin/orders",
+          label: "Danh sách đơn hàng",
         },
       ],
     },
