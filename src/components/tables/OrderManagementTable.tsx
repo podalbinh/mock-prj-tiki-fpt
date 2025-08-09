@@ -1,13 +1,11 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import AdminTable from "@/components/common/Table";
 import type { CustomTableColumn } from "@/components/common/Table";
 import type { Order} from "@/constant/interfaces";
 import { useLoaderData } from "react-router-dom";
-import { Button, Dropdown, message, Space } from "antd";
-import { useUser } from "@/hooks/useUser";
-import ModalConfirm from "../modals/ModalConfirm";
-import type { ColumnType } from "antd/es/table";
-import { DeleteOutlined, EditOutlined, EyeOutlined, MoreOutlined,  } from "@ant-design/icons";
+import { Button } from "antd";
+import { Input, Select } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import ModalDetailOrder from "../modals/ModalDetailOrder";
 
 
@@ -20,114 +18,84 @@ const OrderManagementTable = () => {
         { key: "status", title: "Status", dataIndex: "status", align: "center" },
     ];
 
-    const actionColumn: CustomTableColumn<Order> = {
+   const actionColumn: CustomTableColumn<Order> = {
         title: "Thao tác",
         key: "actions",
         align: "center",
-        dataIndex: "status",
-        render: (_: unknown, record: any) => {
-        const menuItems = [
-            {
-            key: "edit",
-            label: (
-                <Space>
-                <EditOutlined />
-                Chỉnh sửa
-                </Space>
-            ),
-            //   onClick: () => onEdit?.(record),
-            },
-            {
-            key: "delete",
-            label: (
-                <Space>
-                <EyeOutlined />
-                Xem
-                </Space>
-            ),
-            onClick: () => handleDetail(record),
-            danger: true,
-            },
-        ];
-
-        return (
-            <Dropdown
-            menu={{ items: menuItems }}
-            trigger={["click"]}
-            placement="bottomRight"
-            >
+        dataIndex:"status",
+        render: (_: unknown, record: Order) => (
             <Button
-                type="text"
-                icon={<MoreOutlined />}
-                className="hover:bg-gray-100 transition-colors"
+            type="text"
+            icon={<EyeOutlined />}
+            onClick={() => handleDetail(record)}
+            className="hover:bg-gray-100 transition-colors"
             />
-            </Dropdown>
-        );
-        },
+        ),
     };
 
-  const orders = useLoaderData() as Order[];
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openModalDelete, setOpenModalDelete] = useState(false);
-  const { createUser, deleteUser } = useUser();
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const { Search } = Input;
+    const { Option } = Select;
+    const orders = useLoaderData() as Order[];
+    const [openDetailModal, setOpenDetailModal] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [searchText, setSearchText] = useState("");
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  const orderRef = useRef<Order | null>(null);
+    const handleDetail = useCallback((order: Order) => {
+        setSelectedOrder(order); 
+        setOpenDetailModal(true); 
+    }, []);
 
-  //TODO: Implement edit and delete functionality
-  const handleEdit = useCallback(async (user: Order) => {
-    //const { id, ...userData } = user;
-    //await updateUser(id, userData);
-    console.log("Chỉnh sửa:", user);
-  }, []);
-
-  const handleDetail = useCallback((order: Order) => {
-    setSelectedOrder(order); 
-    setOpenDetailModal(true); 
-  }, []);
-
-  const handleConfirmDelete = useCallback(async () => {
-    const user = orderRef.current;
-    if (!user) return;
-
-    try {
-      await deleteUser(user.id);
-      message.success("Xóa người dùng thành công!");
-      // bạn nên trigger revalidate ở đây (VD: bằng useFetcher.load hoặc navigate để reload)
-    } catch (error) {
-      console.error("Xóa người dùng thất bại:", error);
-      message.error("Xóa người dùng thất bại!");
-    } finally {
-      orderRef.current = null;
-      setOpenModalDelete(false);
-    }
-  }, [deleteUser]);
-
-//   const handleSubmitForm = useCallback(
-//     async (values: Order) => {
-//       try {
-//         await createUser(values);
-//         message.success("Tạo người dùng thành công!");
-//       } catch (error) {
-//         console.error("Error creating user:", error);
-//         message.error("Tạo người dùng thất bại!");
-//       } finally {
-//         setOpenModal(false);
-//       }
-//     },
-//     [createUser]
-//   );
+    const filteredOrders = orders?.filter(order => {
+        const matchName = order?.customer_name?.toLowerCase()
+            .includes(searchText.toLowerCase());
+        const matchStatus = statusFilter ? order.status === statusFilter : true;
+        return matchName && matchStatus;
+    });
 
   return (
     <>
       <div className={`bg-white rounded-lg shadow-sm`}>
-        <div className="flex px-6 py-4 justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-10">
             Quản lý đơn hàng
           </h3>
+          <div className="flex gap-3">
+            {/* Tìm kiếm theo tên khách hàng */}
+            <Search
+                placeholder="Tìm theo tên khách hàng"
+                allowClear
+                value={searchText}
+                onSearch={value => setSearchText(value)}
+                onChange={e => setSearchText(e.target.value)}
+                style={{ width: 250 }}
+            />
+
+            {/* Filter theo status */}
+            <Select
+                placeholder="Lọc theo trạng thái"
+                allowClear
+                value={statusFilter || undefined}
+                onChange={(value) => setStatusFilter(value || null)}
+                style={{ width: 180 }}
+            >
+                <Option value="confirmed">Confirmed</Option>
+                <Option value="pending">Pending</Option>
+                <Option value="cancelled">Cancelled</Option>
+            </Select>
+
+            <Button
+                onClick={() => {
+                    setSearchText("");
+                    setStatusFilter(null);
+                }}
+            >
+                Bỏ lọc
+            </Button>
+        </div>
         </div>
         <AdminTable<Order>
-          data={orders}
+          data={filteredOrders}
           columns={[...columns,actionColumn]}
           showActions={false}
         />

@@ -1,7 +1,7 @@
 import OrderManagementTable from "@/components/tables/OrderManagementTable";
 
 
-const UserManagement = () => {
+const OrderManagement = () => {
   return (
     <div>
       <OrderManagementTable />
@@ -9,4 +9,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default OrderManagement;

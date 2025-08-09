@@ -9,6 +9,7 @@ import { orderLoader } from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
+import { categoryLoader } from "./loaders/categoryLoader";
 
 // Lazy load pages
 // const LoginPage = lazy(() => import("@/pages/Login"));
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <RequireRoleWrapper role="admin">
+      <RequireRoleWrapper role="ADMIN">
         <AdminLayout />
       </RequireRoleWrapper>
     ),
@@ -58,7 +59,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/categories",
-        element: <div>Danh sách danh mục</div>,
+        element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
+        loader: categoryLoader,
       },
       {
         path: "/admin/categories/create",
@@ -75,8 +77,9 @@ const router = createBrowserRouter([
         loader: orderLoader,
       },
       {
-        path: "/admin/orders/pending",
-        element: <div>Đơn hàng chờ xử lý</div>,
+        path: "/admin/orders/statistics",
+        element: withSuspense(lazy(() => import("@/pages/OrderStatistics"))),
+        loader: orderLoader,
       },
     ],
   },

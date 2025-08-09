@@ -1,13 +1,12 @@
-import { Form, Input, DatePicker, Select, Button, Space } from "antd";
+import { Form, Input, Select, Button, Space } from "antd";
 import {
   UserOutlined,
   MailOutlined,
   LockOutlined,
-  CalendarOutlined,
   TeamOutlined,
+  PhoneOutlined,
 } from "@ant-design/icons";
 import type { FormProps } from "antd";
-import { formatDate, parseDate } from "@/utils/dateHelper";
 import type { User } from "@/constant/interfaces";
 
 const { Option } = Select;
@@ -30,11 +29,7 @@ export default function CreateUserForm({
   const [form] = Form.useForm();
 
   const handleFinish: FormProps<User>["onFinish"] = (values) => {
-    const formattedValues = {
-      ...values,
-      dateOfBirth: values.dateOfBirth ? formatDate(values.dateOfBirth) : "",
-    };
-    onSubmit?.(formattedValues);
+    onSubmit?.(values);
   };
 
   const handleFinishFailed: FormProps<User>["onFinishFailed"] = (errorInfo) => {
@@ -42,8 +37,8 @@ export default function CreateUserForm({
   };
 
   const roleOptions = [
-    { value: "admin", label: "Admin" },
-    { value: "user", label: "User" },
+    { value: "ADMIN", label: "Admin" },
+    { value: "USER", label: "User" },
   ];
   console.log("defaultValues", defaultValues);
   return (
@@ -56,12 +51,7 @@ export default function CreateUserForm({
         onFinishFailed={handleFinishFailed}
         autoComplete="off"
         className="space-y-4"
-        initialValues={{
-          ...defaultValues,
-          dateOfBirth: defaultValues?.dateOfBirth
-            ? parseDate(defaultValues.dateOfBirth)
-            : undefined,
-        }}
+        initialValues={defaultValues}
       >
         <Form.Item
           label={
@@ -83,16 +73,24 @@ export default function CreateUserForm({
 
         <Form.Item
           label={
-            <span className="text-sm font-medium text-gray-700">Ngày sinh</span>
+            <span className="text-sm font-medium text-gray-700">
+              Số điện thoại
+            </span>
           }
-          name="dateOfBirth"
-          rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}
+          name="phone"
+          rules={[
+            { required: true, message: "Vui lòng nhập số điện thoại!" },
+            {
+              pattern: /^(0[3|5|7|8|9])+([0-9]{8})$/,
+              message: "Số điện thoại không hợp lệ! (VD: 0912345678)",
+            },
+          ]}
         >
-          <DatePicker
-            placeholder="Chọn ngày sinh"
-            className="w-full h-10"
-            format="DD/MM/YYYY"
-            suffixIcon={<CalendarOutlined className="text-gray-400" />}
+          <Input
+            prefix={<PhoneOutlined className="text-gray-400" />}
+            placeholder="Nhập số điện thoại"
+            className="h-10"
+            maxLength={10}
           />
         </Form.Item>
 
@@ -166,7 +164,7 @@ export default function CreateUserForm({
               loading={loading}
               className="px-6 bg-blue-600 hover:bg-blue-700"
             >
-              Tạo người dùng
+              {isUpdating ? "Cập nhật" : "Tạo người dùng"}
             </Button>
           </Space>
         </Form.Item>

@@ -40,19 +40,9 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       ],
     },
     {
-      key: "categories",
+      key: "/admin/categories",
       icon: <AppstoreOutlined />,
       label: "Quản lý danh mục",
-      children: [
-        {
-          key: "/admin/categories",
-          label: "Danh sách danh mục",
-        },
-        {
-          key: "/admin/categories/create",
-          label: "Thêm danh mục",
-        },
-      ],
     },
     {
       key: "/admin/users",
@@ -65,12 +55,12 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       label: "Quản lý đơn hàng",
       children: [
         {
-          key: "/admin/orders",
-          label: "Danh sách đơn hàng",
+          key: "/admin/orders/statistics",
+          label: "Thống kê đơn hàng",
         },
         {
-          key: "/admin/orders/pending",
-          label: "Đơn hàng chờ xử lý",
+          key: "/admin/orders",
+          label: "Danh sách đơn hàng",
         },
       ],
     },

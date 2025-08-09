@@ -1,7 +1,8 @@
 export const API_ENDPOINTS = {
   // Authentication API endpoints
-  LOGIN: "/login",
-  REGISTER: "/register",
+  LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
+  ME: "/auth/me",
 
   // User API endpoints
   USERS: "/users",
@@ -24,6 +25,8 @@ export const API_ENDPOINTS = {
   // Category API endpoints
   GET_CATEGORIES: "/categories",
   CREATE_CATEGORY: "/categories",
+  UPDATE_CATEGORY: (id: number) => `/categories/${id}`,
+  DELETE_CATEGORY: (id: number) => `/categories/${id}`,
 
   // Order API endpoints
   ORDERS: "/orders",
