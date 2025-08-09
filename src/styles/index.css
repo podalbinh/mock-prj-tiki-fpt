@@ -46,3 +46,11 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* Hide browser default password field icons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+

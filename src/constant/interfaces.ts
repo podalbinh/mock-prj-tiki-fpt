@@ -55,3 +55,8 @@ export interface Order {
   total_price: number;
   status: string;
 }
+export interface RegisterRequest{
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
