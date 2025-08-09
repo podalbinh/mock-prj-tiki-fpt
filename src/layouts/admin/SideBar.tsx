@@ -40,19 +40,9 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       ],
     },
     {
-      key: "categories",
+      key: "/admin/categories",
       icon: <AppstoreOutlined />,
       label: "Quản lý danh mục",
-      children: [
-        {
-          key: "/admin/categories",
-          label: "Danh sách danh mục",
-        },
-        {
-          key: "/admin/categories/create",
-          label: "Thêm danh mục",
-        },
-      ],
     },
     {
       key: "/admin/users",
