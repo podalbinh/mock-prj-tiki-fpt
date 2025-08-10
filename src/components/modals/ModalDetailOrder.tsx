@@ -68,10 +68,9 @@ const ModalDetailOrder: React.FC<OrderModalProps> = ({
     >
       {order && (
         <div className="py-4">
-          <p><strong>Shop:</strong> {order.shop}</p>
-          <p><strong>Khách hàng:</strong> {order.customer_name}</p>
+          <p><strong>Khách hàng:</strong> {order.customerName}</p>
           <p><strong>Trạng thái:</strong> {order.status}</p>
-          <p><strong>Tổng tiền:</strong> {order.total_price.toLocaleString()} đ</p>
+          <p><strong>Tổng tiền:</strong> {order.totalPrice.toLocaleString()} đ</p>
 
           <h4 className="mt-4 mb-2 font-bold">Danh sách sản phẩm:</h4>
           <Table
