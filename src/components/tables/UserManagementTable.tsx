@@ -11,7 +11,6 @@ import ModalConfirm from "../modals/ModalConfirm";
 import { isNilOrEmpty } from "@/utils/dataHelper";
 import TableColumnNoData from "../common/TableColumnNoData";
 import { formatDateTime } from "@/utils/dateHelper";
-import { set } from "lodash";
 
 const userColumns: CustomTableColumn<User>[] = [
   {

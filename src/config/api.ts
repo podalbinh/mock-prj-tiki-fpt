@@ -1,6 +1,5 @@
 import apiClient from "./apiClient";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import { API_ENDPOINTS } from "@/constant/endpoint";
 
 export type CustomResponse<T = unknown> = {
   code: number;
@@ -103,7 +102,4 @@ export class Request {
   }
 }
 
-export const getCategories = () => Request.get(API_ENDPOINTS.GET_CATEGORIES);
-export const getBookFeaturedCollections = () => Request.get('/book-featured-collections');
-// Export default để có thể import theo kiểu: import Request from '@/config/api'
 export default Request;

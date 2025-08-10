@@ -16,11 +16,11 @@ const HomePage = () => {
         <Layout className="bg-transparent">
           <Content>
             <div className="max-w-[1450px] w-full mx-auto py-6">
-              <div className="flex flex-col lg:flex-row gap-6">
+              <div className="flex flex-col lg:flex-row gap-3 items-start">
                 <Sidebar />
                 <main className="flex-1">
                   <div className="bg-white rounded-lg">
-                    <h1 className="text-2xl font-semibold text-black">
+                    <h1 className="text-2xl font-semibold text-black p-4">
                       Nhà Sách Tiki
                     </h1>
                   </div>

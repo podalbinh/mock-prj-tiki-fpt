@@ -2,33 +2,64 @@
 
 import React, { useEffect, useState } from 'react'
 
-import ArrowNext from "@/assets/arrow-next.svg"; // Đảm bảo đã cấu hình loader cho SVG hoặc dùng <img src=...>
-import { getBookFeaturedCollections } from '@/config/api';
-import type { CardData } from "@/constant/mockFeaturedCollections";
-import { mockFeaturedCollections } from '@/constant/mockFeaturedCollections';
+import ArrowNext from "@/assets/arrow-next.svg";
+import { API_ENDPOINTS } from '@/constant/endpoint';
+import Request from "@/config/api.ts";
+
+// Updated interface to match API response
+interface ProductItem {
+  id: number;
+  url: string;
+  discountPercent: number;
+}
+
+interface FeaturedCollectionData {
+  logo: string;
+  title: string;
+  sponsor: string;
+  ratingText: string;
+  listProduct: ProductItem[];
+  rating: number;
+}
+
+interface ApiResponse {
+  device: string;
+  code: number;
+  data: FeaturedCollectionData[];
+}
 
 const FeaturedCollections: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [allCards, setAllCards] = useState<CardData[]>([]);
+  const [allCards, setAllCards] = useState<FeaturedCollectionData[]>([]);
+  
+  const getBookFeaturedCollections = () => Request.get<ApiResponse>(API_ENDPOINTS.GET_BOOK_FEATURED_COLLECTIONS);
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const collections = await getBookFeaturedCollections();
-        if (!Array.isArray(collections) || collections.length === 0) {
-          setAllCards(mockFeaturedCollections);
-          return;
+        const response = await getBookFeaturedCollections();
+        console.log('API Response:', response); // Debug log
+        
+        // Check if response has the correct structure
+        if (response && response.data && Array.isArray(response.data)) {
+          setAllCards(response.data);
+        } else if (response && Array.isArray(response)) {
+          // Fallback: if response is directly an array
+          setAllCards(response);
+        } else {
+          console.log('Invalid response structure:', response);
+          setAllCards([]);
         }
-        setAllCards(collections);
       } catch (err) {
-        setAllCards(mockFeaturedCollections);
+        console.error('Error fetching featured collections:', err);
+        setAllCards([]);
       }
     };
     fetchCollections();
   }, []);
 
   // Group into pairs
-  const pairs: CardData[][] = [];
+  const pairs: FeaturedCollectionData[][] = [];
   for (let i = 0; i < allCards.length; i += 2) {
     pairs.push(allCards.slice(i, i + 2));
   }
@@ -42,7 +73,7 @@ const FeaturedCollections: React.FC = () => {
     setCurrentIndex((prev) => (prev === totalPages - 1 ? 0 : prev + 1));
   };
 
-  const renderCard = (cardData: CardData, index: number) => (
+  const renderCard = (cardData: FeaturedCollectionData, index: number) => (
     <div
       key={index}
       className="relative flex bg-white box-border h-[186px] border border-black/5 rounded-lg min-w-[585px] max-w-[585px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -60,23 +91,22 @@ const FeaturedCollections: React.FC = () => {
         <div>
           <h3 className="text-base font-semibold text-gray-800 mb-0.5">{cardData.title}</h3>
           <p className="text-xs text-gray-600 flex items-center">
-            {cardData.sponsor}
-            <span className="font-bold mx-1 text-gray-800">{cardData.brand}</span>
+          Tài trợ bởi<b className='text-black'>{cardData.sponsor}</b>
             <span className="ml-1 text-gray-800">{cardData.ratingText}</span>
             <span className="text-yellow-500 ml-1">⭐</span>
           </p>
         </div>
         <div className="flex gap-2 mt-2 items-end">
-          {cardData.books.map((book) => (
-            <div key={book.id} className="relative group cursor-pointer">
+          {cardData.listProduct.map((product) => (
+            <div key={product.id} className="relative group cursor-pointer">
               <img
-                src={book.image || "src/assets/refund.svg"}
-                alt={book.title}
+                src={product.url}
+                alt={`Product ${product.id}`}
                 className="w-[64px] h-[64px] object-cover rounded border shadow-sm group-hover:shadow-md transition-shadow"
               />
-              {book.discount && (
+              {product.discountPercent > 0 && (
                 <div className="absolute right-[5px] bottom-[5px] bg-red-500 text-white text-[10px] px-1 pl-1 rounded-full font-semibold shadow">
-                  {book.discount}
+                  -{product.discountPercent}%
                 </div>
               )}
             </div>
@@ -86,13 +116,25 @@ const FeaturedCollections: React.FC = () => {
     </div>
   );
 
+  // If no data, show empty state
+  if (pairs.length === 0) {
+    return (
+      <div className="relative w-full">
+        <div className="flex justify-center items-center h-48">
+          <p className="text-gray-500">Không có dữ liệu</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full">      {/* Container chính */}
+    <div className="relative w-full">
       <div className="relative">
         {/* Nút Previous */}
         <button
           onClick={handlePrevious}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"        >
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"
+        >
           <img src={ArrowNext} alt="prev" className="rotate-180 w-[32px] h-[56px]" />
         </button>
 
@@ -105,7 +147,7 @@ const FeaturedCollections: React.FC = () => {
         </button>
 
         {/* Hai card cạnh nhau */}
-        <div className="flex justify-between ">
+        <div className="flex justify-between">
           {pairs[currentIndex]?.map((cardData, index) => renderCard(cardData, index))}
         </div>
 
@@ -115,14 +157,15 @@ const FeaturedCollections: React.FC = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
-                }`}
+              className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${
+                index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
+              }`}
             />
           ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default FeaturedCollections;

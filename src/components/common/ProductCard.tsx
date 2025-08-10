@@ -1,23 +1,8 @@
 import { Card, Rate, Tag, Divider } from 'antd';
-import { TruckOutlined } from '@ant-design/icons';
+import type { Product } from '@/constant/interfaces';
 
 interface ProductCardProps {
-  product: {
-    id: number;
-    title: string;
-    author?: string;
-    price: number;
-    originalPrice: number;
-    discount: number;
-    rating: number;
-    sold: number;
-    image: string;
-    hasAd?: boolean;
-    hasTikiNow?: boolean;
-    isTopDeal?: boolean;
-    isFreeshipXtra?: boolean;
-    isAuthentic?: boolean;
-  };
+  product: Product;
   formatPrice: (price: number) => string;
 }
 
@@ -37,7 +22,7 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
         <div className="absolute left-0 right-0 top-0 bottom-[263px]">
           <img
             alt={product.title}
-            src={product.image || '/placeholder.svg'}
+            src={product.thumbnailUrl || '/placeholder.svg'}
             className="w-full h-full object-cover"
           />
           {product.hasAd && (
@@ -48,10 +33,10 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
           {/* Left badges (optional) */}
           <div className="absolute left-3 top-2 flex items-center gap-2">
             {product.isTopDeal && (
-              <img src="/top-deal.png" alt="TOP DEAL" className="h-5 rounded" />
+              <img src="/src/assets/top-deal.png" alt="TOP DEAL" className="h-5 rounded" />
             )}
             {product.isFreeshipXtra && (
-              <img src="/freeship-extra.png" alt="FREESHIP XTRA" className="h-5 rounded" />
+              <img src="/src/assets/freeship-extra.png" alt="FREESHIP XTRA" className="h-5 rounded" />
             )}
             {product.isAuthentic && (
               <Tag color="blue" className="!m-0 text-[11px] font-semibold">CHÍNH HÃNG</Tag>
@@ -60,12 +45,19 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
         </div>
 
         {/* Price */}
-        <div className="absolute left-3 top-[288px] text-[#FF424E] font-semibold text-[18px] leading-[27px] flex items-center">
+        <div className="absolute left-3 top-[288px] text-[#FF424E] font-semibold text-[18px] leading-[27px] flex items-baseline">
           {formatPrice(product.price)}
-          <span className="ml-0.5 text-[13.5px] leading-[27px]">₫</span>
+          <span className=" text-[13px] leading-[20px] self-start">₫</span>
         </div>
+        
+        {/* Discount - Đặt vị trí động dựa trên độ dài của giá */}
         {product.discount > 0 && (
-          <div className="absolute left-[88px] top-[288px] w-[46.07px] h-[21px] bg-[#F5F5FA] rounded-lg flex items-center justify-center">
+          <div 
+            className="absolute top-[288px] h-[21px] bg-[#F5F5FA] rounded-lg flex items-center justify-center px-2"
+            style={{
+              left: `${Math.max(88, 60 + (formatPrice(product.price).length * 5))}px`
+            }}
+          >
             <span className="text-[14px] leading-[21px] text-[#27272A]">-{product.discount}%</span>
           </div>
         )}
@@ -110,7 +102,7 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
         <div className="absolute left-0 right-0 top-[508px] flex items-center text-[#808089] text-xs px-3">
           {product.hasTikiNow ? (
             <>
-              <TruckOutlined className="mr-1" />
+              <img src="src/assets/now.png" alt="NOW" className="h-[18px] mr-1" />
               <span>Giao siêu tốc 2h</span>
             </>
           ) : (

@@ -22,6 +22,15 @@ export interface Category {
   name: string;
 }
 
+export interface SidebarCategory {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
+  parentId?: number | null;
+  parentName?: string | null;
+  subcategories?: SidebarCategory[] | null;
+}
+
 export interface QuantitySold {
   text: string;
   value: number;
@@ -82,4 +91,38 @@ export interface RegisterRequest{
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface Product {
+  id: number;
+  title: string;
+  author: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  rating: number;
+  sold: number;
+  thumbnailUrl: string;
+  hasAd: boolean;
+  hasTikiNow: boolean;
+  isTopDeal: boolean;
+  isFreeshipXtra: boolean;
+  isAuthentic: boolean;
+}
+
+export interface ProductSearchResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  sortBy: string;
+  orderBy: string;
+  content: Product[];
+}
+
+export interface CategoryWithThumbnail {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
 }
