@@ -5,13 +5,13 @@ import type { Order } from "@/constant/interfaces";
 import { useLoaderData } from "react-router-dom";
 
 
-const COLORS = ["#4CAF50", "#FFC107", "#F44336"];
+const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#3688f4ff" ];
 
 const OrderDashboard = () => {
 
   const orders = useLoaderData() as Order[];
   const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.total_price || 0), 0);
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
   const pendingOrders = orders.filter((o) => o.status === "pending").length;
 
   const pieData = useMemo(() => {
@@ -25,16 +25,6 @@ const OrderDashboard = () => {
     }));
   }, [orders]);
 
-  const barData = useMemo(() => {
-    const shopRevenue: Record<string, number> = {};
-    orders.forEach((o) => {
-      shopRevenue[o.shop] = (shopRevenue[o.shop] || 0) + (o.total_price || 0);
-    });
-    return Object.keys(shopRevenue).map((shop) => ({
-      shop,
-      revenue: shopRevenue[shop],
-    }));
-  }, [orders]);
 
   return (
     <div className="p-4 bg-gray-50 rounded-lg">
@@ -84,22 +74,6 @@ const OrderDashboard = () => {
                 <Tooltip />
                 <Legend />
               </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </Col>
-
-        {/* Bar Chart */}
-        <Col span={12}>
-          <Card title="Doanh thu theo shop" bordered={false} className="shadow-sm">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="shop" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="revenue" fill="#1890ff" />
-              </BarChart>
             </ResponsiveContainer>
           </Card>
         </Col>
