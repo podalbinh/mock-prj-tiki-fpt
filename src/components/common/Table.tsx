@@ -1,7 +1,9 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 import { Table, Dropdown, Button, Space } from "antd";
 import { MoreOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType, TableProps, ColumnType } from "antd/es/table";
+import { isNilOrEmpty } from "@/utils/dataHelper";
+import TableColumnNoData from "./TableColumnNoData";
 
 export interface CustomTableColumn<T> {
   key: string;
@@ -105,6 +107,10 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
           : col.align === "right"
           ? "text-right"
           : "text-left",
+      render: col.render
+        ? col.render
+        : (value: ReactNode) =>
+            isNilOrEmpty(value) ? <TableColumnNoData /> : value,
     })),
     ...(showActions ? [actionColumn] : []),
   ];

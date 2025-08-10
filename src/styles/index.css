@@ -46,3 +46,31 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* Hide browser default password field icons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+
+/* Custom tweaks to match design proportions */
+.ant-card-body {
+  /* keep rounded look consistent */
+}
+
+/* Sort select appearance to match pill border */
+.sort-select .ant-select-selector {
+  border-radius: 20px !important;
+  border-color: #DDDDE3 !important;
+  height: 35px !important;
+  padding: 0 12px !important;
+}
+.sort-select .ant-select-selection-item {
+  line-height: 33px !important;
+}
+
+.filter-bar .ant-divider-vertical {
+  border-inline-start-color: #EBEBF0 !important;
+}
+

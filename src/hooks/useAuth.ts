@@ -11,7 +11,7 @@ import {
   selectError,
   selectIsLoading,
 } from "@/store/slices/authSlice";
-import { useNavigate } from "react-router";
+import { useNavigate, useNavigation } from "react-router";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -22,13 +22,15 @@ export const useAuth = () => {
   const error = useAppSelector(selectError);
   const isLoading = useAppSelector(selectIsLoading);
   const navigate = useNavigate();
+  const path = useNavigation();
 
   // Auto check auth on mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (!token) {
+    if (!token && path.location?.pathname.includes("admin")) {
       navigate("/admin/login");
     }
+
     if (!user) {
       dispatch(checkAuth());
     }

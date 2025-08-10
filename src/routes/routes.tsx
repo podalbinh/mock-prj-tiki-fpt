@@ -4,12 +4,21 @@ import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
 import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
+import {bookLoader} from "@/routes/loaders/bookLoader.tsx";
 import { orderLoader } from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
+import { categoryLoader } from "./loaders/categoryLoader";
 
+// Lazy load pages
+// const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
+const ProfilePage = lazy(() => import("@/pages/Profile"));
+const AccountInfo = lazy(() => import("@/pages/AccountInfo"));
+const Notifications = lazy(() => import("@/pages/Notifications"));
+const Orders = lazy(() => import("@/pages/MyOrders"));
+
 
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
@@ -23,18 +32,40 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <UserLayout />,
-    errorElement: <Error404 />,
     children: [
       {
+        path: "/",
         index: true,
         element: withSuspense(HomePage),
+      },
+      {
+        path: "profile",
+        element: withSuspense(ProfilePage), // <- Trang chứa layout sidebar + Outlet
+        children: [
+          {
+            index: true,
+            element: withSuspense(AccountInfo), // Mặc định là thông tin tài khoản
+          },
+          {
+            path: "account-info",
+            element: withSuspense(AccountInfo),
+          },
+          {
+            path: "notifications",
+            element: withSuspense(Notifications),
+          },
+          {
+            path: "orders",
+            element: withSuspense(Orders),
+          },
+        ],
       },
     ],
   },
   {
     path: "/admin",
     element: (
-      <RequireRoleWrapper role="admin">
+      <RequireRoleWrapper role="ADMIN">
         <AdminLayout />
       </RequireRoleWrapper>
     ),
@@ -46,7 +77,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/products",
-        element: <div>Danh sách sản phẩm</div>,
+        element: withSuspense(lazy(() => import("@/pages/BookManage.tsx"))),
+        loader: bookLoader,
       },
       {
         path: "/admin/products/create",
@@ -54,7 +86,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/categories",
-        element: <div>Danh sách danh mục</div>,
+        element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
+        loader: categoryLoader,
       },
       {
         path: "/admin/categories/create",
@@ -71,8 +104,9 @@ const router = createBrowserRouter([
         loader: orderLoader,
       },
       {
-        path: "/admin/orders/pending",
-        element: <div>Đơn hàng chờ xử lý</div>,
+        path: "/admin/orders/statistics",
+        element: withSuspense(lazy(() => import("@/pages/OrderStatistics"))),
+        loader: orderLoader,
       },
     ],
   },

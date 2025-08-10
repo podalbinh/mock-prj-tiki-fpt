@@ -1,5 +1,6 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
+import { UserRole } from "@/constant/enums";
 import type { User } from "@/constant/interfaces";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -25,15 +26,15 @@ export const login = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await Request.post<{ user: User; accessToken: string }>(
+      const response = await Request.post<{ user: User; token: string }>(
         API_ENDPOINTS.LOGIN,
         credentials
       );
-      const { user, accessToken } = response;
+      const { user, token } = response;
 
-      localStorage.setItem("authToken", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
-      return { user, token: accessToken };
+      localStorage.setItem("authToken", token);
+      
+      return { user, token };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return rejectWithValue(
@@ -50,9 +51,10 @@ export const checkAuth = createAsyncThunk(
     try {
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("No token");
-      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const user = await Request.get<User>(API_ENDPOINTS.ME);
+      localStorage.setItem("user", JSON.stringify(user));
       if (!user) throw new Error("No user data");
-      return user as User;
+      return user;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -70,12 +72,16 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("user");
 });
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -104,7 +110,7 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isLoading = false;
-      })  
+      })
 
       // Logout
       .addCase(logout.fulfilled, (state) => {
@@ -115,7 +121,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError,setUser  } = authSlice.actions;
 export default authSlice.reducer;
 
 // Selectors
@@ -123,6 +129,7 @@ export const selectUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectIsAuthenticated = (state: { auth: AuthState }) =>
   !!state.auth.token;
 export const selectIsAdmin = (state: { auth: AuthState }) =>
-  state.auth.user?.role === "admin";
+  state.auth.user?.role === UserRole.ADMIN;
 export const selectError = (state: { auth: AuthState }) => state.auth.error;
-export const selectIsLoading = (state: { auth: AuthState }) => state.auth.isLoading;
+export const selectIsLoading = (state: { auth: AuthState }) =>
+  state.auth.isLoading;

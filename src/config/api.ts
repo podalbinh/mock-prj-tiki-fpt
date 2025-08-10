@@ -1,5 +1,11 @@
 import apiClient from "./apiClient";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import { API_ENDPOINTS } from "@/constant/endpoint";
+
+export type CustomResponse<T = unknown> = {
+  code: number;
+  data: T;
+};
 
 // Request class chứa tất cả HTTP methods
 export class Request {
@@ -8,8 +14,8 @@ export class Request {
     config: AxiosRequestConfig
   ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await apiClient(config);
-      return response.data;
+      const response: AxiosResponse<CustomResponse<T>> = await apiClient(config);
+      return response.data.data;
     } catch (error: unknown) {
       const axiosError = error as {
         response?: {
@@ -97,5 +103,7 @@ export class Request {
   }
 }
 
+export const getCategories = () => Request.get(API_ENDPOINTS.GET_CATEGORIES);
+export const getBookFeaturedCollections = () => Request.get('/book-featured-collections');
 // Export default để có thể import theo kiểu: import Request from '@/config/api'
 export default Request;
