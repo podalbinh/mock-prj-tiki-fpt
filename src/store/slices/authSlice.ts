@@ -33,7 +33,7 @@ export const login = createAsyncThunk(
       const { user, token } = response;
 
       localStorage.setItem("authToken", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      
       return { user, token };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -52,6 +52,7 @@ export const checkAuth = createAsyncThunk(
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("No token");
       const user = await Request.get<User>(API_ENDPOINTS.ME);
+      localStorage.setItem("user", JSON.stringify(user));
       if (!user) throw new Error("No user data");
       return user;
 
@@ -71,12 +72,16 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("user");
 });
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -116,7 +121,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError,setUser  } = authSlice.actions;
 export default authSlice.reducer;
 
 // Selectors
