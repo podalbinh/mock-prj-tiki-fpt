@@ -12,10 +12,21 @@ import CartWithBadge from "@/components/common/CartWithBadge";
 import {LoginModal} from "@/components/forms/LoginModalForm";
 import { useModal } from '@/hooks/useModal'
 import { SignupModal } from "@/components/forms/SignUpModalForm";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { openLoginModal } = useModal()
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem("authToken"); 
 
+  const handleAccountClick = () => {
+    console.log('isAuthenticated',isAuthenticated)
+    if (isAuthenticated) {
+      navigate("/profile");
+    } else {
+      openLoginModal();
+    }
+  };
 
   return (
     <div className="flex flex-col shadow-sm">
@@ -29,7 +40,7 @@ const Header = () => {
             Trang chủ
           </Link>
           <button
-            onClick={openLoginModal}
+            onClick={handleAccountClick}
             className="mx-4 max-h-min flex items-center"
           >
             <UserOutlined className="text-[20px] p-1" />
