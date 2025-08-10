@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { Card, Select, Checkbox, Divider, Rate, Spin } from 'antd';
+import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { Card, Select, Checkbox, Rate, Spin } from 'antd';
 import ProductCard from './ProductCard';
 import { Request } from '@/config/api';
 import { API_ENDPOINTS } from '@/constant/endpoint';
@@ -8,7 +8,11 @@ import type { Product, ProductSearchResponse } from '@/constant/interfaces';
 
 const { Option } = Select;
 
-export default function ProductGrid() {
+export interface ProductGridRef {
+    handleCategorySelect: (categoryId: number | null) => void;
+}
+
+const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
     // Loading context
     const { showLoading, hideLoading } = useLoading();
     
@@ -18,6 +22,9 @@ export default function ProductGrid() {
     const [hasMore, setHasMore] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
+    
+    // Category filter
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     
     // Sorting
     const [sort, setSort] = useState<'popular' | 'price-asc' | 'price-desc'>('popular');
@@ -42,12 +49,27 @@ export default function ProductGrid() {
     // Flag để kiểm tra xem có đang reset pagination hay không
     const isResettingRef = useRef(false);
 
+    // Expose methods to parent component
+    useImperativeHandle(ref, () => ({
+        handleCategorySelect: (categoryId: number | null) => {
+            console.log('ProductGrid handleCategorySelect called with:', categoryId);
+            setSelectedCategoryId(categoryId);
+            
+            // Reset pagination when category changes
+            resetPagination();
+            
+            // Call fetchProducts directly with the categoryId parameter
+            console.log('Fetching products with categoryId:', categoryId);
+            fetchProductsWithCategory(0, sort, false, categoryId);
+        }
+    }));
+
     const formatPrice = (price: number) => {
         return price.toLocaleString('vi-VN');
     };
 
-    // Fetch products from API
-    const fetchProducts = async (page: number, sortBy: string, append: boolean = false) => {
+    // Fetch products from API with specific categoryId
+    const fetchProductsWithCategory = async (page: number, sortBy: string, append: boolean = false, categoryId: number | null = null) => {
         try {
             setLoading(true);
             
@@ -62,6 +84,16 @@ export default function ProductGrid() {
             if (filters.minRating > 0) {
                 params.minRating = filters.minRating;
             }
+            
+            // Thêm categoryId nếu có category được chọn
+            if (categoryId !== null) {
+                params.categoryId = categoryId;
+                console.log('Adding categoryId to API params:', categoryId);
+            } else {
+                console.log('No categoryId - will fetch all products');
+            }
+            
+            console.log('Final API params:', params);
             
             const response = await Request.get<ProductSearchResponse>(
                 API_ENDPOINTS.SEARCH_PRODUCTS,
@@ -100,6 +132,11 @@ export default function ProductGrid() {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Fetch products from API (uses selectedCategoryId from state)
+    const fetchProducts = async (page: number, sortBy: string, append: boolean = false) => {
+        return fetchProductsWithCategory(page, sortBy, append, selectedCategoryId);
     };
 
     // Reset pagination when filters or sort change
@@ -212,6 +249,15 @@ export default function ProductGrid() {
             <div className="p-4 bg-white rounded-lg shadow-sm border">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Tất cả sản phẩm</h2>
                 
+                {/* Category Filter Display */}
+                {selectedCategoryId && (
+                    <div className="mb-4 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                        <span className="text-blue-700 text-sm">
+                            Đang lọc theo danh mục: <strong>ID {selectedCategoryId}</strong>
+                        </span>
+                    </div>
+                )}
+                
                 {/* Filter Options */}
                 <div className="flex flex-wrap gap-4 mb-4">
                     <Checkbox
@@ -290,4 +336,8 @@ export default function ProductGrid() {
             </div>
         </Card>
     );
-}
+});
+
+ProductGrid.displayName = 'ProductGrid';
+
+export default ProductGrid;

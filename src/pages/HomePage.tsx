@@ -5,10 +5,25 @@ import CategorySection from "@/components/CategorySection";
 import ProductGrid from "@/components/common/ProductGrid";
 import TopBestSellerBook from "@/layouts/user/home_page/TopBestSellerBook.tsx";
 import RelatedSearches from "@/layouts/user/home_page/RelatedSearches.tsx";
+import { useRef } from "react";
 
 const { Content } = Layout;
 
 const HomePage = () => {
+  // Ref để truy cập ProductGrid
+  const productGridRef = useRef<{ handleCategorySelect: (categoryId: number | null) => void }>(null);
+
+  // Handle category selection
+  const handleCategorySelect = (categoryId: number | null) => {
+    console.log('HomePage: handleCategorySelect called with categoryId:', categoryId);
+    if (productGridRef.current) {
+      console.log('HomePage: Calling productGridRef.current.handleCategorySelect');
+      productGridRef.current.handleCategorySelect(categoryId);
+    } else {
+      console.log('HomePage: productGridRef.current is null');
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-[#f5f6fa]">
       {/* Nội dung */}
@@ -25,8 +40,8 @@ const HomePage = () => {
                     </h1>
                   </div>
                   <FeaturedCollections />
-                  <CategorySection />
-                  <ProductGrid />
+                  <CategorySection onCategorySelect={handleCategorySelect} />
+                  <ProductGrid ref={productGridRef} />
                 </main>
               </div>
             </div>

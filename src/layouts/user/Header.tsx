@@ -6,16 +6,37 @@ import shipping from "@/assets/shipping.svg";
 import refund from "@/assets/refund.svg";
 import returnPolicy from "@/assets/return.svg";
 
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { Dropdown, Space, Avatar } from "antd";
 import CartWithBadge from "@/components/common/CartWithBadge";
 import {LoginModal} from "@/components/forms/LoginModalForm";
 import { useModal } from '@/hooks/useModal'
 import { SignupModal } from "@/components/forms/SignUpModalForm";
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
   const { openLoginModal } = useModal()
+  const { user, isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
 
+  const userMenuItems = [
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Đăng xuất",
+      danger: true,
+    },
+  ];
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    switch (key) {
+      case "logout":
+        logout();
+        navigate("/");
+        break;
+    }
+  };
 
   return (
     <div className="flex flex-col shadow-sm">
@@ -28,13 +49,28 @@ const Header = () => {
             <HomeOutlined className="text-[20px] p-1" />
             Trang chủ
           </Link>
-          <button
-            onClick={openLoginModal}
-            className="mx-4 max-h-min flex items-center"
-          >
-            <UserOutlined className="text-[20px] p-1" />
-            Tài khoản
-          </button>
+          
+          {isAuthenticated ? (
+            <Dropdown
+              menu={{ items: userMenuItems, onClick: handleMenuClick }}
+              placement="bottomRight"
+              arrow
+            >
+              <Space className="cursor-pointer mx-4 max-h-min flex items-center">
+                <Avatar icon={<UserOutlined />} size="small" />
+                <span className="text-gray-700">{user?.email}</span>
+              </Space>
+            </Dropdown>
+          ) : (
+            <button
+              onClick={openLoginModal}
+              className="mx-4 max-h-min flex items-center"
+            >
+              <UserOutlined className="text-[20px] p-1" />
+              Tài khoản
+            </button>
+          )}
+          
           <Link to="/cart" className="border-l-2 max-h-min px-4">
             <CartWithBadge />
           </Link>
