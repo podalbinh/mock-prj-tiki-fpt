@@ -24,10 +24,12 @@ export const useBook = () => {
     };
 
     const createBook = async (bookData: Partial<Book>) => {
+        console.log("create book: " + bookData);
         return await Request.post<Book>(API_ENDPOINTS.CREATE_BOOK, bookData);
     };
 
     const updateBook = async (id: number, bookData: Partial<Book>) => {
+        console.log("update book: " + bookData);
         return await Request.put<Book>(
             API_ENDPOINTS.UPDATE_BOOK(id),
             bookData

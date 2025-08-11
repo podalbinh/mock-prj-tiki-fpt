@@ -50,7 +50,6 @@ export interface Specification {
 
 export interface Book {
   id: number;
-  sku: string;
   name: string;
   authors: Author[];
   description: string;
@@ -66,8 +65,9 @@ export interface Book {
   numberOfPage: string;
   stockQuantity: number;
   isActive: boolean;
-  categories: Category;
-  quantitySold: QuantitySold;
+  categoriesId: number;
+  quantitySold: number;
+  thumbnail: string;
 }
 
 export interface Item {

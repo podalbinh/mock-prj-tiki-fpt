@@ -2,11 +2,12 @@ import { Form, Input, Select, Button, Space, InputNumber } from "antd";
 import type { FormProps } from "antd";
 import { Image, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import type {Attribute, Author, Book, Category, Specification} from "@/constant/interfaces";
+import type {Author, Book, Category} from "@/constant/interfaces";
 import { useState, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {useImage} from "@/hooks/useImage.ts";
 import {useCategory} from "@/hooks/useCategory.ts";
+import useUpload from "@/hooks/useUpload.ts";
+import type {RcFile} from "antd/es/upload";
 
 const { Option } = Select;
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -28,7 +29,7 @@ export default function CreateBookForm({
                                             defaultValues
                                        }: CreateBookFormProps) {
     const [form] = Form.useForm();
-    const { uploadMultipleImages } = useImage();
+    const { uploadImage } = useUpload();
     const { getAllCategories } = useCategory();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -43,12 +44,12 @@ export default function CreateBookForm({
         });
 
     const attributeDefinitions = [
-        { code: "publisher_vn", name: "Công ty phát hành" },
-        { code: "publication_date", name: "Năm xuất bản" },
+        { code: "publisherVn", name: "Công ty phát hành" },
+        { code: "publicationDate", name: "Năm xuất bản" },
         { code: "dimensions", name: "Kích thước" },
-        { code: "dich_gia", name: "Dịch Giả" },
-        { code: "book_cover", name: "Loại bìa" },
-        { code: "number_of_page", name: "Số trang" },
+        { code: "dichGia", name: "Dịch Giả" },
+        { code: "bookCover", name: "Loại bìa" },
+        { code: "numberOfPage", name: "Số trang" },
         { code: "manufacturer", name: "Nhà xuất bản" },
     ];
     const [categoriesOption, setCategoriesOption] = useState<Category[]>([]);
@@ -62,10 +63,11 @@ export default function CreateBookForm({
 
         if (isUpdating && defaultValues) {
             // Đặt lại GT một số trường khi update
+            console.log("defaultValues", defaultValues);
             form.setFieldsValue({
                 ...defaultValues,
                 authors: defaultValues.authors?.map((a) => a.name).join(", "),
-                categories: defaultValues.categories?.name,
+                categoriesId: defaultValues.categoriesId,
             });
 
             // Map ảnh từ defaultValues vào fileList để hiển thị
@@ -73,7 +75,7 @@ export default function CreateBookForm({
                 uid: `${index}`,
                 name: `image-${index}`,
                 status: 'done',
-                url: img.base_url,
+                url: img.baseUrl,
             })) || [getAllCategories];
 
             setFileList(files);
@@ -96,23 +98,22 @@ export default function CreateBookForm({
     const handleFinish: FormProps<Book>["onFinish"] = async (formValues) => {
         setIsSubmitting(true);
 
-        // Gửi ảnh lên firebase
-        const imageUrls: string[] = await uploadMultipleImages(
-            fileList
-                .filter((f) => !!f.originFileObj)
-                .map((f) => f.originFileObj as File)
-        );
-
-        // Tạo ds ảnh trong book
-        const images = imageUrls.map((url, index) => ({
-            base_url: url,
-            is_gallery: index !== 0, // ảnh đầu tiên không phải gallery
-            label: '',
-            large_url: url,
-            medium_url: url,
-            small_url: url,
-            thumbnail_url: url,
-        }));
+        // Gửi ảnh lên server
+        const images = [];
+        for (const file of fileList) {
+            const res = await uploadImage(file.originFileObj as RcFile);
+            images.push(
+                {
+                    baseUrl: res.url,
+                    isGallery: res.url.includes('gallery'),
+                    label: res.url.includes('gallery') ? 'Gallery' : '',
+                    largeUrl: res.url,
+                    mediumUrl: res.url,
+                    smallUrl: res.url,
+                    thumbnailUrl: res.url,
+                }
+            )
+        }
 
         // Tạo ds tác giả trong book
         const authors: Author[] = formValues.authors
@@ -128,29 +129,23 @@ export default function CreateBookForm({
             : [];
 
         // Thông số kỹ thuật
-        const specifications: Specification[] = [];
+        let specifications = {};
 
         if (
             "manufacturer" in formValues
-            && "dich_gia" in formValues
-            && "publisher_vn" in formValues
+            && "dichGia" in formValues
+            && "publisherVn" in formValues
             && "dimensions" in formValues
-            && "number_of_page" in formValues
+            && "numberOfPage" in formValues
         ) {
-            specifications.push({
-                name: 'Thông tin sách',
-                attributes: [
-                    formValues.manufacturer && { code: 'manufacturer', name: 'Nhà sản xuất', values: formValues.manufacturer },
-                    formValues.dich_gia && { code: 'dich_gia', name: 'Dịch giả', values: formValues.dich_gia },
-                    formValues.publisher_vn && { code: 'publisher_vn', name: 'Nhà xuất bản', values: formValues.publisher_vn },
-                    formValues.dimensions && { code: 'dimensions', name: 'Kích thước', values: formValues.dimensions },
-                    formValues.number_of_page && { code: 'number_of_page', name: 'Số trang', values: formValues.number_of_page },
-                ].filter(Boolean) as Attribute[]
-            });
+            specifications = {
+                'manufacturer': formValues.manufacturer,
+                'dichGia': formValues.dichGia,
+                'publisherVn': formValues.publisherVn,
+                'dimensions': formValues.dimensions,
+                'numberOfPage': formValues.numberOfPage,
+            }
         }
-
-        // Lấy Category
-        const category = categoriesOption.find((c) => c.name === formValues?.categories) as Category;
 
         // Tập hợp thành phần lại tạo thành sách
         const book: Partial<Book> = {
@@ -158,15 +153,14 @@ export default function CreateBookForm({
             authors,
             description: formValues.description ?? '',
             images,
-            original_price: Number(formValues.original_price),
-            list_price: Number(formValues.list_price),
-            short_description: formValues.short_description ?? '',
-            categories: category,
-            specifications,
+            originalPrice: Number(formValues.originalPrice),
+            listPrice: Number(formValues.listPrice),
+            shortDescription: formValues.shortDescription ?? '',
+            categoriesId: formValues.categoriesId,
+            ...specifications,
+            thumbnail: images[0].baseUrl
         };
 
-        console.log("book: ", book);
-        console.log("formValues: ", formValues);
         onSubmit?.(book as Book);
         setIsSubmitting(false);
         form.resetFields();
@@ -233,7 +227,7 @@ export default function CreateBookForm({
                     label={
                         <span className="text-sm font-medium text-gray-700">Danh mục</span>
                     }
-                    name="categories"
+                    name="categoriesId"
                     rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
                 >
                     <Select
@@ -243,7 +237,7 @@ export default function CreateBookForm({
                         disabled={isUpdating}
                     >
                         {categoriesOption.map((option) => (
-                            <Option key={option.id} value={option.name}>
+                            <Option key={option.id} value={option.id}>
                                 {option.name}
                             </Option>
                         ))}
@@ -255,7 +249,7 @@ export default function CreateBookForm({
                         label={
                             <span className="text-sm font-medium text-gray-700">Giá gốc</span>
                         }
-                        name="original_price"
+                        name="originalPrice"
                         rules={[
                             {
                                 validator: (_, value) => {
@@ -282,7 +276,7 @@ export default function CreateBookForm({
                         label={
                             <span className="text-sm font-medium text-gray-700">Giá niêm yết</span>
                         }
-                        name="list_price"
+                        name="listPrice"
                         rules={[
                             {
                                 validator: (_, value) => {
@@ -305,7 +299,7 @@ export default function CreateBookForm({
                     label={
                         <span className="text-sm font-medium text-gray-700">Mô tả ngắn</span>
                     }
-                    name="short_description"
+                    name="shortDescription"
                 >
                     <Input.TextArea
                         placeholder={"Mô tả ngắn"}
@@ -360,7 +354,7 @@ export default function CreateBookForm({
                     <Upload
                         listType="picture-card"
                         onPreview={handlePreview}
-                        // beforeUpload={() => false} // Ngăn upload tự động
+                        beforeUpload={() => false} // Ngăn upload tự động
                         onChange={({ fileList: newFileList }) => {
                             const updatedList = newFileList.map(file => {
                                 // Nếu chưa có link (ảnh mới) → tạo thumbUrl tạm
