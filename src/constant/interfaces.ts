@@ -72,10 +72,9 @@ export interface Item {
 
 export interface Order {
   id: number;
-  shop: string;
-  customer_name: string;
+  customerName: string;
   products: Item[];
-  total_price: number;
+  totalPrice: number;
   status: string;
 }
 export interface RegisterRequest{
