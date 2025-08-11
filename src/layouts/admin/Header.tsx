@@ -58,7 +58,7 @@ export default function AdminHeader({ collapsed, onToggle }: AdminHeaderProps) {
           arrow
         >
           <Space className="cursor-pointer px-2">
-            <Avatar icon={<UserOutlined />} />
+            <Avatar icon={<UserOutlined />} src={user?.avatarUrl} />
             <div className="flex flex-col items-start">
               <Text strong>{user?.fullName}</Text>
               <Text type="secondary" className="text-xs">
