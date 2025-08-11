@@ -33,5 +33,17 @@ export const useCategory = () => {
     return response;
   };
 
-  return { getAllCategories, createCategory, updateCategory, deleteCategory };
+  const getCategoryWithThumbnail = async () => {
+    return await Request.get<Category[]>(
+      API_ENDPOINTS.GET_CATEGORY_WITH_THUMBNAIL
+    );
+  };
+
+  return {
+    getAllCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getCategoryWithThumbnail,
+  };
 };

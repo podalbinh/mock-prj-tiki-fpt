@@ -1,58 +1,45 @@
-"use client"
+import React, { useEffect, useState } from "react";
 
-import React, { useEffect, useState } from 'react'
+<<<<<<< Updated upstream
+import ArrowNext from "@/assets/arrow-next.svg"; // Đảm bảo đã cấu hình loader cho SVG hoặc dùng <img src=...>
+import { getBookFeaturedCollections } from '@/config/api';
+import type { CardData } from "@/constant/mockFeaturedCollections";
+import { mockFeaturedCollections } from '@/constant/mockFeaturedCollections';
 
+const FeaturedCollections: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [allCards, setAllCards] = useState<CardData[]>([]);
+=======
 import ArrowNext from "@/assets/arrow-next.svg";
-import { API_ENDPOINTS } from '@/constant/endpoint';
-import Request from "@/config/api.ts";
-
-// Updated interface to match API response
-interface ProductItem {
-  id: number;
-  url: string;
-  discountPercent: number;
-}
-
-interface FeaturedCollectionData {
-  logo: string;
-  title: string;
-  sponsor: string;
-  ratingText: string;
-  listProduct: ProductItem[];
-  rating: number;
-}
-
-interface ApiResponse {
-  device: string;
-  code: number;
-  data: FeaturedCollectionData[];
-}
+import { useBook } from "@/hooks/useBook";
+import type { FeaturedCollectionData } from "@/constant/interfaces";
 
 const FeaturedCollections: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [allCards, setAllCards] = useState<FeaturedCollectionData[]>([]);
-  
-  const getBookFeaturedCollections = () => Request.get<ApiResponse>(API_ENDPOINTS.GET_BOOK_FEATURED_COLLECTIONS);
+  const { getBookFeaturedCollections } = useBook();
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await getBookFeaturedCollections();
-        console.log('API Response:', response); // Debug log
-        
-        // Check if response has the correct structure
-        if (response && response.data && Array.isArray(response.data)) {
-          setAllCards(response.data);
-        } else if (response && Array.isArray(response)) {
-          // Fallback: if response is directly an array
-          setAllCards(response);
-        } else {
-          console.log('Invalid response structure:', response);
-          setAllCards([]);
+<<<<<<< Updated upstream
+        const collections = await getBookFeaturedCollections();
+        if (!Array.isArray(collections) || collections.length === 0) {
+          setAllCards(mockFeaturedCollections);
+          return;
         }
+        setAllCards(collections);
       } catch (err) {
-        console.error('Error fetching featured collections:', err);
+        setAllCards(mockFeaturedCollections);
+=======
+        const response = await getBookFeaturedCollections();
+        console.log("API Response:", response); // Debug log
+        setAllCards(response || []);
+      } catch (err) {
+        console.error("Error fetching featured collections:", err);
         setAllCards([]);
+>>>>>>> Stashed changes
       }
     };
     fetchCollections();
@@ -89,9 +76,16 @@ const FeaturedCollections: React.FC = () => {
       {/* Content section bên phải */}
       <div className="flex-1 flex flex-col justify-between p-3">
         <div>
-          <h3 className="text-base font-semibold text-gray-800 mb-0.5">{cardData.title}</h3>
+          <h3 className="text-base font-semibold text-gray-800 mb-0.5">
+            {cardData.title}
+          </h3>
           <p className="text-xs text-gray-600 flex items-center">
-          Tài trợ bởi<b className='text-black'>{cardData.sponsor}</b>
+<<<<<<< Updated upstream
+            {cardData.sponsor}
+            <span className="font-bold mx-1 text-gray-800">{cardData.brand}</span>
+=======
+            Tài trợ bởi<b className="text-black">{cardData.sponsor}</b>
+>>>>>>> Stashed changes
             <span className="ml-1 text-gray-800">{cardData.ratingText}</span>
             <span className="text-yellow-500 ml-1">⭐</span>
           </p>
@@ -133,9 +127,18 @@ const FeaturedCollections: React.FC = () => {
         {/* Nút Previous */}
         <button
           onClick={handlePrevious}
+<<<<<<< Updated upstream
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"        >
+          <img src={ArrowNext} alt="prev" className="rotate-180 w-[32px] h-[56px]" />
+=======
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"
         >
-          <img src={ArrowNext} alt="prev" className="rotate-180 w-[32px] h-[56px]" />
+          <img
+            src={ArrowNext}
+            alt="prev"
+            className="rotate-180 w-[32px] h-[56px]"
+          />
+>>>>>>> Stashed changes
         </button>
 
         {/* Nút Next */}
@@ -147,8 +150,15 @@ const FeaturedCollections: React.FC = () => {
         </button>
 
         {/* Hai card cạnh nhau */}
-        <div className="flex justify-between">
+<<<<<<< Updated upstream
+        <div className="flex justify-between ">
           {pairs[currentIndex]?.map((cardData, index) => renderCard(cardData, index))}
+=======
+        <div className="flex justify-between">
+          {pairs[currentIndex]?.map((cardData, index) =>
+            renderCard(cardData, index)
+          )}
+>>>>>>> Stashed changes
         </div>
 
         {/* Dots indicator */}
@@ -157,9 +167,14 @@ const FeaturedCollections: React.FC = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
+<<<<<<< Updated upstream
+              className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
+                }`}
+=======
               className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${
-                index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
+                index === currentIndex ? "bg-blue-500" : "bg-gray-300"
               }`}
+>>>>>>> Stashed changes
             />
           ))}
         </div>
