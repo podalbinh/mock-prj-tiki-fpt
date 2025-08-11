@@ -8,6 +8,6 @@ export async function bookLoader(): Promise<Book[]> {
         return response;
     } catch (error) {
         console.error("Failed to load books:", error);
-        throw new Response("Failed to load books", { status: 500 });
+        return []
     }
 }

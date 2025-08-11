@@ -8,6 +8,6 @@ export async function userLoader(): Promise<User[]> {
     return response;
   } catch (error) {
     console.error("Failed to load users:", error);
-    throw new Response("Failed to load users", { status: 500 });
+    return [];
   }
 }
