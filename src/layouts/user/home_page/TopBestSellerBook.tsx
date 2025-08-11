@@ -33,7 +33,7 @@ export default function TopBestSellerBook() {
                         <Link to={""} className="flex gap-2.5 text-sm">
                             <span className="text-[#0B74E5] font-[400] hover:text-[#0B74E5]">{book.name}</span>
                             <div className="flex-1"></div>
-                            <span className="text-black hover:text-black">{formattedPrice(book.list_price)}<sup>₫</sup></span>
+                            <span className="text-black hover:text-black">{formattedPrice(book.listPrice)}<sup>₫</sup></span>
                         </Link>
                     </li>
                 ))}

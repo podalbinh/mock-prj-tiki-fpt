@@ -11,12 +11,12 @@ export const useBook = () => {
         const response = await Request.get<Book[]>(
             API_ENDPOINTS.GET_BOOKS,
             { params: {
-                // _limit: 10,
-                _sort: "quantity_sold.value",
+                _limit: 10,
+                _sort: "quantitySold",
                 _order: "desc"
             }}
     );
-        return response.filter((book) => book.quantity_sold !== undefined).slice(0, 10);
+        return response.filter((book) => book.quantitySold !== undefined).slice(0, 10);
     }
 
     const getBookById = async (id: number) => {

@@ -9,11 +9,11 @@ export const API_ENDPOINTS = {
   USER_BY_ID: (id: number) => `/users/${id}`,
 
   // Book API endpoints
-  GET_BOOKS: "/books",
-  GET_BOOK_BY_ID: (id: number) => `/books/${id}`,
-  CREATE_BOOK: "/books",
-  UPDATE_BOOK: (id: number) => `/books/${id}`,
-  DELETE_BOOK: (id: number) => `/books/${id}`,
+  GET_BOOKS: "/products",
+  GET_BOOK_BY_ID: (id: number) => `/products/${id}`,
+  CREATE_BOOK: "/products",
+  UPDATE_BOOK: (id: number) => `/products/${id}`,
+  DELETE_BOOK: (id: number) => `/products/${id}`,
 
   // Product API endpoints
   GET_PRODUCTS: "/products",

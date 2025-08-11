@@ -28,9 +28,9 @@ const columns: CustomTableColumn<Book>[] = [
         }
     },
     {
-        key: "original_price",
+        key: "originalPrice",
         title: "Giá gốc",
-        dataIndex: "original_price",
+        dataIndex: "originalPrice",
         align: "center",
         render: (value) => `${value.toLocaleString()} VND`
     },
@@ -41,24 +41,22 @@ const columns: CustomTableColumn<Book>[] = [
         align: "center",
         width: 100,
         render: (value) => {
-            if (typeof value !== "object") return "-";
-            return "name" in value && `${(value)?.name.toLocaleString()}` || "-";
+            if (!Array.isArray(value)) return "-";
+            if (typeof value[0] !== "object") return "-";
+            return "name" in value[0] && `${(value[0])?.name.toLocaleString()}` || "-";
         }
     },
     {
-        key: "quantity_sold",
+        key: "quantitySold",
         title: "Số lượng đã bán",
-        dataIndex: "quantity_sold",
+        dataIndex: "quantitySold",
         align: "center",
-        render: (value) => {
-            if (typeof value !== "object") return "-";
-            return "value" in value && `${(value)?.value.toLocaleString()} quyển` || "-";
-        }
+        render: (value) => `${value} quyển`
     },
     {
-        key: "short_description",
+        key: "shortDescription",
         title: "Mô tả ngắn",
-        dataIndex: "short_description",
+        dataIndex: "shortDescription",
         width: 400,
     },
 ];
@@ -76,7 +74,6 @@ const BookManagementTable = () => {
 
     const userToDeleteRef = useRef<Book | null>(null);
 
-    //TODO: Implement edit and delete functionality
     const handleEdit = useCallback(async (book: Book) => {
         setEditingBook(book);
         setIsEditing(true);
@@ -108,7 +105,7 @@ const BookManagementTable = () => {
 
         try {
             book.images.map((img) => {
-                deleteImageByUrl(img.base_url);
+                deleteImageByUrl(img.baseUrl);
             });
             await deleteBook(book.id);
             message.success("Xóa sách thành công!");
@@ -128,8 +125,8 @@ const BookManagementTable = () => {
                 if (isEditing && editingBook) {
                     await updateBook(editingBook.id, {
                         ...editingBook,
-                        list_price: values.list_price,
-                        short_description: values.short_description,
+                        listPrice: values.listPrice,
+                        shortDescription: values.shortDescription,
                         description: values.description,
                         images: values.images,
                     });
