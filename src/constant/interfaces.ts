@@ -4,7 +4,7 @@ export interface User {
   password: string;
   fullName?: string;
   phone?: string;
-  avatar?: string | null;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
@@ -77,8 +77,14 @@ export interface Order {
   totalPrice: number;
   status: string;
 }
-export interface RegisterRequest{
+export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface ImageUploadResponse {
+  url: string;
+  id: string;
+  error?: string;
 }

@@ -8,6 +8,8 @@ import {
 } from "@ant-design/icons";
 import type { FormProps } from "antd";
 import type { User } from "@/constant/interfaces";
+import ImageUpload from "../common/ImageUploader";
+import { useState } from "react";
 
 const { Option } = Select;
 
@@ -27,9 +29,15 @@ export default function CreateUserForm({
   isUpdating = false,
 }: CreateUserFormProps) {
   const [form] = Form.useForm();
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const handleFinish: FormProps<User>["onFinish"] = (values) => {
-    onSubmit?.(values);
+    const updatedValues: User = {
+      ...values,
+      avatarUrl: values.avatarUrl?.[0] || null,
+      isActive: true,
+    };
+    onSubmit?.(updatedValues);
   };
 
   const handleFinishFailed: FormProps<User>["onFinishFailed"] = (errorInfo) => {
@@ -53,6 +61,23 @@ export default function CreateUserForm({
         className="space-y-4"
         initialValues={defaultValues}
       >
+        <div className="flex justify-center">
+          <Form.Item
+            name="avatarUrl"
+            valuePropName="value"
+            getValueFromEvent={(value: string[] = []) => value}
+            initialValue={
+              defaultValues?.avatarUrl ? [defaultValues.avatarUrl] : []
+            }
+          >
+            <ImageUpload
+              multiple={false}
+              maxCount={1}
+              toggleUploading={(value: boolean) => setIsUploadingAvatar(value)}
+            />
+          </Form.Item>
+        </div>
+
         <Form.Item
           label={
             <span className="text-sm font-medium text-gray-700">Họ và tên</span>
@@ -161,7 +186,7 @@ export default function CreateUserForm({
             <Button
               type="primary"
               htmlType="submit"
-              loading={loading}
+              loading={loading || isUploadingAvatar}
               className="px-6 bg-blue-600 hover:bg-blue-700"
             >
               {isUpdating ? "Cập nhật" : "Tạo người dùng"}

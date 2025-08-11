@@ -30,6 +30,10 @@ export const API_ENDPOINTS = {
 
   // Order API endpoints
   ORDERS: "/orders",
+
+  // Image upload endpoint
+  UPLOAD_IMAGE: "images/upload",
+  DELETE_IMAGE: (fileId: string) => `images/delete/${fileId}`,
 };
 
 export const PUBLIC_API_ENDPOINTS = [

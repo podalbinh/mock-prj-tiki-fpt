@@ -1,12 +1,22 @@
-import { Layout } from "antd";
-import { Link, Outlet } from "react-router-dom";
-import { UserOutlined, BellOutlined, ShoppingOutlined } from "@ant-design/icons";
+import { Button, Layout } from "antd";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import {
+  UserOutlined,
+  BellOutlined,
+  ShoppingOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "@/hooks/useAuth";
 
 const { Content } = Layout;
 
 const Profile = () => {
-    const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f5f6fa]">
@@ -18,7 +28,7 @@ const Profile = () => {
               <div className="w-64 bg-white shadow-sm">
                 <div className="p-6 flex items-center gap-2">
                   <img
-                    src={user?.avatar ?? ""}
+                    src={user?.avatarUrl ?? ""}
                     alt="Avatar"
                     className="w-10 h-10 rounded-full object-cover"
                   />
@@ -28,6 +38,11 @@ const Profile = () => {
                       {user?.fullName || "Người dùng"}
                     </span>
                   </div>
+                </div>
+                <div className="flex items-center justify-center p-4">
+                  <Button type="primary" color="danger" onClick={handleLogout} className="w-full">
+                    Đăng xuất
+                  </Button>
                 </div>
                 <nav>
                   <ul className="mt-2 space-y-1">
