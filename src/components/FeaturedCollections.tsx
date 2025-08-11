@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-<<<<<<< Updated upstream
-import ArrowNext from "@/assets/arrow-next.svg"; // Đảm bảo đã cấu hình loader cho SVG hoặc dùng <img src=...>
-import { getBookFeaturedCollections } from '@/config/api';
-import type { CardData } from "@/constant/mockFeaturedCollections";
-import { mockFeaturedCollections } from '@/constant/mockFeaturedCollections';
-
-const FeaturedCollections: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [allCards, setAllCards] = useState<CardData[]>([]);
-=======
 import ArrowNext from "@/assets/arrow-next.svg";
 import { useBook } from "@/hooks/useBook";
 import type { FeaturedCollectionData } from "@/constant/interfaces";
@@ -18,28 +8,16 @@ const FeaturedCollections: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [allCards, setAllCards] = useState<FeaturedCollectionData[]>([]);
   const { getBookFeaturedCollections } = useBook();
->>>>>>> Stashed changes
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-<<<<<<< Updated upstream
-        const collections = await getBookFeaturedCollections();
-        if (!Array.isArray(collections) || collections.length === 0) {
-          setAllCards(mockFeaturedCollections);
-          return;
-        }
-        setAllCards(collections);
-      } catch (err) {
-        setAllCards(mockFeaturedCollections);
-=======
         const response = await getBookFeaturedCollections();
         console.log("API Response:", response); // Debug log
         setAllCards(response || []);
       } catch (err) {
         console.error("Error fetching featured collections:", err);
         setAllCards([]);
->>>>>>> Stashed changes
       }
     };
     fetchCollections();
@@ -80,12 +58,7 @@ const FeaturedCollections: React.FC = () => {
             {cardData.title}
           </h3>
           <p className="text-xs text-gray-600 flex items-center">
-<<<<<<< Updated upstream
-            {cardData.sponsor}
-            <span className="font-bold mx-1 text-gray-800">{cardData.brand}</span>
-=======
             Tài trợ bởi<b className="text-black">{cardData.sponsor}</b>
->>>>>>> Stashed changes
             <span className="ml-1 text-gray-800">{cardData.ratingText}</span>
             <span className="text-yellow-500 ml-1">⭐</span>
           </p>
@@ -127,10 +100,6 @@ const FeaturedCollections: React.FC = () => {
         {/* Nút Previous */}
         <button
           onClick={handlePrevious}
-<<<<<<< Updated upstream
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"        >
-          <img src={ArrowNext} alt="prev" className="rotate-180 w-[32px] h-[56px]" />
-=======
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center ml-auto"
         >
           <img
@@ -138,7 +107,6 @@ const FeaturedCollections: React.FC = () => {
             alt="prev"
             className="rotate-180 w-[32px] h-[56px]"
           />
->>>>>>> Stashed changes
         </button>
 
         {/* Nút Next */}
@@ -150,15 +118,10 @@ const FeaturedCollections: React.FC = () => {
         </button>
 
         {/* Hai card cạnh nhau */}
-<<<<<<< Updated upstream
-        <div className="flex justify-between ">
-          {pairs[currentIndex]?.map((cardData, index) => renderCard(cardData, index))}
-=======
         <div className="flex justify-between">
           {pairs[currentIndex]?.map((cardData, index) =>
             renderCard(cardData, index)
           )}
->>>>>>> Stashed changes
         </div>
 
         {/* Dots indicator */}
@@ -167,14 +130,9 @@ const FeaturedCollections: React.FC = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-<<<<<<< Updated upstream
-              className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
-                }`}
-=======
               className={`w-[24px] h-[2px] mb-3 rounded transition-colors ${
                 index === currentIndex ? "bg-blue-500" : "bg-gray-300"
               }`}
->>>>>>> Stashed changes
             />
           ))}
         </div>
