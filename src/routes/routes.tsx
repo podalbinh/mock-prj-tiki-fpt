@@ -14,6 +14,11 @@ import { categoryLoader } from "./loaders/categoryLoader";
 // Lazy load pages
 // const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
+const ProfilePage = lazy(() => import("@/pages/Profile"));
+const AccountInfo = lazy(() => import("@/pages/AccountInfo"));
+const Notifications = lazy(() => import("@/pages/Notifications"));
+const Orders = lazy(() => import("@/pages/MyOrders"));
+
 
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
@@ -32,6 +37,28 @@ const router = createBrowserRouter([
         path: "/",
         index: true,
         element: withSuspense(HomePage),
+      },
+      {
+        path: "profile",
+        element: withSuspense(ProfilePage), // <- Trang chứa layout sidebar + Outlet
+        children: [
+          {
+            index: true,
+            element: withSuspense(AccountInfo), // Mặc định là thông tin tài khoản
+          },
+          {
+            path: "account-info",
+            element: withSuspense(AccountInfo),
+          },
+          {
+            path: "notifications",
+            element: withSuspense(Notifications),
+          },
+          {
+            path: "orders",
+            element: withSuspense(Orders),
+          },
+        ],
       },
     ],
   },

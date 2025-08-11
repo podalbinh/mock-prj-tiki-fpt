@@ -22,7 +22,8 @@ export const API_ENDPOINTS = {
   UPDATE_PRODUCT: (id: number) => `/products/${id}`,
   DELETE_PRODUCT: (id: number) => `/products/${id}`,
   SEARCH_PRODUCTS: "/products/search",
-  GET_PRODUCTS_BY_CATEGORY: (categoryId: number) => `/products/category/${categoryId}`,
+  GET_PRODUCTS_BY_CATEGORY: (categoryId: number) =>
+    `/products/category/${categoryId}`,
 
   // Category API endpoints
   GET_CATEGORIES: "/categories",
@@ -33,6 +34,10 @@ export const API_ENDPOINTS = {
   // Order API endpoints
   ORDERS: "/orders",
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
+
+  // Image upload endpoint
+  UPLOAD_IMAGE: "images/upload",
+  DELETE_IMAGE: (fileId: string) => `images/delete/${fileId}`,
 };
 
 export const PUBLIC_API_ENDPOINTS = [
@@ -44,5 +49,5 @@ export const PUBLIC_API_ENDPOINTS = [
   API_ENDPOINTS.REGISTER,
   API_ENDPOINTS.GET_BOOK_FEATURED_COLLECTIONS,
   API_ENDPOINTS.GET_CATEGORY_WITH_THUMBNAIL,
-  API_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY
+  API_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY,
 ];

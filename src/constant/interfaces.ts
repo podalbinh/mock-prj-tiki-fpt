@@ -4,7 +4,7 @@ export interface User {
   password: string;
   fullName?: string;
   phone?: string;
-  avatar?: string | null;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
@@ -81,13 +81,12 @@ export interface Item {
 
 export interface Order {
   id: number;
-  shop: string;
-  customer_name: string;
+  customerName: string;
   products: Item[];
-  total_price: number;
+  totalPrice: number;
   status: string;
 }
-export interface RegisterRequest{
+export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
@@ -125,4 +124,10 @@ export interface CategoryWithThumbnail {
   id: number;
   name: string;
   thumbnailUrl?: string | null;
+}
+
+export interface ImageUploadResponse {
+  url: string;
+  id: string;
+  error?: string;
 }

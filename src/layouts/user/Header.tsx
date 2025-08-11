@@ -8,19 +8,25 @@ import returnPolicy from "@/assets/return.svg";
 
 import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { Dropdown, Space, Avatar } from "antd";
+import { Dropdown, Space, Avatar, Image } from "antd";
 import CartWithBadge from "@/components/common/CartWithBadge";
-import {LoginModal} from "@/components/forms/LoginModalForm";
-import { useModal } from '@/hooks/useModal'
+import { LoginModal } from "@/components/forms/LoginModalForm";
+import { useModal } from "@/hooks/useModal";
 import { SignupModal } from "@/components/forms/SignUpModalForm";
-import { useAuth } from '@/hooks/useAuth';
+
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
-  const { openLoginModal } = useModal()
-  const { user, isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
+  const { openLoginModal } = useModal();
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   const userMenuItems = [
+    {
+      key: "profile",
+      icon: <UserOutlined />,
+      label: "Hồ sơ",
+    },
     {
       key: "logout",
       icon: <LogoutOutlined />,
@@ -35,30 +41,41 @@ const Header = () => {
         logout();
         navigate("/");
         break;
+      case "profile":
+        navigate("/profile");
+        break;
     }
   };
 
   return (
     <div className="flex flex-col shadow-sm">
       <div className="flex gap-4 px-6 py-3">
-        <img src={logo} alt="Logo" />
+        <Link to="/" className="mx-4 max-h-min">
+          <Image src={logo} alt="Logo" preview={false} />
+        </Link>
         {/* Todo: Tạo thanh search như design */}
         <div className="flex-grow p-4 text-center border">Search</div>
         <div className="flex gap-1">
-          <Link to="/home" className="mx-4 max-h-min">
+          <Link to="/" className="mx-4 max-h-min">
             <HomeOutlined className="text-[20px] p-1" />
             Trang chủ
           </Link>
-          
+
           {isAuthenticated ? (
             <Dropdown
               menu={{ items: userMenuItems, onClick: handleMenuClick }}
               placement="bottomRight"
               arrow
             >
-              <Space className="cursor-pointer mx-4 max-h-min flex items-center">
-                <Avatar icon={<UserOutlined />} size="small" />
-                <span className="text-gray-700">{user?.email}</span>
+              <Space className="cursor-pointer mx-4 py-[2px] max-h-min flex items-center">
+                <Avatar
+                  icon={<UserOutlined />}
+                  size="small"
+                  src={user?.avatarUrl}
+                />
+                <span className="text-gray-700 max-w-28 block truncate">
+                  {user?.fullName}
+                </span>
               </Space>
             </Dropdown>
           ) : (
@@ -70,7 +87,7 @@ const Header = () => {
               Tài khoản
             </button>
           )}
-          
+
           <Link to="/cart" className="border-l-2 max-h-min px-4">
             <CartWithBadge />
           </Link>
@@ -103,8 +120,8 @@ const Header = () => {
           <span>Giá siêu rẻ</span>
         </div>
       </div>
-        <LoginModal />
-        <SignupModal />
+      <LoginModal />
+      <SignupModal />
     </div>
   );
 };
