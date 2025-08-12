@@ -8,6 +8,6 @@ export async function categoryLoader(): Promise<Category[]> {
     return response;
   } catch (error) {
     console.error("Failed to load categories:", error);
-    throw new Response("Failed to load categories", { status: 500 });
+    return [];
   }
 }

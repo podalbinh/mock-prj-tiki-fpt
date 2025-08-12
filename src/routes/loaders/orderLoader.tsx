@@ -9,6 +9,6 @@ export async function orderLoader(): Promise<Order[]> {
     return response;
   } catch (error) {
     console.error("Failed to load orders:", error);
-    throw new Response("Failed to load orders", { status: 500 });
+    return [];
   }
 }

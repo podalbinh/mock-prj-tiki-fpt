@@ -131,3 +131,18 @@ export interface ImageUploadResponse {
   id: string;
   error?: string;
 }
+
+export interface ProductItem {
+  id: number;
+  url: string;
+  discountPercent: number;
+}
+
+export interface FeaturedCollectionData {
+  logo: string;
+  title: string;
+  sponsor: string;
+  ratingText: string;
+  listProduct: ProductItem[];
+  rating: number;
+}

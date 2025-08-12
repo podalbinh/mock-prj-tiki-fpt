@@ -4,7 +4,7 @@ import LoadingOverlay from "@/components/wrapper/LoadingOverlay";
 import UserLayout from "@/layouts/user/UserLayout";
 import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
-import {bookLoader} from "@/routes/loaders/bookLoader.tsx";
+import { bookLoader } from "@/routes/loaders/bookLoader.tsx";
 import { orderLoader } from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
@@ -18,7 +18,6 @@ const ProfilePage = lazy(() => import("@/pages/Profile"));
 const AccountInfo = lazy(() => import("@/pages/AccountInfo"));
 const Notifications = lazy(() => import("@/pages/Notifications"));
 const Orders = lazy(() => import("@/pages/MyOrders"));
-
 
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
