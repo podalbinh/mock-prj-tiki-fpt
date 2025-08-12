@@ -1,6 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import AdminTable, {type CustomTableColumn} from "@/components/common/Table";
-import type {Book} from "@/constant/interfaces";
+import type {Book, Category} from "@/constant/interfaces";
 import {useLoaderData, useRevalidator} from "react-router-dom";
 import {App, Button} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -8,60 +8,7 @@ import ModalConfirm from "../modals/ModalConfirm";
 import {useBook} from "@/hooks/useBook.ts";
 import ModalFormCreateBook from "@/components/modals/ModalFormCreateBook.tsx";
 import {useImage} from "@/hooks/useImage.ts";
-
-const columns: CustomTableColumn<Book>[] = [
-    {
-        key: "name",
-        title: "Tên sách",
-        dataIndex: "name",
-        width: 200,
-    },
-    {
-        key: "authors",
-        title: "Tác giả",
-        dataIndex: "authors",
-        align: "center",
-        width: 150,
-        render: (value) => {
-            if (!Array.isArray(value)) return "-";
-            return value.map((author) => "name" in author && author?.name || "-").join(", ");
-        }
-    },
-    {
-        key: "original_price",
-        title: "Giá gốc",
-        dataIndex: "original_price",
-        align: "center",
-        render: (value) => `${value.toLocaleString()} VND`
-    },
-    {
-        key: "categories",
-        title: "Phân loại",
-        dataIndex: "categories",
-        align: "center",
-        width: 100,
-        render: (value) => {
-            if (typeof value !== "object") return "-";
-            return "name" in value && `${(value)?.name.toLocaleString()}` || "-";
-        }
-    },
-    {
-        key: "quantity_sold",
-        title: "Số lượng đã bán",
-        dataIndex: "quantity_sold",
-        align: "center",
-        render: (value) => {
-            if (typeof value !== "object") return "-";
-            return "value" in value && `${(value)?.value.toLocaleString()} quyển` || "-";
-        }
-    },
-    {
-        key: "short_description",
-        title: "Mô tả ngắn",
-        dataIndex: "short_description",
-        width: 400,
-    },
-];
+import { useCategory } from "@/hooks/useCategory.ts";
 
 const BookManagementTable = () => {
     const books = useLoaderData() as Book[];
@@ -72,11 +19,19 @@ const BookManagementTable = () => {
     const {createBook, deleteBook, updateBook } = useBook();
     const {deleteImageByUrl} = useImage();
     const revalidator = useRevalidator();
+    const { getAllCategories } = useCategory();
+    const [categoriesOption, setCategoriesOption] = useState<Category[]>([]);
     const { message } = App.useApp();
 
     const userToDeleteRef = useRef<Book | null>(null);
+    useEffect(() => {
+        // Lấy Categories
+        (async () => {
+            const data = await getAllCategories();
+            setCategoriesOption(data);
+        })();
+    }, [])
 
-    //TODO: Implement edit and delete functionality
     const handleEdit = useCallback(async (book: Book) => {
         setEditingBook(book);
         setIsEditing(true);
@@ -108,7 +63,7 @@ const BookManagementTable = () => {
 
         try {
             book.images.map((img) => {
-                deleteImageByUrl(img.base_url);
+                deleteImageByUrl(img.baseUrl);
             });
             await deleteBook(book.id);
             message.success("Xóa sách thành công!");
@@ -128,8 +83,8 @@ const BookManagementTable = () => {
                 if (isEditing && editingBook) {
                     await updateBook(editingBook.id, {
                         ...editingBook,
-                        list_price: values.list_price,
-                        short_description: values.short_description,
+                        listPrice: values.listPrice,
+                        shortDescription: values.shortDescription,
                         description: values.description,
                         images: values.images,
                     });
@@ -156,6 +111,58 @@ const BookManagementTable = () => {
         },
         [createBook, isEditing, updateBook, message, revalidator]
     );
+
+    const columns: CustomTableColumn<Book>[] = [
+        {
+            key: "name",
+            title: "Tên sách",
+            dataIndex: "name",
+            width: 200,
+        },
+        {
+            key: "authors",
+            title: "Tác giả",
+            dataIndex: "authors",
+            align: "center",
+            width: 150,
+            render: (value) => {
+                if (!Array.isArray(value)) return "-";
+                return value.map((author) => "name" in author && author?.name || "-").join(", ");
+            }
+        },
+        {
+            key: "originalPrice",
+            title: "Giá gốc",
+            dataIndex: "originalPrice",
+            align: "center",
+            render: (value) => `${value.toLocaleString()} VND`
+        },
+        {
+            key: "categoriesId",
+            title: "Phân loại",
+            dataIndex: "categoriesId",
+            align: "center",
+            width: 100,
+            render: (value) => {
+                const category = categoriesOption.filter((c) => c.id === value)[0];
+                console.log(value);
+                return category?.name || "-";
+            }
+        },
+        {
+            key: "quantitySold",
+            title: "Số lượng đã bán",
+            dataIndex: "quantitySold",
+            align: "center",
+            render: (value) => `${value} quyển`
+        },
+        {
+            key: "shortDescription",
+            title: "Mô tả ngắn",
+            dataIndex: "shortDescription",
+            width: 400,
+        },
+    ];
 
     return (
         <>

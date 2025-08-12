@@ -38,13 +38,13 @@ export interface QuantitySold {
 }
 
 export interface Image {
-  base_url: string;
-  is_gallery: boolean;
+  baseUrl: string;
+  isGallery: boolean;
   label: string;
-  large_url: string;
-  medium_url: string;
-  small_url: string;
-  thumbnail_url: string;
+  largeUrl: string;
+  mediumUrl: string;
+  smallUrl: string;
+  thumbnailUrl: string;
 }
 
 export interface Attribute {
@@ -64,13 +64,20 @@ export interface Book {
   authors: Author[];
   description: string;
   images: Image[];
-  original_price: number;
-  list_price: number;
-  rating_average: number;
-  short_description: string;
-  categories: Category;
-  quantity_sold: QuantitySold;
-  specifications: Specification[];
+  originalPrice: number;
+  listPrice: number;
+  ratingAverage: number;
+  shortDescription: string;
+  publisherVn: string;
+  publicationDate: string;
+  dimensions: string;
+  bookCover: string;
+  numberOfPage: string;
+  stockQuantity: number;
+  isActive: boolean;
+  categoriesId: number;
+  quantitySold: number;
+  thumbnail: string;
 }
 
 export interface Item {
