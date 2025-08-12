@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
 
   // Category API endpoints
   CATEGORIES: "/categories",
+  SEARCH_CATEGORIES: "/categories/search",
   CATEGORY_BY_ID: (id: number) => `/categories/${id}`,
   GET_CATEGORY_WITH_THUMBNAIL: "categories/root-with-thumbnail",
   GET_CATEGORIES_WITH_SUBCATEGORIES: "categories/with-subcategories",
