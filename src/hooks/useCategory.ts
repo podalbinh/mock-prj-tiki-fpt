@@ -4,12 +4,12 @@ import type { Category } from "@/constant/interfaces";
 
 export const useCategory = () => {
   const getAllCategories = async () => {
-    return await Request.get<Category[]>(API_ENDPOINTS.GET_CATEGORIES);
+    return await Request.get<Category[]>(API_ENDPOINTS.CATEGORIES);
   };
 
   const createCategory = async (categoryData: Partial<Category>) => {
     const response = await Request.post<Category>(
-      API_ENDPOINTS.CREATE_CATEGORY,
+      API_ENDPOINTS.CATEGORIES,
       categoryData
     );
     return response;
@@ -20,7 +20,7 @@ export const useCategory = () => {
     categoryData: Partial<Category>
   ) => {
     const response = await Request.put<Category>(
-      API_ENDPOINTS.UPDATE_CATEGORY(id),
+      API_ENDPOINTS.CATEGORY_BY_ID(id),
       categoryData
     );
     return response;
@@ -28,7 +28,7 @@ export const useCategory = () => {
 
   const deleteCategory = async (id: number) => {
     const response = await Request.delete<Category>(
-      API_ENDPOINTS.DELETE_CATEGORY(id)
+      API_ENDPOINTS.CATEGORY_BY_ID(id)
     );
     return response;
   };
