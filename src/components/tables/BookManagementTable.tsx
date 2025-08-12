@@ -2,12 +2,13 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import AdminTable, {type CustomTableColumn} from "@/components/common/Table";
 import type {Book, Category} from "@/constant/interfaces";
 import {useLoaderData, useRevalidator} from "react-router-dom";
-import {App, Button} from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import {App, Button, Input, Select, Image} from "antd";
+import {PlusOutlined, SearchOutlined} from "@ant-design/icons";
 import ModalConfirm from "../modals/ModalConfirm";
 import {useBook} from "@/hooks/useBook.ts";
 import ModalFormCreateBook from "@/components/modals/ModalFormCreateBook.tsx";
 import { useCategory } from "@/hooks/useCategory.ts";
+const { Option } = Select;
 
 const BookManagementTable = () => {
     const books = useLoaderData() as Book[];
@@ -15,6 +16,10 @@ const BookManagementTable = () => {
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [editingBook, setEditingBook] = useState<Book | undefined>(undefined);
     const [isEditing, setIsEditing] = useState(false);
+    const [searchText, setSearchText] = useState("");
+    const [fieldSelected, setFieldSelected] = useState(undefined);
+    const [booksShowed, setBooksShowed] = useState(books);
+    const [order, setOrder] = useState<"asc" | "desc">("asc");
     const {createBook, deleteBook, updateBook } = useBook();
     const revalidator = useRevalidator();
     const { getAllCategories } = useCategory();
@@ -107,12 +112,60 @@ const BookManagementTable = () => {
         [createBook, isEditing, updateBook, message, revalidator]
     );
 
+    const sortBooks = (field: keyof Book, order: "asc" | "desc") => {
+        const sortedBooks = [...booksShowed].sort((a, b) => {
+            const valA = a[field];
+            const valB = b[field];
+
+            if (valA === valB) return 0;
+
+            if (order === "asc") {
+                return valA > valB ? 1 : -1;
+            } else {
+                return valA > valB ? -1 : 1;
+            }
+        });
+
+        setBooksShowed(sortedBooks);
+    };
+
+    const searchBooksByName = (text: string) => {
+        if (text === "" || text === undefined) return setBooksShowed(books);
+        const filteredBooks = books.filter((book) => {
+            const name = book.name.toLowerCase();
+            const textToSearch = text.toLowerCase();
+            return name.includes(textToSearch);
+        });
+        setBooksShowed(filteredBooks);
+    }
+
     const columns: CustomTableColumn<Book>[] = [
         {
             key: "name",
             title: "Tên sách",
             dataIndex: "name",
             width: 200,
+        },
+        {
+            key: "images",
+            title: "Ảnh bìa",
+            dataIndex: "images",
+            width: 200,
+            render: (value) => {
+                if (!Array.isArray(value) || value.length === 0) return "-";
+                if (value.length === 0) return "-";
+                if (typeof value[0] !== "object") return "-";
+                if (!("baseUrl" in value[0])) return "-";
+                return (
+                    <Image
+                        src={value[0].baseUrl || ""}
+                        alt="Sách"
+                        width={80}
+                        height={120}
+                        style={{ objectFit: 'cover', borderRadius: 8 }}
+                    />
+                );
+            },
         },
         {
             key: "authors",
@@ -176,8 +229,60 @@ const BookManagementTable = () => {
                         Tạo sách mới
                     </Button>
                 </div>
+
+                <div className="flex gap-3">
+                    <Input
+                        placeholder="Tìm kiếm theo tên sách"
+                        allowClear
+                        value={searchText}
+                        onChange={(e) => {
+                            setSearchText(e.target.value);
+                            searchBooksByName(searchText);
+                        }}
+                        onPressEnter={() => searchBooksByName(searchText)}
+                        style={{ width: 250 }}
+                        prefix={<SearchOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    />
+
+                    <Select
+                        placeholder="Chọn trường sắp xếp"
+                        allowClear
+                        value={fieldSelected}
+                        onChange={(value) => {
+                            setFieldSelected(value);
+                            if (value) {
+                                sortBooks(value, order);
+                            } else {
+                                setBooksShowed(booksShowed);
+                            }
+                        }}
+                        style={{ width: 180 }}
+                    >
+                        <Option value="quantitySold">Số lượng đã bán</Option>
+                        <Option value="originalPrice">Giá gốc</Option>
+                        <Option value="name">Tên sách</Option>
+                        <Option value="authors">Tác giả</Option>
+                    </Select>
+
+                    <Select
+                        placeholder="Chọn chiều sắp xếp"
+                        allowClear
+                        value={order}
+                        onChange={(value) => {
+                            setOrder(value || undefined);
+                            if (fieldSelected) {
+                                sortBooks(fieldSelected, value);
+                            }
+                        }}
+                        style={{ width: 180 }}
+                    >
+                        <Option value="asc">Tăng dần</Option>
+                        <Option value="desc">Giảm dần</Option>
+                    </Select>
+                </div>
+
                 <AdminTable<Book>
-                    data={books}
+                    data={booksShowed}
                     columns={columns}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
