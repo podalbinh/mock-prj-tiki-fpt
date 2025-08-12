@@ -36,6 +36,8 @@ export const useBook = () => {
     await Request.delete(API_ENDPOINTS.PRODUCT_BY_ID(id));
   };
 
+  const getBookFeaturedCollections = () => Request.get<any>(API_ENDPOINTS.GET_BOOK_FEATURED_COLLECTIONS);
+
   return {
     getAllBooks,
     getBookById,
@@ -43,5 +45,6 @@ export const useBook = () => {
     updateBook,
     deleteBook,
     getTopSellingBooks,
+    getBookFeaturedCollections
   };
 };

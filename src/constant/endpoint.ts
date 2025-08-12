@@ -25,7 +25,7 @@ export const API_ENDPOINTS = {
   CATEGORY_BY_ID: (id: number) => `/categories/${id}`,
   GET_CATEGORY_WITH_THUMBNAIL: "categories/root-with-thumbnail",
   GET_CATEGORIES_WITH_SUBCATEGORIES: "categories/with-subcategories",
-
+  CATEGORIES_WITH_SUB: "/categories/with-subcategories",
   // Order API endpoints
   ORDERS: "/orders",
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",

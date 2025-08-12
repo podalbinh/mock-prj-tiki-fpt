@@ -270,10 +270,10 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
 
   return (
     <Card
-      className="bg-[#F7F7FA] !border-none !shadow-none !bg-transparent"
+      className="bg-[#F5F5FA] !border-none !shadow-none !bg-transparent"
       classNames={{ body: "!p-0" }}
       style={{
-        backgroundColor: "#F7F7FA",
+        backgroundColor: "#F5F5FA",
       }}
     >
       {/* Filter and Sort Section */}
@@ -286,7 +286,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         {selectedCategoryId && (
           <div className="mb-4 p-2 bg-blue-50 border border-blue-200 rounded-lg">
             <span className="text-blue-700 text-sm">
-              Đang lọc theo danh mục: <strong>ID {selectedCategoryId}</strong>
+              Đang lọc theo danh mục ID: <strong>{selectedCategoryId}</strong>
             </span>
           </div>
         )}
@@ -352,7 +352,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F7F7FA] mt-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F5F5FA] mt-4">
         {products.map((product) => (
           <div key={product.id} className="rounded-lg">
             <ProductCard product={product} formatPrice={formatPrice} />
@@ -361,8 +361,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       </div>
 
       {/* Sentinel + Loading */}
-      <div ref={sentinelRef} className="h-2 bg-[#F7F7FA]" />
-      <div className="flex justify-center py-2 bg-[#F7F7FA]">
+      <div ref={sentinelRef} className="h-2 bg-[#F5F5FA]" />
+      <div className="flex justify-center py-2 bg-[#F5F5FA]">
         {loading && <Spin />}
         {!hasMore && products.length > 0 && (
           <span className="text-gray-500">Đã hiển thị tất cả sản phẩm</span>
