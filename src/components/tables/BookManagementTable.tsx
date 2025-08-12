@@ -7,7 +7,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import ModalConfirm from "../modals/ModalConfirm";
 import {useBook} from "@/hooks/useBook.ts";
 import ModalFormCreateBook from "@/components/modals/ModalFormCreateBook.tsx";
-import {useImage} from "@/hooks/useImage.ts";
 import { useCategory } from "@/hooks/useCategory.ts";
 
 const BookManagementTable = () => {
@@ -17,7 +16,6 @@ const BookManagementTable = () => {
     const [editingBook, setEditingBook] = useState<Book | undefined>(undefined);
     const [isEditing, setIsEditing] = useState(false);
     const {createBook, deleteBook, updateBook } = useBook();
-    const {deleteImageByUrl} = useImage();
     const revalidator = useRevalidator();
     const { getAllCategories } = useCategory();
     const [categoriesOption, setCategoriesOption] = useState<Category[]>([]);
@@ -62,9 +60,6 @@ const BookManagementTable = () => {
         if (!book) return;
 
         try {
-            book.images.map((img) => {
-                deleteImageByUrl(img.baseUrl);
-            });
             await deleteBook(book.id);
             message.success("Xóa sách thành công!");
             revalidator.revalidate();
