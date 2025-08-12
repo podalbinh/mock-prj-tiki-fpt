@@ -19,7 +19,7 @@ const BookManagementTable = () => {
     const [searchText, setSearchText] = useState("");
     const [fieldSelected, setFieldSelected] = useState(undefined);
     const [booksShowed, setBooksShowed] = useState(books);
-    const [order, setOrder] = useState<"asc" | "desc">("asc");
+    const [order, setOrder] = useState<"asc" | "desc" | undefined>(undefined);
     const {createBook, deleteBook, updateBook } = useBook();
     const revalidator = useRevalidator();
     const { getAllCategories } = useCategory();
@@ -111,6 +111,31 @@ const BookManagementTable = () => {
         },
         [createBook, isEditing, updateBook, message, revalidator]
     );
+    
+    const searchBooksByName = function (text: string) {
+        if (text === "") setBooksShowed(books);
+        else {
+            const result = books.filter((book) => book.name.toLowerCase().includes(text.toLowerCase()));
+            setBooksShowed(result);
+        }
+    }
+
+    const sortBooks = (field: keyof Book, order: "asc" | "desc") => {
+        const sortedBooks = [...booksShowed].sort((a, b) => {
+            const valA = a[field];
+            const valB = b[field];
+
+            if (valA === valB) return 0;
+
+            if (order === "asc") {
+                return valA > valB ? 1 : -1;
+            } else {
+                return valA > valB ? -1 : 1;
+            }
+        });
+
+        setBooksShowed(sortedBooks);
+    };
 
     const columns: CustomTableColumn<Book>[] = [
         {
@@ -223,7 +248,7 @@ const BookManagementTable = () => {
                         value={fieldSelected}
                         onChange={(value) => {
                             setFieldSelected(value);
-                            if (value) {
+                            if (value && order !== undefined) {
                                 sortBooks(value, order);
                             } else {
                                 setBooksShowed(booksShowed);
