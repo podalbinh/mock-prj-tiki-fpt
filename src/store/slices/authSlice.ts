@@ -47,16 +47,18 @@ export const login = createAsyncThunk(
 // Check auth
 export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
+      const state = getState() as { auth: AuthState };
+      if (state.auth.user) {
+        return state.auth.user;
+      }
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("No token");
       const user = await Request.get<User>(API_ENDPOINTS.ME);
       localStorage.setItem("user", JSON.stringify(user));
       if (!user) throw new Error("No user data");
       return user;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");

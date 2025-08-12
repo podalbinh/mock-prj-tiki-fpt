@@ -28,7 +28,7 @@ export const API_ENDPOINTS = {
 
   // Order API endpoints
   ORDERS: "/orders",
-  GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
+  FEATURED_COLLECTIONS: "/featured-collections",
 
   // Image upload endpoint
   UPLOAD_IMAGE: "images/upload",

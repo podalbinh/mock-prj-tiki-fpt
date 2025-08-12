@@ -22,7 +22,7 @@ export default function TopBestSellerBook() {
   }, []);
 
   return (
-    <div className="flex flex-col my-2 mx-6 p-4 bg-white">
+    <div className="flex flex-col my-2 p-4 bg-white">
       <h2 className="text-xl font-medium">
         Top Bán Chạy Sản Phẩm Nhà Sách Tiki
       </h2>
