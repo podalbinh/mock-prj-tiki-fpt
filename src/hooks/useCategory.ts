@@ -1,10 +1,16 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
-import type { Category } from "@/constant/interfaces";
+import type { Category, PageableParams } from "@/constant/interfaces";
 
 export const useCategory = () => {
   const getAllCategories = async () => {
     return await Request.get<Category[]>(API_ENDPOINTS.CATEGORIES);
+  };
+
+  const searchCategories = async (params: PageableParams) => {
+    return await Request.get<Category[]>(API_ENDPOINTS.SEARCH_CATEGORIES, {
+      params: { ...params },
+    });
   };
 
   const createCategory = async (categoryData: Partial<Category>) => {
@@ -41,6 +47,7 @@ export const useCategory = () => {
 
   return {
     getAllCategories,
+    searchCategories,
     createCategory,
     updateCategory,
     deleteCategory,

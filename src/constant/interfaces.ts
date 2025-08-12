@@ -20,6 +20,7 @@ export interface Author {
 export interface Category {
   id: number;
   name: string;
+  parent: Category | null;
 }
 
 export interface SidebarCategory {
@@ -145,4 +146,11 @@ export interface FeaturedCollectionData {
   ratingText: string;
   listProduct: ProductItem[];
   rating: number;
+}
+
+export interface PageableParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+  keyword?: string;
 }
