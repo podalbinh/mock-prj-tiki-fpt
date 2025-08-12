@@ -16,9 +16,21 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "antd";
 
 const Header = () => {
+  const suggestions = [
+    "điện gia dụng",
+    "xe cộ",
+    "mẹ & bé",
+    "khỏe đẹp",
+    "nhà cửa",
+    "sách",
+    "potter",
+    "lịch treo tường 2024",
+    "nguyễn nhật ánh",
+  ]
+
   const { openLoginModal } = useModal()
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("authToken"); 
+  const isAuthenticated = !!localStorage.getItem("authToken");
 
   const handleAccountClick = () => {
     console.log('isAuthenticated',isAuthenticated)
@@ -30,42 +42,66 @@ const Header = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-sm">
-      <div className="flex gap-4 px-6 py-3">
-        <img src={logo} alt="Logo" />
-        {/* Todo: Tạo thanh search như design */}
-        <div className="flex-grow">
-          <Input
-            // value={}
-            // onChange={}
-            placeholder="100% hàng thật"
-            prefix={<SearchOutlined className="text-gray-400" size={16} aria-hidden="true" />}
-            addonAfter={
-              <button type="submit" className="search-addon" aria-label="Tìm kiếm">
-                Tìm kiếm
-              </button>
-            }
-            // cho phép clear nếu muốn
-            allowClear
-            className="antd-search-input"
-            // antd Input cần ref khác kiểu, nhưng ta chỉ focus qua inputRef khi rỗng
-          />
+    <div className="flex flex-col shadow-sm w-full">
+      <div className="flex justify-between px-6 py-3 w-full">
+        <div className="w-[10%]">
+          <img src={logo} alt="Logo"/>
         </div>
-        <div className="flex gap-1">
-          <Link to="/home" className="mx-4 max-h-min">
-            <HomeOutlined className="text-[20px] p-1" />
-            Trang chủ
-          </Link>
-          <button
-            onClick={handleAccountClick}
-            className="mx-4 max-h-min flex items-center"
-          >
-            <UserOutlined className="text-[20px] p-1" />
-            Tài khoản
-          </button>
-          <Link to="/cart" className="border-l-2 max-h-min px-4">
-            <CartWithBadge />
-          </Link>
+
+        <div className="flex flex-col w-[90%]">
+          <div className="flex  items-center justify-between">
+            <div className="w-[70%]">
+              <Input
+                // value={query}
+                // onChange={(e) => setQuery(e.target.value)}
+                placeholder="100% hàng thật"
+                prefix={<SearchOutlined className="text-gray-400" size={16} aria-hidden="true" />}
+                addonAfter={
+                    <button type="submit" aria-label="Tìm kiếm">
+                        Tìm kiếm
+                    </button>
+                }
+              />
+            </div>
+            <div className="flex">
+              <Link
+                to="/home"
+                className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
+              >
+                <HomeOutlined className="text-[20px] p-1 flex-shrink-0" />
+                Trang chủ
+              </Link>
+
+              <button
+                onClick={handleAccountClick}
+                className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
+              >
+                <UserOutlined className="text-[20px] p-1 flex-shrink-0" />
+                Tài khoản
+              </button>
+
+              <Link
+                to="/cart"
+                className="border-l-2 max-h-min px-4 flex items-center"
+              >
+                <CartWithBadge />
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+            {suggestions.map((s, i) => (
+                <button
+                    key={i}
+                    type="button"
+                    // onClick={() => applySuggestion(s)}
+                    aria-label={`Tìm nhanh: ${s}`}
+                    title={s}
+                >
+                    {s}
+                </button>
+            ))}
+          </div>
         </div>
       </div>
       <div className="flex gap-2 py-2 border-t-[1px] px-6">
