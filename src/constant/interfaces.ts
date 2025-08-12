@@ -20,6 +20,16 @@ export interface Author {
 export interface Category {
   id: number;
   name: string;
+  parent: Category | null;
+}
+
+export interface SidebarCategory {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
+  parentId?: number | null;
+  parentName?: string | null;
+  subcategories?: SidebarCategory[] | null;
 }
 
 export interface QuantitySold {
@@ -90,8 +100,64 @@ export interface RegisterRequest {
   confirmPassword: string;
 }
 
+export interface Product {
+  id: number;
+  title: string;
+  author: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  rating: number;
+  sold: number;
+  thumbnailUrl: string;
+  hasAd: boolean;
+  hasTikiNow: boolean;
+  isTopDeal: boolean;
+  isFreeshipXtra: boolean;
+  isAuthentic: boolean;
+}
+
+export interface ProductSearchResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  sortBy: string;
+  orderBy: string;
+  content: Product[];
+}
+
+export interface CategoryWithThumbnail {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
+}
+
 export interface ImageUploadResponse {
   url: string;
   id: string;
   error?: string;
+}
+
+export interface ProductItem {
+  id: number;
+  url: string;
+  discountPercent: number;
+}
+
+export interface FeaturedCollectionData {
+  logo: string;
+  title: string;
+  sponsor: string;
+  ratingText: string;
+  listProduct: ProductItem[];
+  rating: number;
+}
+
+export interface PageableParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+  keyword?: string;
 }

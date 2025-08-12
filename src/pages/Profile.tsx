@@ -19,7 +19,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f5f6fa]">
+    <div className="flex flex-col min-h-screen mb-8">
       <div className="flex-1">
         <Layout className="bg-transparent">
           <Content>
