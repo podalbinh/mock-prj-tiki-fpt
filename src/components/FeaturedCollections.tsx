@@ -18,7 +18,6 @@ const FeaturedCollections: React.FC = () => {
     const fetchCollections = async () => {
       try {
         const response = await getBookFeaturedCollections();
-        console.log("API Response:", response); // Debug log
         setAllCards(response || []);
       } catch (err) {
         console.error("Error fetching featured collections:", err);

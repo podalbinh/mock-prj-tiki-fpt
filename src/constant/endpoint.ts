@@ -9,8 +9,8 @@ export const API_ENDPOINTS = {
   USER_BY_ID: (id: number) => `/users/${id}`,
 
   // Book API endpoints
-  BOOKS: "/books",
-  BOOK_BY_ID: (id: number) => `/books/${id}`,
+  // BOOKS: "/books",
+  // BOOK_BY_ID: (id: number) => `/books/${id}`,
 
   // Product API endpoints
   PRODUCTS: "/products",

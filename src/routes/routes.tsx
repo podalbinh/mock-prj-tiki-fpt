@@ -80,10 +80,6 @@ const router = createBrowserRouter([
         loader: bookLoader,
       },
       {
-        path: "/admin/products/create",
-        element: <div>Thêm sản phẩm</div>,
-      },
-      {
         path: "/admin/categories",
         element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
         loader: categoryLoader,
