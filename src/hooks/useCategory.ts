@@ -45,6 +45,10 @@ export const useCategory = () => {
     );
   };
 
+  const getAllCategoriesWithSub = async () => {
+    return await Request.get<Category[]>(API_ENDPOINTS.CATEGORIES_WITH_SUB);
+  };
+
   return {
     getAllCategories,
     searchCategories,
@@ -52,5 +56,6 @@ export const useCategory = () => {
     updateCategory,
     deleteCategory,
     getCategoryWithThumbnail,
+    getAllCategoriesWithSub
   };
 };

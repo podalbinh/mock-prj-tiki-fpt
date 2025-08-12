@@ -112,33 +112,6 @@ const BookManagementTable = () => {
         [createBook, isEditing, updateBook, message, revalidator]
     );
 
-    const sortBooks = (field: keyof Book, order: "asc" | "desc") => {
-        const sortedBooks = [...booksShowed].sort((a, b) => {
-            const valA = a[field];
-            const valB = b[field];
-
-            if (valA === valB) return 0;
-
-            if (order === "asc") {
-                return valA > valB ? 1 : -1;
-            } else {
-                return valA > valB ? -1 : 1;
-            }
-        });
-
-        setBooksShowed(sortedBooks);
-    };
-
-    const searchBooksByName = (text: string) => {
-        if (text === "" || text === undefined) return setBooksShowed(books);
-        const filteredBooks = books.filter((book) => {
-            const name = book.name.toLowerCase();
-            const textToSearch = text.toLowerCase();
-            return name.includes(textToSearch);
-        });
-        setBooksShowed(filteredBooks);
-    }
-
     const columns: CustomTableColumn<Book>[] = [
         {
             key: "name",
