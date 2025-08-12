@@ -1,11 +1,11 @@
-import ProductManagementTable from "@/components/tables/BookManagementTable.tsx";
+import BookManagementTable from "@/components/tables/BookManagementTable.tsx";
 
-const ProductManagement = () => {
+const BookManagement = () => {
     return (
         <div>
-            <ProductManagementTable />
+            <BookManagementTable />
         </div>
     );
 };
 
-export default ProductManagement;
+export default BookManagement;

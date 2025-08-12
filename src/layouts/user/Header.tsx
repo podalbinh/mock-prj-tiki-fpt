@@ -7,12 +7,13 @@ import refund from "@/assets/refund.svg";
 import returnPolicy from "@/assets/return.svg";
 
 import { HomeOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
-import {LoginModal} from "@/components/forms/LoginModalForm";
-import { useModal } from '@/hooks/useModal'
+import { LoginModal } from "@/components/forms/LoginModalForm";
+import { useModal } from "@/hooks/useModal";
 import { SignupModal } from "@/components/forms/SignUpModalForm";
-import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "@/hooks/useAuth";
 import { Input } from "antd";
 
 const Header = () => {
@@ -30,7 +31,7 @@ const Header = () => {
 
   const { openLoginModal } = useModal()
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("authToken");
+  const isAuthenticated = !!localStorage.getItem("authToken"); 
 
   const handleAccountClick = () => {
     console.log('isAuthenticated',isAuthenticated)
@@ -131,8 +132,8 @@ const Header = () => {
           <span>Giá siêu rẻ</span>
         </div>
       </div>
-        <LoginModal />
-        <SignupModal />
+      <LoginModal />
+      <SignupModal />
     </div>
   );
 };

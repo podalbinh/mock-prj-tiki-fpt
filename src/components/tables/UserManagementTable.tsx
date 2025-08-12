@@ -4,14 +4,13 @@ import type { CustomTableColumn } from "@/components/common/Table";
 import type { User } from "@/constant/interfaces";
 import { useLoaderData, useRevalidator } from "react-router-dom";
 import ModalFormCreateUser from "../modals/ModalFormCreateUser";
-import { App, Button, Tag } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { App, Avatar, Button, Tag } from "antd";
+import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { useUser } from "@/hooks/useUser";
 import ModalConfirm from "../modals/ModalConfirm";
 import { isNilOrEmpty } from "@/utils/dataHelper";
 import TableColumnNoData from "../common/TableColumnNoData";
 import { formatDateTime } from "@/utils/dateHelper";
-import { set } from "lodash";
 
 const userColumns: CustomTableColumn<User>[] = [
   {
@@ -30,11 +29,14 @@ const userColumns: CustomTableColumn<User>[] = [
     key: "fullName",
     title: "Full Name",
     dataIndex: "fullName",
-    render: (value) =>
+    render: (value, record) =>
       isNilOrEmpty(value) ? (
         <TableColumnNoData />
       ) : (
-        value
+        <>
+          <Avatar src={record.avatarUrl} icon={<UserOutlined />} />
+          <span className="ml-2">{value}</span>
+        </>
       ),
   },
   {

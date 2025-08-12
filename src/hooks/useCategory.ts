@@ -1,15 +1,21 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
-import type { Category } from "@/constant/interfaces";
+import type { Category, PageableParams } from "@/constant/interfaces";
 
 export const useCategory = () => {
   const getAllCategories = async () => {
-    return await Request.get<Category[]>(API_ENDPOINTS.GET_CATEGORIES);
+    return await Request.get<Category[]>(API_ENDPOINTS.CATEGORIES);
+  };
+
+  const searchCategories = async (params: PageableParams) => {
+    return await Request.get<Category[]>(API_ENDPOINTS.SEARCH_CATEGORIES, {
+      params: { ...params },
+    });
   };
 
   const createCategory = async (categoryData: Partial<Category>) => {
     const response = await Request.post<Category>(
-      API_ENDPOINTS.CREATE_CATEGORY,
+      API_ENDPOINTS.CATEGORIES,
       categoryData
     );
     return response;
@@ -20,7 +26,7 @@ export const useCategory = () => {
     categoryData: Partial<Category>
   ) => {
     const response = await Request.put<Category>(
-      API_ENDPOINTS.UPDATE_CATEGORY(id),
+      API_ENDPOINTS.CATEGORY_BY_ID(id),
       categoryData
     );
     return response;
@@ -28,10 +34,28 @@ export const useCategory = () => {
 
   const deleteCategory = async (id: number) => {
     const response = await Request.delete<Category>(
-      API_ENDPOINTS.DELETE_CATEGORY(id)
+      API_ENDPOINTS.CATEGORY_BY_ID(id)
     );
     return response;
   };
 
-  return { getAllCategories, createCategory, updateCategory, deleteCategory };
+  const getCategoryWithThumbnail = async () => {
+    return await Request.get<Category[]>(
+      API_ENDPOINTS.GET_CATEGORY_WITH_THUMBNAIL
+    );
+  };
+
+  const getAllCategoriesWithSub = async () => {
+    return await Request.get<Category[]>(API_ENDPOINTS.CATEGORIES_WITH_SUB);
+  };
+
+  return {
+    getAllCategories,
+    searchCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getCategoryWithThumbnail,
+    getAllCategoriesWithSub
+  };
 };

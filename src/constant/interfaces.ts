@@ -4,7 +4,7 @@ export interface User {
   password: string;
   fullName?: string;
   phone?: string;
-  avatar?: string | null;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
@@ -20,6 +20,16 @@ export interface Author {
 export interface Category {
   id: number;
   name: string;
+  parent: Category | null;
+}
+
+export interface SidebarCategory {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
+  parentId?: number | null;
+  parentName?: string | null;
+  subcategories?: SidebarCategory[] | null;
 }
 
 export interface QuantitySold {
@@ -28,13 +38,13 @@ export interface QuantitySold {
 }
 
 export interface Image {
-  base_url: string;
-  is_gallery: boolean;
+  baseUrl: string;
+  isGallery: boolean;
   label: string;
-  large_url: string;
-  medium_url: string;
-  small_url: string;
-  thumbnail_url: string;
+  largeUrl: string;
+  mediumUrl: string;
+  smallUrl: string;
+  thumbnailUrl: string;
 }
 
 export interface Attribute {
@@ -54,13 +64,20 @@ export interface Book {
   authors: Author[];
   description: string;
   images: Image[];
-  original_price: number;
-  list_price: number;
-  rating_average: number;
-  short_description: string;
-  categories: Category;
-  quantity_sold: QuantitySold;
-  specifications: Specification[];
+  originalPrice: number;
+  listPrice: number;
+  ratingAverage: number;
+  shortDescription: string;
+  publisherVn: string;
+  publicationDate: string;
+  dimensions: string;
+  bookCover: string;
+  numberOfPage: string;
+  stockQuantity: number;
+  isActive: boolean;
+  categoriesId: number;
+  quantitySold: number;
+  thumbnail: string;
 }
 
 export interface Item {
@@ -77,8 +94,70 @@ export interface Order {
   totalPrice: number;
   status: string;
 }
-export interface RegisterRequest{
+export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface Product {
+  id: number;
+  title: string;
+  author: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  rating: number;
+  sold: number;
+  thumbnailUrl: string;
+  hasAd: boolean;
+  hasTikiNow: boolean;
+  isTopDeal: boolean;
+  isFreeshipXtra: boolean;
+  isAuthentic: boolean;
+}
+
+export interface ProductSearchResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  sortBy: string;
+  orderBy: string;
+  content: Product[];
+}
+
+export interface CategoryWithThumbnail {
+  id: number;
+  name: string;
+  thumbnailUrl?: string | null;
+}
+
+export interface ImageUploadResponse {
+  url: string;
+  id: string;
+  error?: string;
+}
+
+export interface ProductItem {
+  id: number;
+  url: string;
+  discountPercent: number;
+}
+
+export interface FeaturedCollectionData {
+  logo: string;
+  title: string;
+  sponsor: string;
+  ratingText: string;
+  listProduct: ProductItem[];
+  rating: number;
+}
+
+export interface PageableParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+  keyword?: string;
 }
