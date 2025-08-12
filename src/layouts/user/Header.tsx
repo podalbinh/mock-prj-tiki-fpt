@@ -6,15 +6,14 @@ import shipping from "@/assets/shipping.svg";
 import refund from "@/assets/refund.svg";
 import returnPolicy from "@/assets/return.svg";
 
-import { HomeOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, LogoutOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
 import { LoginModal } from "@/components/forms/LoginModalForm";
 import { useModal } from "@/hooks/useModal";
 import { SignupModal } from "@/components/forms/SignUpModalForm";
-
+import { Avatar, Dropdown, Input, Space } from "antd";
 import { useAuth } from "@/hooks/useAuth";
-import { Input } from "antd";
 
 const Header = () => {
   const suggestions = [
@@ -30,15 +29,32 @@ const Header = () => {
   ]
 
   const { openLoginModal } = useModal()
+  const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("authToken"); 
 
-  const handleAccountClick = () => {
-    console.log('isAuthenticated',isAuthenticated)
-    if (isAuthenticated) {
-      navigate("/profile");
-    } else {
-      openLoginModal();
+  const userMenuItems = [
+    {
+      key: "profile",
+      icon: <UserOutlined />,
+      label: "Hồ sơ",
+    },
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Đăng xuất",
+      danger: true,
+    },
+  ];
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    switch (key) {
+      case "logout":
+        logout();
+        navigate("/");
+        break;
+      case "profile":
+        navigate("/profile");
+        break;
     }
   };
 
@@ -65,26 +81,39 @@ const Header = () => {
               />
             </div>
             <div className="flex">
-              <Link
-                to="/home"
-                className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
-              >
+              <Link to="/" className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap">
                 <HomeOutlined className="text-[20px] p-1 flex-shrink-0" />
                 Trang chủ
               </Link>
 
-              <button
-                onClick={handleAccountClick}
-                className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
-              >
-                <UserOutlined className="text-[20px] p-1 flex-shrink-0" />
-                Tài khoản
-              </button>
+              {isAuthenticated ? (
+                <Dropdown
+                  menu={{ items: userMenuItems, onClick: handleMenuClick }}
+                  placement="bottomRight"
+                  arrow
+                >
+                  <Space className="cursor-pointer mx-4 py-[2px] max-h-min flex items-center">
+                    <Avatar
+                      icon={<UserOutlined />}
+                      size="small"
+                      src={user?.avatarUrl}
+                    />
+                    <span className="text-gray-700 max-w-28 block truncate">
+                      {user?.fullName}
+                    </span>
+                  </Space>
+                </Dropdown>
+              ) : (
+                <button
+                  onClick={openLoginModal}
+                  className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
+                >
+                  <UserOutlined className="text-[20px] p-1 flex-shrink-0" />
+                  Tài khoản
+                </button>
+              )}
 
-              <Link
-                to="/cart"
-                className="border-l-2 max-h-min px-4 flex items-center"
-              >
+              <Link to="/cart" className="border-l-2 max-h-min px-4 flex items-center">
                 <CartWithBadge />
               </Link>
             </div>
