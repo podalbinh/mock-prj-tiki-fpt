@@ -12,7 +12,6 @@ export default function Sidebar() {
     const fetchCategories = async () => {
       try {
         const response = await getAllCategories();
-        console.log("Categories API Response:", response); // Debug log
 
         setCategories(response || []);
       } catch (error) {

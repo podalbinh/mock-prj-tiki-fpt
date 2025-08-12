@@ -41,14 +41,13 @@ export default function CreateUserForm({
   };
 
   const handleFinishFailed: FormProps<User>["onFinishFailed"] = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.error("Failed:", errorInfo);
   };
 
   const roleOptions = [
     { value: "ADMIN", label: "Admin" },
     { value: "USER", label: "User" },
   ];
-  console.log("defaultValues", defaultValues);
   return (
     <div className="w-full max-w-md mx-auto">
       <Form

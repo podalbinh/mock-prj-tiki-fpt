@@ -18,7 +18,6 @@ export default function CategorySection({
     const fetchCategories = async () => {
       try {
         const response = await getCategoryWithThumbnail();
-        console.log("CategorySection API Response:", response);
 
         setCategories(response);
       } catch (error) {
@@ -31,28 +30,10 @@ export default function CategorySection({
 
   // Handle category click
   const handleCategoryClick = (category: CategoryWithThumbnail) => {
-    console.log(
-      "CategorySection: Category clicked:",
-      category.name,
-      "ID:",
-      category.id
-    );
-    console.log("CategorySection: Current selectedCategory:", selectedCategory);
-
     if (selectedCategory === category.id) {
-      // Nếu click vào category đã chọn thì bỏ chọn
-      console.log(
-        "CategorySection: Deselecting category, calling onCategorySelect(null)"
-      );
       setSelectedCategory(null);
       onCategorySelect(null);
     } else {
-      // Chọn category mới
-      console.log(
-        "CategorySection: Selecting new category, calling onCategorySelect(",
-        category.id,
-        ")"
-      );
       setSelectedCategory(category.id);
       onCategorySelect(category.id);
     }

@@ -28,7 +28,6 @@ export const useImage = () => {
             const filePath = match[1]; // Ví dụ: images/abc.png
             const imageRef = ref(storage, filePath);
             await deleteObject(imageRef);
-            console.log("Ảnh đã được xoá thành công.");
         } catch (error) {
             console.error("Lỗi khi xoá ảnh:", error);
         }

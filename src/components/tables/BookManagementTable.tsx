@@ -145,7 +145,6 @@ const BookManagementTable = () => {
             width: 100,
             render: (value) => {
                 const category = categoriesOption.filter((c) => c.id === value)[0];
-                console.log(value);
                 return category?.name || "-";
             }
         },

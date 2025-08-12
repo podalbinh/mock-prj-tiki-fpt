@@ -25,19 +25,9 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       label: "Dashboard",
     },
     {
-      key: "products",
+      key: "/admin/products",
       icon: <ShoppingOutlined />,
       label: "Quản lý sản phẩm",
-      children: [
-        {
-          key: "/admin/products",
-          label: "Danh sách sản phẩm",
-        },
-        {
-          key: "/admin/products/create",
-          label: "Thêm sản phẩm",
-        },
-      ],
     },
     {
       key: "/admin/categories",

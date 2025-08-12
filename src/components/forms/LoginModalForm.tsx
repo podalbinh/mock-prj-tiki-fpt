@@ -17,7 +17,6 @@ export function LoginModal() {
     const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
-        console.log('LoginModal mounted')
         // Reset form fields when modal opens
         if (error) {
             notification.error({
