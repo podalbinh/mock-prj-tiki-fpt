@@ -54,6 +54,7 @@ export default function CreateBookForm({
     ];
     const [categoriesOption, setCategoriesOption] = useState<Category[]>([]);
 
+    // ----------------------------------- PROCESS ------------------------------------
     useEffect(() => {
         // Lấy Categories
         (async () => {
@@ -101,9 +102,10 @@ export default function CreateBookForm({
         // Gửi ảnh lên server
         const images = [];
         for (const file of fileList) {
-            const res = await uploadImage(file.originFileObj as RcFile);
-            images.push(
-                {
+            // Nếu file chưa có url thì mới upload
+            if (!file.url) {
+                const res = await uploadImage(file.originFileObj as RcFile);
+                images.push({
                     baseUrl: res.url,
                     isGallery: res.url.includes('gallery'),
                     label: res.url.includes('gallery') ? 'Gallery' : '',
@@ -111,8 +113,19 @@ export default function CreateBookForm({
                     mediumUrl: res.url,
                     smallUrl: res.url,
                     thumbnailUrl: res.url,
-                }
-            )
+                });
+            } else {
+                // Nếu là file cũ, có thể push luôn dữ liệu cũ vào
+                images.push({
+                    baseUrl: file.url,
+                    isGallery: file.url.includes('gallery'),
+                    label: file.url.includes('gallery') ? 'Gallery' : '',
+                    largeUrl: file.url,
+                    mediumUrl: file.url,
+                    smallUrl: file.url,
+                    thumbnailUrl: file.url,
+                });
+            }
         }
 
         // Tạo ds tác giả trong book
@@ -172,6 +185,7 @@ export default function CreateBookForm({
         console.log("Failed:", errorInfo);
     };
 
+// -----------------------------------VIEW --------------------------------------
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
             <PlusOutlined />
@@ -351,6 +365,18 @@ export default function CreateBookForm({
                     rules={[{ required: true, message: "Vui lòng tải lên ít nhất 1 ảnh!" }]}
                 >
                     <Image.PreviewGroup/>
+                        {previewImage && (
+                            <Image
+                                wrapperStyle={{ display: 'none' }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )}
+
                     <Upload
                         listType="picture-card"
                         onPreview={handlePreview}
@@ -372,17 +398,6 @@ export default function CreateBookForm({
                         }}
                         fileList={fileList}
                     >
-                        {previewImage && (
-                            <Image
-                                wrapperStyle={{ display: 'none' }}
-                                preview={{
-                                    visible: previewOpen,
-                                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                }}
-                                src={previewImage}
-                            />
-                        )}
                         {uploadButton}
                     </Upload>
                 </Form.Item>
