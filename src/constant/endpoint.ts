@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
   CATEGORIES_WITH_SUB: "/categories/with-subcategories",
   // Order API endpoints
   ORDERS: "/orders",
+  ORDER_BY_ID: (id: number) => `/orders/${id}`,
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
 
   // Image upload endpoint
