@@ -37,7 +37,7 @@ export interface QuantitySold {
   value: number;
 }
 
-export interface Image {
+export interface ImageBook {
   baseUrl: string;
   isGallery: boolean;
   label: string;
@@ -63,7 +63,7 @@ export interface Book {
   name: string;
   authors: Author[];
   description: string;
-  images: Image[];
+  images: ImageBook[];
   originalPrice: number;
   listPrice: number;
   ratingAverage: number;

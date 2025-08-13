@@ -1,5 +1,6 @@
 import { Card, Rate, Tag, Divider } from 'antd';
 import type { Product } from '@/constant/interfaces';
+import {useNavigate} from "react-router";
 
 interface ProductCardProps {
   product: Product;
@@ -7,12 +8,15 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, formatPrice }: ProductCardProps) {
+  const navigate = useNavigate();
+
   return (
     <Card
       hoverable
       bordered
       className="rounded-lg overflow-hidden hover:shadow-md transition-shadow !border-[#EBEBF0] !bg-white"
       classNames={{ body: '!p-0' }}
+      onClick={() => navigate(`/books/${product.id}`)}
     >
       <div className="relative h-[531px]">
         {/* Background panel */}

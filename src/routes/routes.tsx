@@ -38,6 +38,10 @@ const router = createBrowserRouter([
         element: withSuspense(HomePage),
       },
       {
+        path: "books/:id",
+        element: withSuspense(lazy(() => import("@/pages/BookDetail"))),
+      },
+      {
         path: "profile",
         element: withSuspense(ProfilePage), // <- Trang chứa layout sidebar + Outlet
         children: [
