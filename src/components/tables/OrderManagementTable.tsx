@@ -47,7 +47,7 @@ const OrderManagementTable = () => {
   ];
 
   const actionColumn: CustomTableColumn<Order> = {
-    title: "Thao tác",
+    title: "Actions",
     key: "actions",
     align: "center",
     dataIndex: "status",
