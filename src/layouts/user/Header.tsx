@@ -88,9 +88,7 @@ const Header = () => {
             </button>
           )}
 
-          <Link to="/cart" className="border-l-2 max-h-min px-4">
-            <CartWithBadge />
-          </Link>
+          <CartWithBadge />
         </div>
       </div>
       <div className="flex gap-2 py-2 border-t-[1px] px-6">
