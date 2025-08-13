@@ -1,35 +1,53 @@
 import { useUser } from "@/hooks/useUser";
-import { DeleteOutlined, FacebookOutlined, GoogleOutlined, LockOutlined, MailOutlined, MobileOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { DeleteOutlined, FacebookOutlined, GoogleOutlined, HomeOutlined, LockOutlined, MailOutlined, MobileOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice";
+import { App, Button, Form, Input } from "antd";
+import ImageUpload from "@/components/common/ImageUploader";
+
 
 const AccountInfo = () => {
-    const userJson = localStorage.getItem("user");
-    const user = userJson ? JSON.parse(userJson) : null;
-    const dispatch = useAppDispatch();
-    const { updateUser } = useUser();
+  const userJson = localStorage.getItem("user");
+  const user = userJson ? JSON.parse(userJson) : null;
+  const dispatch = useAppDispatch();
+  const { updateUser } = useUser();
+  const { message } = App.useApp();
+  const [form] = Form.useForm();
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
-    const [fullName, setFullName] = useState(user?.fullName || "");
+  useEffect(() => {
+    if (user) {
+      form.setFieldsValue({
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+      });
+    }
+  }, [user]);
 
-    const handleSaveProfile = async () => {
-        try {
-            const response = await updateUser(user.id, {
-                fullName: fullName,
-            });
+  const handleFinish = async (values: any) => {
+    try {
+      const payload = {
+        fullName: values.fullName,
+        email: values.email,
+        phone: values.phone,
+        address: values.address,
+        avatarUrl: values.avatarUrl?.[0] || null,
+      };
 
-            if (response) {
-                localStorage.setItem("user", JSON.stringify(response));
-                dispatch(setUser(response));
-                alert("Cập nhật thành công!");
-            } else {
-                    alert("Cập nhật thất bại");
-            }
-        } catch (err) {
-            console.error("Lỗi cập nhật:", err);
-            alert("Có lỗi xảy ra.");
-        }
-    };
+      const response = await updateUser(user.id, payload);
+      if (response) {
+        localStorage.setItem("user", JSON.stringify(response));
+        dispatch(setUser(response));
+        message.success("Cập nhật thông tin thành công!");
+      }
+    } catch (err) {
+      console.error("Lỗi cập nhật:", err);
+      message.error("Cập nhật thất bại!");
+    }
+  };
 
 
   return (
@@ -37,110 +55,95 @@ const AccountInfo = () => {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Personal Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Thông tin cá nhân</h2>
+          <div className="w-full mx-auto bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-xl font-semibold mb-6 text-gray-800">Cập nhật thông tin cá nhân</h2>
 
-            {/* Profile Avatar */}
-            <div className="flex items-center mb-6">
-              <div className="relative">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                  <UserOutlined className="text-blue-500 text-3xl" />
-                </div>
-              </div>
-            </div>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleFinish}
+          initialValues={{}}
+        >
+          {/* Upload Avatar */}
+          <Form.Item
+            name="avatarUrl"
+            label="Ảnh đại diện"
+            valuePropName="value"
+            getValueFromEvent={(value: string[] = []) => value}
+            initialValue={
+              user.avatarUrl ? [user.avatarUrl] : null
+            }
+          >
+            <ImageUpload
+              multiple={false}
+              maxCount={1}
+              toggleUploading={setIsUploadingAvatar}
+              onChange={(value)=>{
+                form.setFieldValue('avatarUrl',value)
+              }}
+            />
+          </Form.Item>
 
-            {/* Name Field */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Họ & Tên</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+          {/* Full Name */}
+          <Form.Item
+            name="fullName"
+            label="Họ và tên"
+            rules={[
+              { required: true, message: "Vui lòng nhập họ và tên!" },
+              { min: 2, message: "Tên quá ngắn!" },
+            ]}
+          >
+            <Input prefix={<UserOutlined />} placeholder="Nhập họ và tên" />
+          </Form.Item>
 
-            {/* Gender */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">Giới tính</label>
-              <div className="flex space-x-6">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    defaultChecked 
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Nam</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Nữ</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="other"
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Khác</span>
-                </label>
-              </div>
-            </div>
+          {/* Phone */}
+          <Form.Item
+            name="phone"
+            label="Số điện thoại"
+            rules={[
+              { required: true, message: "Vui lòng nhập số điện thoại!" },
+              {
+                pattern: /^(0[3|5|7|8|9])+([0-9]{8})$/,
+                message: "Số điện thoại không hợp lệ!",
+              },
+            ]}
+          >
+            <Input prefix={<PhoneOutlined />} placeholder="Nhập số điện thoại" maxLength={10} />
+          </Form.Item>
 
-            {/* Country */}
-            <div className="mb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Quốc tịch</label>
-              <select defaultValue="vn" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-400">
-                <option>Chọn quốc tịch</option>
-                <option value="vn">Việt Nam</option>
-                <option value="us">Hoa Kỳ</option>
-                <option value="jp">Nhật Bản</option>
-                <option value="kr">Hàn Quốc</option>
-              </select>
-            </div>
+          {/* Email */}
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email!" },
+              { type: "email", message: "Email không hợp lệ!" },
+            ]}
+          >
+            <Input prefix={<MailOutlined />} placeholder="Nhập email" />
+          </Form.Item>
 
-            {/* Save Button */}
-            <button onClick={handleSaveProfile} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-colors">
+          {/* Address */}
+          <Form.Item name="address" label="Địa chỉ">
+            <Input prefix={<HomeOutlined />} placeholder="Nhập địa chỉ" />
+          </Form.Item>
+
+          {/* Submit Button */}
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isUploadingAvatar}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Lưu thay đổi
-            </button>
-          </div>
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
 
           {/* Right Column - Contact & Security */}
           <div className="space-y-6">
-            {/* Phone & Email Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Số điện thoại và Email</h2>
-
-              {/* Phone Number */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-4">
-                <div className="flex items-center space-x-3">
-                  <PhoneOutlined className="text-gray-500 w-5 h-5" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Số điện thoại</p>
-                    <p className="text-sm text-gray-900">{user?.phone}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <MailOutlined className="text-gray-500 w-5 h-5" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Địa chỉ email</p>
-                    <p className="text-sm text-gray-900">{user?.email || ""}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Security Section */}
             <div className="bg-white rounded-lg shadow-sm p-6">
