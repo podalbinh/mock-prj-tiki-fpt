@@ -336,7 +336,7 @@ export default function CreateBookForm({
         >
           Thông tin chi tiết
         </div>
-        <div className={`grid grid-cols-2 gap-4 ${isUpdating ? "hidden" : ""}`}>
+        <div className={`grid grid-cols-2 gap-4`}>
           {attributeDefinitions.map((attr) => (
             <Form.Item
               key={attr.code}
@@ -344,7 +344,7 @@ export default function CreateBookForm({
               label={attr.name}
               rules={[
                 {
-                  required: !isUpdating,
+                  required: true,
                   message: `Vui lòng nhập ${attr.name}`,
                 },
               ]}
