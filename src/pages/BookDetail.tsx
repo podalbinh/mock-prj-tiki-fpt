@@ -10,6 +10,9 @@ import {useBook} from "@/hooks/useBook.ts";
 import type { Book } from "@/constant/interfaces";
 import { Content } from "antd/es/layout/layout";
 import SummaryToggle from "@/layouts/user/book_detail_page/SummaryToggle.tsx";
+import SimilarProducts from "@/layouts/user/book_detail_page/SimilarProducts.tsx";
+import TopDeals from "@/layouts/user/book_detail_page/TopDeals.tsx";
+import SaveShopping from "@/layouts/user/book_detail_page/SaveShopping.tsx";
 
 export default function BookDetail() {
     const { id } = useParams<{ id: string }>();
@@ -34,30 +37,39 @@ export default function BookDetail() {
             {/* Nội dung */}
             <div className="flex-1">
                 <Layout className="bg-transparent">
-                    <Content>
+                    <Content className="mb-8">
                         <div className="pt-10"></div>
                         <div className="grid grid-cols-12 gap-6">
-                            <div className="col-span-4">
+                            <div className="col-span-3">
                                 <div className="bg-white rounded-lg p-3 flex flex-col gap-4">
                                     <BookImageGallery images={book?.images || []}/>
                                     <SummaryToggle content={book?.shortDescription || ""}/>
                                 </div>
 
                             </div>
-                            <div className="col-span-5 flex flex-col gap-3">
+                            <div className="col-span-6 flex flex-col gap-3">
                                 <Card>
                                     <BookInfo book={book || undefined}/>
                                 </Card>
+                                <div className={"bg-white rounded-lg p-4 flex flex-col gap-4"}>
+                                    <BookMetaData book={book || undefined}/>
+                                </div>
                                 <Card>
-                                    <BookMetaData />
+                                    <BookDescription book={book || undefined}/>
                                 </Card>
                                 <Card>
-                                    <BookDescription />
+                                    <SimilarProducts book={book || undefined}/>
+                                </Card>
+                                <Card>
+                                    <TopDeals/>
+                                </Card>
+                                <Card>
+                                    <SaveShopping/>
                                 </Card>
                             </div>
 
                             <div className="col-span-3">
-                                <PurchaseActions />
+                                <PurchaseActions book={book || undefined}/>
                             </div>
                         </div>
                     </Content>

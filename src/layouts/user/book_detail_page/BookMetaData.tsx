@@ -1,16 +1,37 @@
-import { Descriptions } from "antd";
+import type {Book} from "@/constant/interfaces.ts";
 
-export default function BookMetaData() {
+interface BookMetaDataProps {
+    book: Book | undefined;
+}
+
+export default function BookMetaData({book}: BookMetaDataProps) {
+    const data = [
+        { label: 'Bookcare', value: 'Có' },
+        { label: 'Công ty phát hành', value: book?.publisherVn || "-" },
+        { label: 'Ngày xuất bản', value: book?.publicationDate || "-" },
+        { label: 'Kích thước', value: book?.dimensions || "-" },
+        { label: 'Dịch Giả', value: book?.dichGia || "-" },
+        { label: 'Loại bìa', value: book?.bookCover || "-" },
+        { label: 'Số trang', value: book?.numberOfPage || "-" },
+        { label: 'Nhà xuất bản', value: book?.manufacturer || "-" },
+    ];
+
     return (
-        <Descriptions column={1} bordered>
-            <Descriptions.Item label="Bookcare">Có</Descriptions.Item>
-            <Descriptions.Item label="Công ty phát hành">1980 Books</Descriptions.Item>
-            <Descriptions.Item label="Ngày xuất bản">2024-07-01</Descriptions.Item>
-            <Descriptions.Item label="Kích thước">13 x 20.5 cm</Descriptions.Item>
-            <Descriptions.Item label="Dịch giả">Huyền Trang</Descriptions.Item>
-            <Descriptions.Item label="Loại bìa">Bìa mềm</Descriptions.Item>
-            <Descriptions.Item label="Số trang">263</Descriptions.Item>
-            <Descriptions.Item label="Nhà xuất bản">Nhà Xuất Bản Dân Trí</Descriptions.Item>
-        </Descriptions>
+        <div>
+            <div>
+                <p className={"text-md font-semibold mb-0"} >Thông tin chi tiết</p>
+            </div>
+            <div className="mt-2">
+                {data.map((item, index) => (
+                    <div
+                        key={index}
+                        className={`flex py-1 ${index !== data.length - 1 ? 'border-b border-gray-200' : ''}`}
+                    >
+                        <div className="w-2/4 text-gray-400 text-sm">{item.label}</div>
+                        <div className="flex-1 text-sm">{item.value}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }

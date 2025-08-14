@@ -172,7 +172,7 @@ export default function CreateBookForm({
       shortDescription: formValues.shortDescription ?? "",
       categoriesId: formValues.categoriesId,
       ...specifications,
-      thumbnail: images[0].baseUrl,
+      thumbnailUrl: images[0].baseUrl,
     };
 
     onSubmit?.(book as Book);
@@ -330,13 +330,11 @@ export default function CreateBookForm({
         <hr className={`${isUpdating ? "hidden" : ""}`} />
 
         <div
-          className={`text-lg font-bold text-gray-700 ${
-            isUpdating ? "hidden" : ""
-          }`}
+          className={`text-lg font-bold text-gray-700`}
         >
           Thông tin chi tiết
         </div>
-        <div className={`grid grid-cols-2 gap-4 ${isUpdating ? "hidden" : ""}`}>
+        <div className={`grid grid-cols-2 gap-4`}>
           {attributeDefinitions.map((attr) => (
             <Form.Item
               key={attr.code}
@@ -344,7 +342,7 @@ export default function CreateBookForm({
               label={attr.name}
               rules={[
                 {
-                  required: !isUpdating,
+                  required: true,
                   message: `Vui lòng nhập ${attr.name}`,
                 },
               ]}

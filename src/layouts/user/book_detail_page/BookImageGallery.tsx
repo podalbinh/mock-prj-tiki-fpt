@@ -31,8 +31,8 @@ export default function BookImageGallery({ images }: BookImageGalleryProps) {
             {/* Ảnh chính */}
             <div
                 style={{
-                    width: 368,
-                    height: 370,
+                    width: 250,
+                    height: 250,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -55,19 +55,23 @@ export default function BookImageGallery({ images }: BookImageGalleryProps) {
             </div>
 
             {/* Khu vực thumbnail */}
-            <div className="relative flex items-center mt-3 w-[400px]">
+            <div className="relative flex items-center mt-3 w-full">
                  {/*Nút trái */}
-                <button
-                    className={`absolute left-0 z-10 bg-white border rounded-full p-1 shadow hover:bg-gray-100 ${images.length < 6 ? "hidden" : ""}`}
-                    onClick={() => scrollThumbnails("left")}
-                >
-                    <LeftOutlined />
-                </button>
+                {
+                    (images.length > 4) && (
+                        <button
+                            className={`z-10 bg-white border rounded-full p-1 shadow hover:bg-gray-100`}
+                            onClick={() => scrollThumbnails("left")}
+                        >
+                            <LeftOutlined />
+                        </button>
+                    )
+                }
 
                 {/* List thumbnails */}
                 <div
                     ref={thumbnailRef}
-                    className="flex gap-2 overflow-x-hidden scroll-smooth px-8"
+                    className="flex-1 flex gap-2 overflow-x-hidden scroll-smooth"
                 >
                     {images.map((img, idx) => (
                         <div key={idx}
@@ -102,12 +106,16 @@ export default function BookImageGallery({ images }: BookImageGalleryProps) {
                 </div>
 
                  {/*Nút phải */}
-                <button
-                    className={`absolute right-0 z-10 bg-white border rounded-full p-1 shadow hover:bg-gray-100 ${images.length < 6 ? "hidden" : ""}`}
-                    onClick={() => scrollThumbnails("right")}
-                >
-                    <RightOutlined />
-                </button>
+                {
+                    (images.length > 4) && (
+                        <button
+                            className={`z-10 bg-white border rounded-full p-1 shadow hover:bg-gray-100`}
+                            onClick={() => scrollThumbnails("right")}
+                        >
+                            <RightOutlined />
+                        </button>
+                    )
+                }
             </div>
         </div>
     );

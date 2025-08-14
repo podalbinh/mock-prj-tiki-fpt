@@ -1,0 +1,41 @@
+/* Dot mặc định */
+.ant-carousel .slick-dots li button {
+    background-color: #d1d1d1 !important;
+    opacity: 1 !important;
+    transition: none !important; /* tắt animation mờ */
+}
+
+/* Dot active */
+.ant-carousel .slick-dots li.slick-active button {
+    background-color: #0A68FF !important;
+    opacity: 1 !important;
+    transition: none !important;
+}
+
+.ant-carousel .slick-arrow {
+    top: 50% !important;          /* căn giữa dọc */
+    transform: translateY(-50%) !important;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    z-index: 10;
+    opacity: 1;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.ant-carousel .slick-slide > div {
+    display: flex;
+    justify-content: center; /* căn giữa ngang */
+    align-items: center;     /* căn giữa dọc */
+    height: 200px;           /* chiều cao slide */
+}
+
+.ant-carousel .slick-prev:before,
+.ant-carousel .slick-next:before {
+    color: #0A68FF;
+    font-size: 20px;
+    opacity: 1; /* luôn hiển thị */
+}

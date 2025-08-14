@@ -71,13 +71,15 @@ export interface Book {
   publisherVn: string;
   publicationDate: string;
   dimensions: string;
+  dichGia: string;
+  manufacturer: string;
   bookCover: string;
   numberOfPage: string;
   stockQuantity: number;
   isActive: boolean;
   categoriesId: number;
   quantitySold: number;
-  thumbnail: string;
+  thumbnailUrl: string;
 }
 
 export interface Item {
