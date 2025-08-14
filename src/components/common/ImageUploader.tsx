@@ -36,12 +36,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>(
-    value?.map((url, idx) => ({
-      uid: String(idx),
-      name: `image-${idx}`,
-      status: "done",
-      url,
-    })) || []
+    Array.isArray(value)
+      ? value.map((url, idx) => ({
+          uid: String(idx),
+          name: `image-${idx}`,
+          status: "done",
+          url,
+        }))
+      : [value].map((url, idx) => ({
+          uid: String(idx),
+          name: `image-${idx}`,
+          status: "done",
+          url,
+        }))
   );
   const { uploadImage, deleteImage } = useUpload();
 
