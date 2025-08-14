@@ -10,6 +10,7 @@ import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
+import PaymentLayout from "@/layouts/user/payment_page/PaymentLayout.tsx";
 
 // Lazy load pages
 // const LoginPage = lazy(() => import("@/pages/Login"));
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/payment",
+    element: <PaymentLayout />,
   },
   {
     path: "/admin",
