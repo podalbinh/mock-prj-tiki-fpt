@@ -11,14 +11,12 @@ import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
 
-// Lazy load pages
-// const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const AccountInfo = lazy(() => import("@/pages/AccountInfo"));
 const Notifications = lazy(() => import("@/pages/Notifications"));
 const Orders = lazy(() => import("@/pages/MyOrders"));
-
+const Cart = lazy(() => import("@/pages/CartPage"));
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
 ) => (
@@ -59,6 +57,10 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "cart",
+        element: withSuspense(Cart),
+      }
     ],
   },
   {
@@ -104,6 +106,10 @@ const router = createBrowserRouter([
         loader: orderLoader,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: withSuspense(lazy(() => import("@/pages/LoginAdmin"))),
   },
   {
     path: "/admin/login",

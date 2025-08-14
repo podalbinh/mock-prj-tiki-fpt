@@ -161,3 +161,13 @@ export interface PageableParams {
   sort?: string;
   keyword?: string;
 }
+
+
+export interface CartItem {
+  productId: number;
+  name: string;
+  thumbnailUrl: string;
+  price: number;
+  originalPrice?: number;
+  quantity: number;
+}
