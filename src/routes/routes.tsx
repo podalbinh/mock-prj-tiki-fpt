@@ -103,6 +103,10 @@ const router = createBrowserRouter([
         element: withSuspense(lazy(() => import("@/pages/OrderStatistics"))),
         loader: orderLoader,
       },
+      {
+        path: "/admin/profile",
+        element: withSuspense(lazy(() => import("@/pages/AdminProfile"))),
+      },
     ],
   },
   {

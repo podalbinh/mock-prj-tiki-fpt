@@ -6,6 +6,7 @@ import {
   AppstoreOutlined,
   UserOutlined,
   ShoppingCartOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -53,6 +54,11 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
           label: "Danh sách đơn hàng",
         },
       ],
+    },
+    {
+      key: "/admin/profile",
+      icon: <ProfileOutlined />,
+      label: "Thông tin cá nhân",
     },
   ];
 
