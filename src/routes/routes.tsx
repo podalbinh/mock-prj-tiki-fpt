@@ -11,7 +11,7 @@ import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
 import { adminDashboardLoader } from "./loaders/adminDashboardLoader";
-import PaymentLayout from "@/layouts/user/payment_page/PaymentLayout.tsx";
+import Payment from "@/pages/Payment.tsx";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/payment",
-    element: <PaymentLayout />,
+    element: <Payment />,
   },
   {
     path: "/admin",

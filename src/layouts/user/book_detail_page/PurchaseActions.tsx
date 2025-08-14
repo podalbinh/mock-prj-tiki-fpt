@@ -1,7 +1,11 @@
-import { Button, InputNumber, Card } from "antd";
+import {Button, InputNumber, Card, App} from "antd";
 import type {Book} from "@/constant/interfaces.ts";
 import {useState} from "react";
 import {formattedPrice} from "@/utils/priceHelper.ts";
+import {useNavigate} from "react-router";
+import {type RootState, useAppDispatch} from "@/store";
+import { addToCart } from "@/store/slices/cartSlice.ts";
+import { useSelector } from "react-redux";
 
 interface PurchaseActionsProps {
     book: Book | undefined;
@@ -11,13 +15,33 @@ interface PurchaseActionsProps {
 export default function PurchaseActions({ book }: PurchaseActionsProps) {
     const [quantity, setQuantity] = useState(1);
     const totalPrice = book ? book.listPrice * quantity : 0;
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const items = useSelector((state: RootState) => state.cart.items);
+    const { message } = App.useApp();
 
     const onClickBuyNow = () => {
-        return
+        navigate("/payment", {
+            state: { bookId: book?.id, quantity: quantity}
+        });
     }
 
     const onClickAddToCart = () => {
-        return
+        if (!book?.id) return;
+        const exists = items.some((item) => item.id === book.id);
+
+        if (exists) {
+            message.error("Sản phẩm này đã có trong giỏ hàng!");
+            return;
+        }
+
+        dispatch(
+            addToCart({
+                id: book?.id,
+                quantity: quantity
+            })
+        );
+        message.success("Thêm sản phẩm vào giỏ hàng thành công");
     }
 
     return (

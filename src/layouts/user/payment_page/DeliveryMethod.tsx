@@ -2,8 +2,64 @@ import { Radio, Card } from "antd";
 import {formattedPrice} from "@/utils/priceHelper.ts";
 import BookPaymentCard from "@/layouts/user/payment_page/BookPaymentCard.tsx";
 import {RightOutlined} from "@ant-design/icons";
+import {useLocation} from "react-router-dom";
+import {useEffect, useState} from "react";
+import type {Book} from "@/constant/interfaces.ts";
+import {useBook} from "@/hooks/useBook.ts";
+import {useAppSelector} from "@/store";
+
+interface BookSold {
+    book: Book;
+    quantity: number;
+}
 
 export default function DeliveryMethod() {
+    const location = useLocation();
+    const { getBookById } = useBook();
+    const [bookCart, setBookCart] = useState<BookSold[]>([]);
+    const cartItems = useAppSelector((state) => state.cart.items);
+
+    useEffect(() => {
+        if (location.state) {
+            (async () => {
+                const data = await getBookById(location.state?.bookId);
+                setBookCart([
+                    {
+                        book: data,
+                        quantity: location.state?.quantity
+                    }
+                ]);
+            })();
+            return;
+        }
+
+        if (cartItems.length === 0) {
+            setBookCart([]);
+            return;
+        }
+
+        (async () => {
+            const books = await Promise.all(
+                cartItems.map(async (item) => {
+                    if (!item.id) return;
+                    const data = await getBookById(item.id);
+                    return {
+                        book: data,
+                        quantity: item.quantity
+                    };
+                })
+            );
+
+            const validBooks = books.filter(
+                (b): b is { book: Book; quantity: number } => b !== undefined
+            );
+
+            setBookCart(validBooks);
+        })();
+
+    }, []);
+
+
     return (
         <Card className={"rounded"}>
             <p className="text-lg font-bold">Chọn hình thức giao hàng</p>
@@ -68,7 +124,17 @@ export default function DeliveryMethod() {
                 </div>
 
                 {/*Hiển thị thông tin sách mua*/}
-                <BookPaymentCard/>
+                <div className="flex flex-col gap-2 mt-2">
+                    {
+                        bookCart.map((book) => (
+                            <BookPaymentCard
+                                key={book.book.id}
+                                book={book.book}
+                                quantity={book.quantity}
+                            />
+                        ))
+                    }
+                </div>
             </div>
 
             <hr className={"my-3"}/>
