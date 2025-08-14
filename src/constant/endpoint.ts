@@ -29,6 +29,8 @@ export const API_ENDPOINTS = {
   // Order API endpoints
   ORDERS: "/orders",
   ORDER_BY_ID: (id: number) => `/orders/${id}`,
+  MY_ORDERS:"/orders/me",
+
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
 
   // Image upload endpoint
