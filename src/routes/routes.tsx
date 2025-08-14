@@ -61,7 +61,7 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: withSuspense(Cart),
-      }
+      },
     ],
   },
   {
@@ -120,6 +120,10 @@ const router = createBrowserRouter([
   {
     path: "/403",
     element: <Error403 />,
+  },
+  {
+    path: "/confirm",
+    element: withSuspense(lazy(() => import("@/pages/PaymentConfirm"))),
   },
 ]);
 
