@@ -2,12 +2,13 @@ export interface User {
   id: number;
   email: string;
   password: string;
-  fullName?: string;
-  phone?: string;
-  avatarUrl?: string | null;
+  fullName: string;
+  phone: string;
+  avatarUrl: string | null;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+  address: string;
   role: "ADMIN" | "USER";
 }
 
