@@ -86,6 +86,7 @@ export interface Item {
   quantity: number;
   name: string;
   price: number;
+  thumbnail?: string;
 }
 
 export interface Order {
@@ -94,6 +95,8 @@ export interface Order {
   products: Item[];
   totalPrice: number;
   status: string;
+  createdAt?: string;
+  address?: string;
 }
 export interface RegisterRequest {
   email: string;
