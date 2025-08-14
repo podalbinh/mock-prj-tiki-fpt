@@ -52,7 +52,7 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
   onSelectionChange,
 }: CustomTableProps<T>) => {
   const actionColumn: ColumnType<T> = {
-    title: "Thao tác",
+    title: "Actions",
     key: "actions",
     width: 80,
     align: "center",
