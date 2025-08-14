@@ -10,16 +10,15 @@ import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
+import { adminDashboardLoader } from "./loaders/adminDashboardLoader";
 import PaymentLayout from "@/layouts/user/payment_page/PaymentLayout.tsx";
 
-// Lazy load pages
-// const LoginPage = lazy(() => import("@/pages/Login"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const AccountInfo = lazy(() => import("@/pages/AccountInfo"));
 const Notifications = lazy(() => import("@/pages/Notifications"));
 const Orders = lazy(() => import("@/pages/MyOrders"));
-
+const Cart = lazy(() => import("@/pages/CartPage"));
 const withSuspense = (
   Component: React.LazyExoticComponent<() => JSX.Element>
 ) => (
@@ -64,6 +63,10 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "cart",
+        element: withSuspense(Cart),
+      },
     ],
   },
   {
@@ -81,6 +84,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        loader: adminDashboardLoader,
         element: withSuspense(lazy(() => import("@/pages/AdminDashboard"))),
       },
       {
@@ -92,10 +96,6 @@ const router = createBrowserRouter([
         path: "/admin/categories",
         element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
         loader: categoryLoader,
-      },
-      {
-        path: "/admin/categories/create",
-        element: <div>Thêm danh mục</div>,
       },
       {
         path: "/admin/users",
@@ -112,7 +112,15 @@ const router = createBrowserRouter([
         element: withSuspense(lazy(() => import("@/pages/OrderStatistics"))),
         loader: orderLoader,
       },
+      {
+        path: "/admin/profile",
+        element: withSuspense(lazy(() => import("@/pages/AdminProfile"))),
+      },
     ],
+  },
+  {
+    path: "/login",
+    element: withSuspense(lazy(() => import("@/pages/LoginAdmin"))),
   },
   {
     path: "/admin/login",
@@ -121,6 +129,10 @@ const router = createBrowserRouter([
   {
     path: "/403",
     element: <Error403 />,
+  },
+  {
+    path: "/confirm",
+    element: withSuspense(lazy(() => import("@/pages/PaymentConfirm"))),
   },
 ]);
 

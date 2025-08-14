@@ -1,3 +1,25 @@
+import { Image } from "antd";
+import logo2 from "@/assets/bo-cong-thuong.svg";
+import logo1 from "@/assets/bo-cong-thuong-2.svg";
+import logo3 from "@/assets/bo-cong-thuong-3.svg";
+import payment0 from "@/assets/payment-0.svg";
+import payment1 from "@/assets/payment-1.svg";
+import payment2 from "@/assets/payment-2.svg";
+import payment3 from "@/assets/payment-3.svg";
+import payment4 from "@/assets/payment-4.svg";
+import payment5 from "@/assets/payment-5.svg";
+import payment6 from "@/assets/payment-6.svg";
+import payment7 from "@/assets/payment-7.svg";
+import payment8 from "@/assets/payment-8.svg";
+import payment9 from "@/assets/payment-9.svg";
+import payment10 from "@/assets/payment-10.svg";
+import appstore from "@/assets/appstore.svg";
+import googleplay from "@/assets/googleplay.svg";
+import zalo from "@/assets/zalo.svg";
+import facebook from "@/assets/facebook.svg";
+import youtube from "@/assets/youtube.svg";
+import tikiQr from "@/assets/tiki-qr.svg";
+
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200">
@@ -154,15 +176,9 @@ export default function Footer() {
 
             <h4 className="font-semibold text-gray-900 mb-3">Chứng nhận bởi</h4>
             <div className="flex flex-wrap gap-2">
-              <div className="w-12 h-12 bg-red-100 rounded flex items-center justify-center">
-                <div className="w-8 h-8 bg-red-500 rounded-full"></div>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded flex items-center justify-center">
-                <div className="w-8 h-8 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center">
-                <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
-              </div>
+              <Image src={logo1} preview={false} />
+              <Image src={logo2} preview={false} />
+              <Image src={logo3} preview={false} />
             </div>
           </div>
 
@@ -173,33 +189,17 @@ export default function Footer() {
             </h3>
             <div className="grid grid-cols-4 gap-2 mb-6">
               {/* Payment method icons */}
-              <div className="w-12 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                VISA
-              </div>
-              <div className="w-12 h-8 bg-red-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                MC
-              </div>
-              <div className="w-12 h-8 bg-green-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                JCB
-              </div>
-              <div className="w-12 h-8 bg-blue-500 rounded flex items-center justify-center text-white text-xs font-bold">
-                ATM
-              </div>
-              <div className="w-12 h-8 bg-purple-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                MO
-              </div>
-              <div className="w-12 h-8 bg-cyan-500 rounded flex items-center justify-center text-white text-xs font-bold">
-                ZP
-              </div>
-              <div className="w-12 h-8 bg-red-500 rounded flex items-center justify-center text-white text-xs font-bold">
-                AL
-              </div>
-              <div className="w-12 h-8 bg-blue-400 rounded flex items-center justify-center text-white text-xs font-bold">
-                VN
-              </div>
-              <div className="w-12 h-8 bg-gray-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                COD
-              </div>
+              <Image src={payment0} preview={false} className="max-w-12"/>
+              <Image src={payment1} preview={false} className="max-w-12"/>
+              <Image src={payment2} preview={false} className="max-w-12"/>
+              <Image src={payment3} preview={false} className="max-w-12"/>
+              <Image src={payment4} preview={false} className="max-w-12"/>
+              <Image src={payment5} preview={false} className="max-w-12"/>
+              <Image src={payment6} preview={false} className="max-w-12"/>
+              <Image src={payment7} preview={false} className="max-w-12"/>
+              <Image src={payment8} preview={false} className="max-w-12"/>
+              <Image src={payment9} preview={false} className="max-w-12"/>
+              <Image src={payment10} preview={false} className="max-w-12"/>
             </div>
 
             <h4 className="font-semibold text-gray-900 mb-3">
@@ -214,24 +214,14 @@ export default function Footer() {
               Kết nối với chúng tôi
             </h3>
             <div className="flex space-x-3 mb-6">
-              <a
-                href="#"
-                className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700"
-              >
-                {/* <Facebook size={16} /> */}
-                Facebook
+              <a href="#" className="w-8 h-8 rounded-full">
+                <Image src={facebook} preview={false} />
               </a>
-              <a
-                href="#"
-                className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700"
-              >
-                Youtube
+              <a href="#" className="w-8 h-8 rounded-full">
+                <Image src={youtube} preview={false} />
               </a>
-              <a
-                href="#"
-                className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600"
-              >
-                Mess
+              <a href="#" className="w-8 h-8 rounded-full">
+                <Image src={zalo} preview={false} />
               </a>
             </div>
 
@@ -239,19 +229,15 @@ export default function Footer() {
               Tải ứng dụng trên điện thoại
             </h4>
             <div className="flex items-start space-x-3">
-              <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
-                <div className="w-12 h-12 bg-black rounded grid grid-cols-3 gap-px p-1">
-                  {Array.from({ length: 9 }).map((_, i) => (
-                    <div key={i} className="bg-white rounded-sm"></div>
-                  ))}
-                </div>
+              <div className="w-16 h-16 rounded flex items-center justify-center">
+                <Image src={tikiQr} preview={false} />
               </div>
               <div className="space-y-2">
-                <div className="w-24 h-8 bg-black rounded flex items-center justify-center">
-                  <span className="text-white text-xs">App Store</span>
+                <div className="w-24 h-8 rounded flex items-center justify-center">
+                  <Image src={appstore} preview={false} />
                 </div>
                 <div className="w-24 h-8 bg-black rounded flex items-center justify-center">
-                  <span className="text-white text-xs">Google Play</span>
+                  <Image src={googleplay} preview={false} />
                 </div>
               </div>
             </div>

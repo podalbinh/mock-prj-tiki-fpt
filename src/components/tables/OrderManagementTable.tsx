@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import AdminTable from "@/components/common/Table";
 import type { CustomTableColumn } from "@/components/common/Table";
 import type { Order } from "@/constant/interfaces";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRevalidator } from "react-router-dom";
 import {  Button, Input, Select, Tag } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import ModalDetailOrder from "../modals/ModalDetailOrder";
@@ -12,6 +12,7 @@ const OrderManagementTable = () => {
   const { Option } = Select;
 
   const rawOrders = useLoaderData() as Order[];
+  const revalidator = useRevalidator();
   
   const columns: CustomTableColumn<Order>[] = [
     { key: "customerName", title: "Customer", dataIndex: "customerName" },
@@ -47,7 +48,7 @@ const OrderManagementTable = () => {
   ];
 
   const actionColumn: CustomTableColumn<Order> = {
-    title: "Thao tác",
+    title: "Actions",
     key: "actions",
     align: "center",
     dataIndex: "status",
@@ -134,6 +135,7 @@ const OrderManagementTable = () => {
         onCancel={() => setOpenDetailModal(false)}
         open={openDetailModal}
         order={selectedOrder}
+        onUpdate={() => revalidator.revalidate()}
       />
     </>
   );
