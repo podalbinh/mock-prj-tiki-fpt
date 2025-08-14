@@ -34,4 +34,7 @@ export const API_ENDPOINTS = {
   // Image upload endpoint
   UPLOAD_IMAGE: "images/upload",
   DELETE_IMAGE: (fileId: string) => `images/delete/${fileId}`,
+
+  // Dashboard API endpoints
+  ADMIN_DASHBOARD: "admin/dashboard",
 };

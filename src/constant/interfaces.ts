@@ -162,7 +162,6 @@ export interface PageableParams {
   keyword?: string;
 }
 
-
 export interface CartItem {
   productId: number;
   name: string;
@@ -170,4 +169,44 @@ export interface CartItem {
   price: number;
   originalPrice?: number;
   quantity: number;
+}
+
+// Thống kê tổng quan
+export interface StatsData {
+  totalUsers: number;
+  totalProducts: number;
+  totalOrders: number;
+  totalRevenue: number;
+  monthlyGrowth: number; // %
+  todayOrders: number;
+}
+
+// Dữ liệu thống kê theo tháng
+export interface MonthlyData {
+  name: string; // ví dụ: "T1", "T2"
+  users: number;
+  orders: number;
+  revenue: number;
+  books: number;
+}
+
+// Dữ liệu phân loại sản phẩm
+export interface CategoryData {
+  name: string;
+  value: number;
+}
+
+// Dữ liệu đơn hàng gần đây
+export interface RecentOrdersData {
+  name: string; // ví dụ: "Hôm nay", "Hôm qua"
+  orders: number;
+  revenue: number;
+}
+
+// Interface bao gộp toàn bộ dữ liệu trả về từ API
+export interface DashboardData {
+  statsData: StatsData;
+  monthlyData: MonthlyData[];
+  categoryData: CategoryData[];
+  recentOrdersData: RecentOrdersData[];
 }

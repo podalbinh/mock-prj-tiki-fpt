@@ -10,6 +10,7 @@ import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
+import { adminDashboardLoader } from "./loaders/adminDashboardLoader";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        loader: adminDashboardLoader,
         element: withSuspense(lazy(() => import("@/pages/AdminDashboard"))),
       },
       {
@@ -85,10 +87,6 @@ const router = createBrowserRouter([
         path: "/admin/categories",
         element: withSuspense(lazy(() => import("@/pages/CategoryManagement"))),
         loader: categoryLoader,
-      },
-      {
-        path: "/admin/categories/create",
-        element: <div>Thêm danh mục</div>,
       },
       {
         path: "/admin/users",
