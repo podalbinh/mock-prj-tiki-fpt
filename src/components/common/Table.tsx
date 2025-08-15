@@ -29,6 +29,7 @@ export interface CustomTableProps<
   className?: string;
   showSelection?: boolean;
   onSelectionChange?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
+   onChange?: TableProps<T>["onChange"]; 
 }
 
 const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
@@ -50,6 +51,7 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
   className = "",
   showSelection = false,
   onSelectionChange,
+  onChange,
 }: CustomTableProps<T>) => {
   const actionColumn: ColumnType<T> = {
     title: "Actions",
@@ -136,6 +138,7 @@ const AdminTable = <T extends { id: number | number; disabled?: boolean }>({
         rowSelection={rowSelection}
         className="ant-table-custom"
         scroll={{ x: "max-content" }}
+        onChange={onChange}
       />
     </div>
   );

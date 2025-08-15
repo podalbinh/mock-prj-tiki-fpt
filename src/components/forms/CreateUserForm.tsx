@@ -34,7 +34,7 @@ export default function CreateUserForm({
   const handleFinish: FormProps<User>["onFinish"] = (values) => {
     const updatedValues: User = {
       ...values,
-      avatarUrl: values.avatarUrl?.[0] || null,
+      avatarUrl: values.avatarUrl?.[0] || "",
       isActive: true,
     };
     onSubmit?.(updatedValues);
@@ -65,9 +65,6 @@ export default function CreateUserForm({
             name="avatarUrl"
             valuePropName="value"
             getValueFromEvent={(value: string[] = []) => value}
-            initialValue={
-              defaultValues?.avatarUrl ? [defaultValues.avatarUrl] : []
-            }
           >
             <ImageUpload
               multiple={false}

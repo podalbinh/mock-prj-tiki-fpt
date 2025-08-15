@@ -214,3 +214,13 @@ export interface DashboardData {
   categoryData: CategoryData[];
   recentOrdersData: RecentOrdersData[];
 }
+
+export interface PagedResponse<T> {
+  currentPage: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  data: T[];
+}

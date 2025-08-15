@@ -1,10 +1,10 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
-import type { User } from "@/constant/interfaces";
+import type { PageableParams, PagedResponse, User } from "@/constant/interfaces";
 
 export const useUser = () => {
-  const getAllUsers = async () => {
-    const response = await Request.get<User[]>(API_ENDPOINTS.USERS);
+  const getAllUsers = async (params: PageableParams) => {
+    const response = await Request.get<PagedResponse<User>>(API_ENDPOINTS.USERS, { params });
     return response;
   };
 
