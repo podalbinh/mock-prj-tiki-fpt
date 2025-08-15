@@ -1,21 +1,34 @@
 import { Button } from "antd";
+import {useNavigate} from "react-router";
 
 export default function ShippingAddress() {
+    const navigation = useNavigate()
+    const userJson = localStorage.getItem("user");
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    const onClick = () => {
+        navigation('/profile')
+    }
+
     return (
         <div className="rounded-md p-4 bg-white">
             {/* Tiêu đề */}
             <div className="flex justify-between items-center mb-2">
                 <span className="text-gray-500 text-sm">Giao tới</span>
-                <Button type="link" className="p-0 text-blue-500">
+                <Button
+                    onClick={onClick}
+                    type="link"
+                    className="p-0 text-blue-500"
+                >
                     Thay đổi
                 </Button>
             </div>
 
             {/* Tên + SĐT */}
             <div className="flex items-center text-base font-bold mb-2">
-                <span>Vũ Anh Tú</span>
+                <span>{user?.fullName || "-"}</span>
                 <span className="mx-2 text-gray-300">|</span>
-                <span>0942438693</span>
+                <span>{user?.phone || "-"}</span>
             </div>
 
             {/* Địa chỉ */}
@@ -24,7 +37,7 @@ export default function ShippingAddress() {
           Văn phòng
         </span>
                 <span>
-          số 17 Duy Tân, Phường Dịch Vọng, Quận Cầu Giấy, Hà Nội
+          {user?.address || "-"}
         </span>
             </div>
         </div>

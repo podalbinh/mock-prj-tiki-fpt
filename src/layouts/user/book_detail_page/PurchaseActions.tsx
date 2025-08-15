@@ -6,6 +6,8 @@ import {useNavigate} from "react-router";
 import {type RootState, useAppDispatch} from "@/store";
 import { addToCart } from "@/store/slices/cartSlice.ts";
 import { useSelector } from "react-redux";
+import {useModal} from "@/hooks/useModal.ts";
+import {selectUser} from "@/store/slices/authSlice.ts";
 
 interface PurchaseActionsProps {
     book: Book | undefined;
@@ -19,16 +21,28 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
     const dispatch = useAppDispatch();
     const items = useSelector((state: RootState) => state.cart.items);
     const { message } = App.useApp();
+    const { openLoginModal } = useModal();
+    const user = useSelector(selectUser);
 
     const onClickBuyNow = () => {
+        if (!user) {
+            openLoginModal();
+            return;
+        }
+
         navigate("/payment", {
             state: { bookId: book?.id, quantity: quantity}
         });
     }
 
     const onClickAddToCart = () => {
+        if (!user) {
+            openLoginModal();
+            return;
+        }
+
         if (!book?.id) return;
-        const exists = items.some((item) => item.id === book.id);
+        const exists = items.some((item) => item.productId === book.id);
 
         if (exists) {
             message.error("Sản phẩm này đã có trong giỏ hàng!");
@@ -37,7 +51,7 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
 
         dispatch(
             addToCart({
-                id: book?.id,
+                productId: book?.id,
                 quantity: quantity
             })
         );

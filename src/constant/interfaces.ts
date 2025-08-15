@@ -97,6 +97,12 @@ export interface Order {
   totalPrice: number;
   status: string;
 }
+
+export interface OrderCreate {
+  productId: number;
+  quantity: number;
+}
+
 export interface RegisterRequest {
   email: string;
   password: string;

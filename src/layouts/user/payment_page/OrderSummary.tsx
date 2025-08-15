@@ -1,18 +1,25 @@
-import { Card, Button } from "antd";
+import {Card, Button, App} from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import {useBook} from "@/hooks/useBook.ts";
-import {useAppSelector} from "@/store";
+import {useAppSelector, useAppDispatch} from "@/store";
 import {formattedPrice} from "@/utils/priceHelper.ts";
 import {useNavigate} from "react-router";
+import {useOrder} from "@/hooks/useOrder.ts";
+import {clearCart} from "@/store/slices/cartSlice.ts";
 
 export default function OrderSummary() {
     const location = useLocation();
     const navigate = useNavigate();
+    const {createOrders} = useOrder()
     const { getBookById } = useBook();
     const [total, setTotal] = useState<number>(0);
     const cartItems = useAppSelector((state) => state.cart.items);
+    const { message } = App.useApp();
+    const userJson = localStorage.getItem("user");
+    const user = userJson ? JSON.parse(userJson) : null;
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (location.state) {
@@ -28,8 +35,8 @@ export default function OrderSummary() {
         (async () => {
             const totalPrice = await Promise.all(
                 cartItems.map(async (item) => {
-                    if (!item.id) return 0;
-                    const data = await getBookById(item.id);
+                    if (!item.productId) return 0;
+                    const data = await getBookById(item.productId);
                     return data.listPrice * item.quantity;
                 })
             );
@@ -42,7 +49,37 @@ export default function OrderSummary() {
     }, []);
 
     const onClick = () => {
-        // Gửi API
+        if (!user?.fullName || !user?.address || !user?.phone) {
+            message.error("Chưa có đầy đủ thông tin khách hàng để giao hàng")
+            return;
+        }
+
+        try {
+            if (location.state) {
+                (async () => {
+                    await createOrders([{productId: location.state?.bookId, quantity: location.state?.quantity}])
+                })();
+            } else if (cartItems.length > 0) {
+                (async () => {
+                    const data = cartItems
+                        .filter((item): item is { productId: number; quantity: number } =>
+                            item.productId !== undefined
+                        )
+                        .map((item) => ({
+                            productId: item.productId,
+                            quantity: item.quantity
+                        }));
+
+                    await createOrders(data);
+                })();
+            }
+        } catch (e) {
+            console.error(e);
+            message.error("Lưu đơn hàng thất bại")
+            return;
+        }
+        message.success("Lưu đơn hàng thành công")
+        dispatch(clearCart());
         navigate("/confirm");
     }
 

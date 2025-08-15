@@ -41,8 +41,8 @@ export default function DeliveryMethod() {
         (async () => {
             const books = await Promise.all(
                 cartItems.map(async (item) => {
-                    if (!item.id) return;
-                    const data = await getBookById(item.id);
+                    if (!item.productId) return;
+                    const data = await getBookById(item.productId);
                     return {
                         book: data,
                         quantity: item.quantity
