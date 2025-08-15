@@ -71,7 +71,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/payment",
-    element: <Payment />,
+    element: (
+        <RequireRoleWrapper role="USER">
+          <Payment />
+        </RequireRoleWrapper>
+    ),
   },
   {
     path: "/admin",
