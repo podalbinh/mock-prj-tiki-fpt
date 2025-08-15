@@ -1,4 +1,4 @@
-import  { useEffect, useMemo, useCallback } from "react";
+import  { useEffect, useMemo, useCallback, useState } from "react";
 import { Badge, notification } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useCart } from "@/hooks/useCart";
@@ -12,19 +12,45 @@ const CartWithBadge = () => {
   const { openLoginModal } = useModal();
   const navigate = useNavigate();
   
-  // Sử dụng useMemo để tính toán totalItems và đảm bảo re-render khi cartItems thay đổi
-  const totalItems = useMemo(() => {
-    console.log('CartWithBadge: useMemo triggered, cartItems.length:', cartItems.length);
-    return cartItems.length;
+  // Local state để track cart items
+  const [localCartItems, setLocalCartItems] = useState(cartItems);
+  
+  // Update local state khi cartItems thay đổi
+  useEffect(() => {
+    console.log('CartWithBadge: cartItems changed, updating local state:', cartItems);
+    setLocalCartItems(cartItems);
   }, [cartItems]);
   
-  // Debug log để kiểm tra realtime
-  console.log('CartWithBadge: render, totalItems:', totalItems, 'cartItems.length:', cartItems.length);
+  // Sử dụng useMemo để tính toán totalItems và đảm bảo re-render khi localCartItems thay đổi
+  const totalItems = useMemo(() => {
+    const total = localCartItems.length;
+    console.log('CartWithBadge: useMemo triggered, totalItems:', total, 'localCartItems:', localCartItems);
+    return total;
+  }, [localCartItems]);
   
-  // useEffect để đảm bảo component re-render khi cartItems thay đổi
+  // Debug log để kiểm tra realtime
+  console.log('CartWithBadge: render, totalItems:', totalItems, 'localCartItems.length:', localCartItems.length);
+  
+  // useEffect để đảm bảo component re-render khi localCartItems thay đổi
   useEffect(() => {
-    console.log('CartWithBadge: useEffect triggered, totalItems:', totalItems, 'cartItems.length:', cartItems.length);
-  }, [totalItems, cartItems.length]);
+    console.log('CartWithBadge: useEffect triggered, totalItems:', totalItems, 'localCartItems.length:', localCartItems.length);
+  }, [totalItems, localCartItems.length]);
+
+  // Thêm useEffect để lắng nghe cart-updated event
+  useEffect(() => {
+    const handleCartUpdated = (e: CustomEvent) => {
+      console.log('CartWithBadge: cart-updated event received:', e.detail);
+      if (e.detail && e.detail.cartItems) {
+        setLocalCartItems(e.detail.cartItems);
+      }
+    };
+
+    window.addEventListener('cart-updated', handleCartUpdated as EventListener);
+    
+    return () => {
+      window.removeEventListener('cart-updated', handleCartUpdated as EventListener);
+    };
+  }, []);
 
   const handleCartClick = useCallback(() => {
     if (isAuthenticated) {

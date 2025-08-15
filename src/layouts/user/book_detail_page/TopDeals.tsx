@@ -1,8 +1,7 @@
 import type {Book} from "@/constant/interfaces.ts";
 import {useEffect, useState} from "react";
 import {useBook} from "@/hooks/useBook.ts";
-import BookCard from "@/layouts/user/book_detail_page/BookCard.tsx";
-import {CarouselCustom} from "@/layouts/user/book_detail_page/CarouselCustom.tsx";
+import CarouselCustom from "@/layouts/user/book_detail_page/CarouselCustom";
 
 
 export default function TopDeals() {
@@ -23,11 +22,7 @@ export default function TopDeals() {
             <div>
                 <p className={"text-md font-semibold mb-0"} >Top Deals</p>
             </div>
-            <CarouselCustom itemsPerSlide={4}>
-                {books.map((b) => (
-                    <BookCard key={b.id} book={b} />
-                ))}
-            </CarouselCustom>
+            <CarouselCustom books={books} columns={4} rows={1}/>
         </div>
     );
 }

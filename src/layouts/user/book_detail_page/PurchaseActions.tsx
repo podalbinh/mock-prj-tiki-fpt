@@ -1,14 +1,18 @@
-import {Button, InputNumber, Card, App} from "antd";
+import {Button, Card, App} from "antd";
 import type {Book} from "@/constant/interfaces.ts";
 import {useState} from "react";
 import {formattedPrice} from "@/utils/priceHelper.ts";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
+
 import {useModal} from "@/hooks/useModal.ts";
+
+import Counter from "@/layouts/user/book_detail_page/Counter.tsx";
 import {useCart} from "@/hooks/useCart.ts";
 
 interface PurchaseActionsProps {
     book: Book | undefined;
 }
+
 
 export default function PurchaseActions({ book }: PurchaseActionsProps) {
     const [quantity, setQuantity] = useState(1);
@@ -59,14 +63,27 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
 
     return (
         <Card>
+            <div className="flex gap-2">
+                <img
+                    src="/src/assets/tiki-logo.svg"
+                    alt="ai"
+                    style={{ width: 40, height: 40 }}
+                />
+                <div>
+                    <div>Tiki Trading</div>
+                    <img
+                        src="/src/assets/offical.svg"
+                        alt="ai"
+                        style={{ height: 20 }}
+                    />
+                </div>
+            </div>
+
+            <hr className={"my-4"}/>
+
             <div className="flex flex-col gap-2 mb-4">
                 <p className="text-sm font-semibold mb-0">Số lượng</p>
-                <InputNumber
-                    min={1}
-                    value={quantity}
-                    onChange={(value) => setQuantity(value || 1)} // đảm bảo luôn ≥ 1
-                    className="w-16"
-                />
+                <Counter min={1} onChange={setQuantity}/>
             </div>
             <div className="mb-4">
                 <span className="block font-semibold">Tạm tính</span>

@@ -28,12 +28,12 @@ export default function BookCard({ book }: BookCardProps) {
                 {/* Picture area */}
                 <div
                     className="relative rounded-lg flex items-center justify-center bg-white"
-                    style={{ width: 130, height: 130, overflow: "hidden" }}
+                    style={{ width: "100%", height: "100%", overflow: "hidden" }}
                 >
                     <img
                         src={book?.images?.[0]?.thumbnailUrl || '/placeholder.svg'}
                         alt={book?.name || "Book"}
-                        className="max-w-full max-h-full object-contain"
+                        className="object-contain w-full h-full"
                     />
                     {showAd && (
                         <span className="absolute top-2 right-2 rounded-md bg-[#F5F5FA] border border-white text-[#27272A] text-[10px] font-bold px-2 py-[2px] uppercase">
