@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 export default function ShippingAddress() {
     const navigation = useNavigate()

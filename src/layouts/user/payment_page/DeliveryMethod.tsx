@@ -6,7 +6,7 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {Book} from "@/constant/interfaces.ts";
 import {useBook} from "@/hooks/useBook.ts";
-import {useAppSelector} from "@/store";
+import {useCart} from "@/hooks/useCart.ts";
 
 interface BookSold {
     book: Book;
@@ -17,16 +17,41 @@ export default function DeliveryMethod() {
     const location = useLocation();
     const { getBookById } = useBook();
     const [bookCart, setBookCart] = useState<BookSold[]>([]);
-    const cartItems = useAppSelector((state) => state.cart.items);
+    const { cartItems } = useCart();
 
     useEffect(() => {
-        if (location.state) {
+        if (location.state?.selectedCartItems) {
+            // Xử lý state mới với selectedCartItems
             (async () => {
-                const data = await getBookById(location.state?.bookId);
+                const selectedItems = location.state.selectedCartItems;
+                const books = await Promise.all(
+                    selectedItems.map(async (item: any) => {
+                        if (!item.productId) return;
+                        const data = await getBookById(item.productId);
+                        return {
+                            book: data,
+                            quantity: item.quantity || 1
+                        };
+                    })
+                );
+
+                const validBooks = books.filter(
+                    (b): b is { book: Book; quantity: number } => b !== undefined
+                );
+
+                setBookCart(validBooks);
+            })();
+            return;
+        }
+
+        if (location.state?.bookId) {
+            // Xử lý state cũ (backward compatibility)
+            (async () => {
+                const data = await getBookById(location.state.bookId);
                 setBookCart([
                     {
                         book: data,
-                        quantity: location.state?.quantity
+                        quantity: location.state.quantity || 1
                     }
                 ]);
             })();
@@ -42,10 +67,10 @@ export default function DeliveryMethod() {
             const books = await Promise.all(
                 cartItems.map(async (item) => {
                     if (!item.productId) return;
-                    const data = await getBookById(item.productId);
+                    const data = await getBookById(item.productId || 0);
                     return {
                         book: data,
-                        quantity: item.quantity
+                        quantity: item.quantity || 1
                     };
                 })
             );
@@ -57,7 +82,7 @@ export default function DeliveryMethod() {
             setBookCart(validBooks);
         })();
 
-    }, []);
+    }, [location.state, cartItems]);
 
 
     return (

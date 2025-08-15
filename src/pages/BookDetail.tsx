@@ -26,10 +26,13 @@ export default function BookDetail() {
         if (isNaN(bookId)) return;
 
         (async () => {
-            const data = await getBookById(bookId);
-            setBook(data);
+            try {
+                const data = await getBookById(bookId);
+                setBook(data);
+            } catch (error) {
+                console.error('Error fetching book:', error);
+            }
         })();
-        console.log(book);
     }, [id]);
 
     return (

@@ -2,30 +2,24 @@ import {Button, InputNumber, Card, App} from "antd";
 import type {Book} from "@/constant/interfaces.ts";
 import {useState} from "react";
 import {formattedPrice} from "@/utils/priceHelper.ts";
-import {useNavigate} from "react-router";
-import {type RootState, useAppDispatch} from "@/store";
-import { addToCart } from "@/store/slices/cartSlice.ts";
-import { useSelector } from "react-redux";
+import {useNavigate} from "react-router-dom";
 import {useModal} from "@/hooks/useModal.ts";
-import {selectUser} from "@/store/slices/authSlice.ts";
+import {useCart} from "@/hooks/useCart.ts";
 
 interface PurchaseActionsProps {
     book: Book | undefined;
 }
 
-
 export default function PurchaseActions({ book }: PurchaseActionsProps) {
     const [quantity, setQuantity] = useState(1);
     const totalPrice = book ? book.listPrice * quantity : 0;
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const items = useSelector((state: RootState) => state.cart.items);
     const { message } = App.useApp();
     const { openLoginModal } = useModal();
-    const user = useSelector(selectUser);
+    const { addToCart, cartItems } = useCart();
 
     const onClickBuyNow = () => {
-        if (!user) {
+        if (!addToCart) {
             openLoginModal();
             return;
         }
@@ -36,26 +30,31 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
     }
 
     const onClickAddToCart = () => {
-        if (!user) {
+        if (!addToCart) {
             openLoginModal();
             return;
         }
 
         if (!book?.id) return;
-        const exists = items.some((item) => item.productId === book.id);
+        const exists = cartItems.some((item) => item.productId === book.id);
 
         if (exists) {
             message.error("Sản phẩm này đã có trong giỏ hàng!");
             return;
         }
 
-        dispatch(
-            addToCart({
-                productId: book?.id,
-                quantity: quantity
-            })
-        );
-        message.success("Thêm sản phẩm vào giỏ hàng thành công");
+        const success = addToCart({
+            productId: book.id,
+            name: book.name,
+            thumbnailUrl: book.images[0].thumbnailUrl,
+            price: book.listPrice,
+            originalPrice: book.originalPrice,
+            quantity: quantity
+        });
+
+        if (success) {
+            message.success("Thêm sản phẩm vào giỏ hàng thành công");
+        }
     }
 
     return (

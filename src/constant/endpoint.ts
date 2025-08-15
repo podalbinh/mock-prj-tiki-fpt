@@ -9,8 +9,8 @@ export const API_ENDPOINTS = {
   USER_BY_ID: (id: number) => `/users/${id}`,
 
   // Book API endpoints
-  // BOOKS: "/books",
-  // BOOK_BY_ID: (id: number) => `/books/${id}`,
+  BOOKS: "/products",
+  BOOK_BY_ID: (id: number) => `/products/${id}`,
 
   // Product API endpoints
   PRODUCTS: "/products",
@@ -38,4 +38,7 @@ export const API_ENDPOINTS = {
 
   // Dashboard API endpoints
   ADMIN_DASHBOARD: "admin/dashboard",
+
+  // Cart
+  VALIDATE_CART: "carts/validate"
 };

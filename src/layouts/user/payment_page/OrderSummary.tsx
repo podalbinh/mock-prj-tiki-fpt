@@ -3,11 +3,11 @@ import { DownOutlined } from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import {useBook} from "@/hooks/useBook.ts";
-import {useAppSelector, useAppDispatch} from "@/store";
 import {formattedPrice} from "@/utils/priceHelper.ts";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import {useOrder} from "@/hooks/useOrder.ts";
-import {clearCart} from "@/store/slices/cartSlice.ts";
+import {useCart} from "@/hooks/useCart.ts";
+import type { CartItem } from "@/constant/interfaces";
 
 export default function OrderSummary() {
     const location = useLocation();
@@ -15,17 +15,35 @@ export default function OrderSummary() {
     const {createOrders} = useOrder()
     const { getBookById } = useBook();
     const [total, setTotal] = useState<number>(0);
-    const cartItems = useAppSelector((state) => state.cart.items);
+    const { cartItems, clearCart } = useCart();
     const { message } = App.useApp();
     const userJson = localStorage.getItem("user");
     const user = userJson ? JSON.parse(userJson) : null;
-    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (location.state) {
+        if (location.state?.selectedCartItems) {
+            // Xử lý state mới với selectedCartItems
             (async () => {
-                const data = await getBookById(location.state?.bookId);
-                setTotal(data.listPrice * location.state?.quantity);
+                const selectedItems = location.state.selectedCartItems;
+                const totalPrice = await Promise.all(
+                    selectedItems.map(async (item: any) => {
+                        if (!item.productId) return 0;
+                        const data = await getBookById(item.productId);
+                        return data.listPrice * (item.quantity || 1);
+                    })
+                );
+
+                const sum = totalPrice.reduce((acc, price) => acc + (price || 0), 0);
+                setTotal(sum);
+            })();
+            return;
+        }
+
+        if (location.state?.bookId) {
+            // Xử lý state cũ (backward compatibility)
+            (async () => {
+                const data = await getBookById(location.state.bookId);
+                setTotal(data.listPrice * (location.state.quantity || 1));
             })();
             return;
         }
@@ -36,8 +54,8 @@ export default function OrderSummary() {
             const totalPrice = await Promise.all(
                 cartItems.map(async (item) => {
                     if (!item.productId) return 0;
-                    const data = await getBookById(item.productId);
-                    return data.listPrice * item.quantity;
+                    const data = await getBookById(item.productId || 0);
+                    return data.listPrice * (item.quantity || 1);
                 })
             );
 
@@ -46,7 +64,7 @@ export default function OrderSummary() {
             setTotal(sum);
         })();
 
-    }, []);
+    }, [location.state, cartItems]);
 
     const onClick = () => {
         if (!user?.fullName || !user?.address || !user?.phone) {
@@ -55,19 +73,31 @@ export default function OrderSummary() {
         }
 
         try {
-            if (location.state) {
+            if (location.state?.selectedCartItems) {
                 (async () => {
-                    await createOrders([{productId: location.state?.bookId, quantity: location.state?.quantity}])
+                    const selectedItems = location.state.selectedCartItems;
+                    const data = selectedItems
+                        .filter((item: any) => item.productId !== undefined)
+                        .map((item: any) => ({
+                            productId: item.productId || 0,
+                            quantity: item.quantity || 1
+                        }));
+
+                    await createOrders(data);
+                })();
+            } else if (location.state?.bookId) {
+                (async () => {
+                    await createOrders([{productId: location.state.bookId, quantity: location.state.quantity || 1}])
                 })();
             } else if (cartItems.length > 0) {
                 (async () => {
                     const data = cartItems
-                        .filter((item): item is { productId: number; quantity: number } =>
+                        .filter((item): item is CartItem =>
                             item.productId !== undefined
                         )
                         .map((item) => ({
-                            productId: item.productId,
-                            quantity: item.quantity
+                            productId: item.productId || 0,
+                            quantity: item.quantity || 1
                         }));
 
                     await createOrders(data);
@@ -79,7 +109,7 @@ export default function OrderSummary() {
             return;
         }
         message.success("Lưu đơn hàng thành công")
-        dispatch(clearCart());
+        clearCart();
         navigate("/confirm");
     }
 

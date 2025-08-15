@@ -1,6 +1,6 @@
 import { Card, Rate, Tag, Divider } from 'antd';
 import type { Product } from '@/constant/interfaces';
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 interface ProductCardProps {
   product: Product;

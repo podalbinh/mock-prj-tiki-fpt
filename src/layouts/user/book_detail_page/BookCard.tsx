@@ -1,6 +1,6 @@
 import { Card, Rate} from 'antd';
 import type {Book} from '@/constant/interfaces';
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import {formattedPrice} from "@/utils/priceHelper.ts";
 import {useEffect, useState } from 'react';
 

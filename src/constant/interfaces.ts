@@ -219,3 +219,27 @@ export interface DashboardData {
   categoryData: CategoryData[];
   recentOrdersData: RecentOrdersData[];
 }
+
+
+
+
+export interface CartValidateSuccessResponse {
+  device: string;
+  code: number;
+  data: {
+    message: string;
+  };
+}
+
+export interface CartValidateErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    path: string;
+    error: string;
+    message: string;
+  };
+}
+
+export type CartValidateResponse = CartValidateSuccessResponse | CartValidateErrorResponse;

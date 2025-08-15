@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Button, notification } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '@/hooks/useCart';
-import { useAuth } from '@/hooks/useAuth';
-import { useModal } from '@/hooks/useModal';
+import { notification, Checkbox, Button } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import CartItem from '@/components/common/CartItem';
 import CartSummary from '@/components/common/CartSummary';
 import EmptyCart from '@/components/EmptyCart';
 import { LoginModal } from '@/components/forms/LoginModalForm';
-
+import { useCart } from '@/hooks/useCart';
+import { useAuth } from '@/hooks/useAuth';
+import { useModal } from '@/hooks/useModal';
+import type { CartValidateResponse } from '@/constant/interfaces';
+import type { CartValidateErrorResponse } from '@/constant/interfaces';
 const CartPage = () => {
     const navigate = useNavigate();
-    const { cartItems, updateQuantity, removeFromCart, getTotalPrice } = useCart();
+    const { cartItems, updateQuantity, removeFromCart, getTotalPrice, validateCart } = useCart();
     const { isAuthenticated } = useAuth();
     const { openLoginModal } = useModal();
     const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
     const [selectAll, setSelectAll] = useState(false);
-
     // Redirect if not authenticated
     useEffect(() => {
         if (!isAuthenticated) {
@@ -46,7 +46,7 @@ const CartPage = () => {
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
-            setSelectedItems(new Set(cartItems.map(item => item.productId)));
+            setSelectedItems(new Set(cartItems.map(item => item.productId || 0)));
         } else {
             setSelectedItems(new Set());
         }
@@ -95,7 +95,7 @@ const CartPage = () => {
         });
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (selectedItems.size === 0) {
             notification.warning({
                 message: 'Thông báo',
@@ -103,15 +103,54 @@ const CartPage = () => {
             });
             return;
         }
-        
-        notification.info({
-            message: 'Thông báo',
-            description: 'Tính năng thanh toán đang được phát triển',
-        });
+
+        try {
+            // Gọi API validate cart với các item được chọn
+            const selectedCartItems = getSelectedItems();
+            console.log('Selected cart items:', selectedCartItems);
+            
+            const response = await validateCart(selectedCartItems);
+            console.log('Validate cart response:', response);
+            
+            // Nếu validate thành công (không có error), navigate đến payment page
+            console.log('Validation successful, navigating to payment...');
+            console.log('Response object:', response);
+            
+            if (selectedCartItems.length > 0) {
+                console.log('Navigating with all selected items:', selectedCartItems);
+                console.log('About to call navigate...');
+                console.log('Navigate function:', navigate);
+                console.log('Navigate function type:', typeof navigate);
+                
+                try {
+                    navigate("/payment", {
+                        state: { 
+                            selectedCartItems: selectedCartItems
+                        }
+                    });
+                    console.log('Navigate called successfully');
+                } catch (navigateError) {
+                    console.error('Error calling navigate:', navigateError);
+                }
+            } else {
+                console.log('No selected items to navigate with');
+            }
+        } catch (error) {
+            console.error('Error validating cart:', error);
+            // Xử lý error message từ API response
+            if (error && typeof error === 'object' && 'data' in error) {
+                const apiError = error as any;
+                    notification.error({
+                        message: 'Lỗi xác nhận giỏ hàng',
+                        description: apiError.data.data.message,
+                    });
+
+            }
+        }
     };
 
     const getSelectedItems = () => {
-        return cartItems.filter(item => selectedItems.has(item.productId));
+        return cartItems.filter(item => selectedItems.has(item.productId || 0));
     };
 
     // Don't render anything if not authenticated (will redirect)
@@ -182,9 +221,9 @@ const CartPage = () => {
                     <div className="divide-y divide-gray-200">
                         {cartItems.map(item => (
                             <CartItem
-                                key={item.productId}
+                                key={item.productId || 0}
                                 item={item}
-                                isSelected={selectedItems.has(item.productId)}
+                                isSelected={selectedItems.has(item.productId || 0)}
                                 onSelect={handleSelectItem}
                                 onQuantityChange={handleQuantityChange}
                                 onRemove={handleRemove}
