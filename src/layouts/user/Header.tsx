@@ -12,7 +12,7 @@ import CartWithBadge from "@/components/common/CartWithBadge";
 import { LoginModal } from "@/components/forms/LoginModalForm";
 import { useModal } from "@/hooks/useModal";
 import { SignupModal } from "@/components/forms/SignUpModalForm";
-import { Avatar, Dropdown, Input, Space } from "antd";
+import { Avatar, Dropdown, Space } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
@@ -67,18 +67,22 @@ const Header = () => {
 
         <div className="flex flex-col w-[90%]">
           <div className="flex  items-center justify-between">
-            <div className="w-[70%]">
-              <Input
-                // value={query}
-                // onChange={(e) => setQuery(e.target.value)}
-                placeholder="100% hàng thật"
-                prefix={<SearchOutlined className="text-gray-400" size={16} aria-hidden="true" />}
-                addonAfter={
-                    <button type="submit" aria-label="Tìm kiếm">
-                        Tìm kiếm
-                    </button>
-                }
-              />
+            <div className="w-[70%] border rounded-lg">
+              <div className="flex items-center w-full">
+                <SearchOutlined className="text-gray-400 mr-2 px-3 py-2"  aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="100% hàng thật"
+                  className="flex-1 outline-none text-sm placeholder-gray-400"
+                />
+                <button
+                  type="submit"
+                  aria-label="Tìm kiếm"
+                  className="text-blue-500 text-sm font-normal rounded-r-lg border-l px-3 py-2 pl-2 hover:bg-blue-100"
+                >
+                  Tìm kiếm
+                </button>
+              </div>
             </div>
             <div className="flex">
               <Link to="/" className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap">
@@ -119,12 +123,11 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
             {suggestions.map((s, i) => (
                 <button
                     key={i}
                     type="button"
-                    // onClick={() => applySuggestion(s)}
                     aria-label={`Tìm nhanh: ${s}`}
                     title={s}
                 >
