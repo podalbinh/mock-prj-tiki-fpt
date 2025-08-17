@@ -38,7 +38,7 @@ export interface QuantitySold {
   value: number;
 }
 
-export interface Image {
+export interface ImageBook {
   baseUrl: string;
   isGallery: boolean;
   label: string;
@@ -64,7 +64,7 @@ export interface Book {
   name: string;
   authors: Author[];
   description: string;
-  images: Image[];
+  images: ImageBook[];
   originalPrice: number;
   listPrice: number;
   ratingAverage: number;
@@ -72,13 +72,15 @@ export interface Book {
   publisherVn: string;
   publicationDate: string;
   dimensions: string;
+  dichGia: string;
+  manufacturer: string;
   bookCover: string;
   numberOfPage: string;
   stockQuantity: number;
   isActive: boolean;
   categoriesId: number;
   quantitySold: number;
-  thumbnail: string;
+  thumbnailUrl: string;
 }
 
 export interface Item {
@@ -98,6 +100,12 @@ export interface Order {
   createdAt?: string;
   address?: string;
 }
+
+export interface OrderCreate {
+  productId: number;
+  quantity: number;
+}
+
 export interface RegisterRequest {
   email: string;
   password: string;
@@ -214,6 +222,27 @@ export interface DashboardData {
   categoryData: CategoryData[];
   recentOrdersData: RecentOrdersData[];
 }
+
+export interface CartValidateSuccessResponse {
+  device: string;
+  code: number;
+  data: {
+    message: string;
+  };
+}
+
+export interface CartValidateErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    path: string;
+    error: string;
+    message: string;
+  };
+}
+
+export type CartValidateResponse = CartValidateSuccessResponse | CartValidateErrorResponse;
 
 export interface PagedResponse<T> {
   currentPage: number;

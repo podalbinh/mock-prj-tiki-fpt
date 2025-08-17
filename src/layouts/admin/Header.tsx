@@ -6,7 +6,7 @@ import {
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;

@@ -1,6 +1,6 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
-import type { Order } from "@/constant/interfaces";
+import type {Order, OrderCreate} from "@/constant/interfaces";
 
 export const useOrder = () => {
   const getAllOrders = async () => {
@@ -16,5 +16,12 @@ export const useOrder = () => {
     return response;
   };
 
-  return { getAllOrders, updateOrder };
+  const createOrders = async (ordersData: Partial<OrderCreate[]>) => {
+    return await Request.post<OrderCreate[]>(
+      API_ENDPOINTS.ORDERS_CREATE,
+      ordersData
+    );
+  }
+
+  return { getAllOrders, updateOrder, createOrders };
 };

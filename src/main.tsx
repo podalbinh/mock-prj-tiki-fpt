@@ -9,6 +9,7 @@ import router from "./routes/routes.tsx";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import { App } from "antd";
+import "./main.css"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

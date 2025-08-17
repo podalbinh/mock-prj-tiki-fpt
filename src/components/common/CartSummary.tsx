@@ -10,7 +10,7 @@ type Props = {
 
 const CartSummary: React.FC<Props> = ({ items, selectedItems, onCheckout }) => {
     const totalItems = selectedItems.length; // Số lượng sản phẩm khác nhau đã chọn
-    const subtotal = selectedItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const subtotal = selectedItems.reduce((acc, item) => acc + ((item.price || 0) * (item.quantity || 1)), 0);
     const shippingFee: number = 0; // Miễn phí vận chuyển
     const total: number = subtotal + shippingFee;
 
