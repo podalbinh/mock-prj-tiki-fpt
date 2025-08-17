@@ -7,6 +7,13 @@ import { useLoaderData } from "react-router-dom";
 
 const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#3688f4ff" ];
 
+const STATUS_LABELS: Record<string, string> = {
+  confirmed: "Đã xác nhận",
+  pending: "Đang giao hàng",
+  completed: "Đã giao hàng",
+  cancelled: "Đã hủy",
+};
+
 const OrderDashboard = () => {
 
   const orders = useLoaderData() as Order[];
@@ -20,7 +27,7 @@ const OrderDashboard = () => {
       statusCount[o.status] = (statusCount[o.status] || 0) + 1;
     });
     return Object.keys(statusCount).map((status) => ({
-      name: status,
+      name:  STATUS_LABELS[status] || status,
       value: statusCount[status],
     }));
   }, [orders]);

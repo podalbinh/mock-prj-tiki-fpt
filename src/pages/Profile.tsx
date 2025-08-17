@@ -25,7 +25,7 @@ const Profile = () => {
           <Content>
             <div className="max-w-[1450px] w-full mx-auto py-6 flex gap-6">
               {/* Sidebar */}
-              <div className="w-64 bg-white shadow-sm">
+              <div className="w-64 shadow-sm">
                 <div className="p-6 flex items-center gap-2">
                   <img
                     src={user?.avatarUrl ?? ""}
@@ -39,27 +39,22 @@ const Profile = () => {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-center p-4">
-                  <Button type="primary" color="danger" onClick={handleLogout} className="w-full">
-                    Đăng xuất
-                  </Button>
-                </div>
                 <nav>
                   <ul className="mt-2 space-y-1">
                     <li className="flex items-center gap-2 px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                      <UserOutlined className="text-gray-500" />
+                      <i className="fa-solid fa-user text-gray-500"></i>
                       <Link to="/profile/account-info" className="flex-1">
                         Thông tin tài khoản
                       </Link>
                     </li>
                     <li className="flex items-center gap-2 px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                      <BellOutlined className="text-gray-500" />
+                      <i className="fa-solid fa-bell text-gray-500"></i>
                       <Link to="/profile/notifications" className="flex-1">
                         Thông báo của tôi
                       </Link>
                     </li>
                     <li className="flex items-center gap-2 px-6 py-2 hover:bg-gray-100 cursor-pointer">
-                      <ShoppingOutlined className="text-gray-500" />
+                      <i className="fa-solid fa-file-lines text-gray-500"></i>
                       <Link to="/profile/orders" className="flex-1">
                         Quản lý đơn hàng
                       </Link>
@@ -69,7 +64,7 @@ const Profile = () => {
               </div>
 
               {/* Main content */}
-              <div className="flex-1 p-6 bg-white shadow-sm rounded-lg">
+              <div className="flex-1 p-6 shadow-sm rounded-lg">
                 <Outlet />
               </div>
             </div>
