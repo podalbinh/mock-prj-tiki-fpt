@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 interface ConfirmModalProps {
@@ -31,23 +31,21 @@ const ModalConfirm: React.FC<ConfirmModalProps> = ({
           {title}
         </div>
       }
-      open={open}
-      onOk={onOk}
       onCancel={onCancel}
-      okText={okText}
-      cancelText={cancelText}
+      onOk={onOk}
+      open={open}
       confirmLoading={loading}
       centered
       width={480}
       className="confirm-modal"
-      okButtonProps={{
-        className:
-          "bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-white font-medium px-6 py-2 h-10 rounded-md transition-colors duration-200",
-      }}
-      cancelButtonProps={{
-        className:
-          "border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-800 font-medium px-6 py-2 h-10 rounded-md transition-colors duration-200",
-      }}
+      footer={
+        <div className="flex gap-4 justify-end">
+          <Button onClick={onCancel}>{cancelText}</Button>
+          <Button onClick={onOk} color="danger" variant="solid">
+            {okText}
+          </Button>
+        </div>
+      }
     >
       <div className="py-4">
         <p className="text-gray-600 text-base leading-relaxed">{description}</p>

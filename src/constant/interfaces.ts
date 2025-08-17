@@ -88,6 +88,7 @@ export interface Item {
   quantity: number;
   name: string;
   price: number;
+  thumbnail?: string;
 }
 
 export interface Order {
@@ -96,6 +97,8 @@ export interface Order {
   products: Item[];
   totalPrice: number;
   status: string;
+  createdAt?: string;
+  address?: string;
 }
 
 export interface OrderCreate {
@@ -220,9 +223,6 @@ export interface DashboardData {
   recentOrdersData: RecentOrdersData[];
 }
 
-
-
-
 export interface CartValidateSuccessResponse {
   device: string;
   code: number;
@@ -243,3 +243,13 @@ export interface CartValidateErrorResponse {
 }
 
 export type CartValidateResponse = CartValidateSuccessResponse | CartValidateErrorResponse;
+
+export interface PagedResponse<T> {
+  currentPage: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  data: T[];
+}

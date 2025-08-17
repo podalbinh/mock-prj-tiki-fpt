@@ -30,6 +30,8 @@ export const API_ENDPOINTS = {
   ORDERS: "/orders",
   ORDERS_CREATE: "/orders/create",
   ORDER_BY_ID: (id: number) => `/orders/${id}`,
+  MY_ORDERS:"/orders/me",
+
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
 
   // Image upload endpoint
