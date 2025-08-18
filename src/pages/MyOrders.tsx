@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import AdminTable from "@/components/common/Table";
 import type { CustomTableColumn } from "@/components/common/Table";
 import type { Order } from "@/constant/interfaces";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { Button, Select, Tag } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -11,10 +11,6 @@ const OrderListTable = () => {
   const { Option } = Select;
   const navigate = useNavigate();
   const rawOrders = useLoaderData() as Order[];
-  const revalidator = useRevalidator();
-
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
   const handleDetail = useCallback((order: Order) => {
@@ -24,6 +20,21 @@ const OrderListTable = () => {
   const filteredOrders = rawOrders?.filter((order: Order) => {
     return statusFilter ? order.status === statusFilter : true;
   });
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "confirmed":
+        return "Đã xác nhận";
+      case "pending":
+        return "Đang giao hàng";
+      case "completed":
+        return "Đã giao hàng";
+      case "cancelled":
+        return "Đã hủy";
+      default:
+        return status;
+    }
+  };
 
   const columns: CustomTableColumn<Order>[] = [
     {
@@ -72,7 +83,7 @@ const OrderListTable = () => {
 
         return (
           <Tag color={color} style={{ textTransform: "capitalize" }}>
-            {status}
+            {getStatusText(status)}
           </Tag>
         );
       },
@@ -95,7 +106,7 @@ const OrderListTable = () => {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white rounded-lg shadow-sm py-5 px-7">
         <h3 className="text-lg font-semibold text-gray-900 mb-10">
           Danh sách đơn hàng
         </h3>
@@ -108,10 +119,10 @@ const OrderListTable = () => {
             onChange={(value) => setStatusFilter(value || null)}
             style={{ width: 200 }}
           >
-            <Option value="confirmed">Confirmed</Option>
-            <Option value="pending">Pending</Option>
-            <Option value="cancelled">Cancelled</Option>
-            <Option value="completed">Completed</Option>
+            <Option value="confirmed">Đã xác nhận</Option>
+            <Option value="pending">Đang giao hàng</Option>
+            <Option value="completed">Đã giao hàng</Option>
+            <Option value="cancelled">Đã hủy</Option>
           </Select>
 
           <Button
@@ -129,14 +140,6 @@ const OrderListTable = () => {
           showActions={false}
         />
       </div>
-
-      {/* <ModalDetailOrder
-        title="Chi tiết đơn hàng"
-        onCancel={() => setOpenDetailModal(false)}
-        open={openDetailModal}
-        order={selectedOrder}
-        onUpdate={() => revalidator.revalidate()}
-      /> */}
     </>
   );
 };

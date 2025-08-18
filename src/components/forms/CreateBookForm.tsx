@@ -172,7 +172,7 @@ export default function CreateBookForm({
       shortDescription: formValues.shortDescription ?? "",
       categoriesId: formValues.categoriesId,
       ...specifications,
-      thumbnail: images[0].baseUrl,
+      thumbnailUrl: images[0].baseUrl,
     };
 
     onSubmit?.(book as Book);
@@ -330,9 +330,7 @@ export default function CreateBookForm({
         <hr className={`${isUpdating ? "hidden" : ""}`} />
 
         <div
-          className={`text-lg font-bold text-gray-700 ${
-            isUpdating ? "hidden" : ""
-          }`}
+          className={`text-lg font-bold text-gray-700`}
         >
           Thông tin chi tiết
         </div>

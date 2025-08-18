@@ -48,10 +48,10 @@ export default function Sidebar() {
 
   return (
     <Card
-      bordered={false}
+      variant="borderless"
       title="Khám phá theo danh mục"
       size="small"
-      className="!border-none !shadow-none"
+      className="!border-none !shadow-none hidden lg:block"
       classNames={{
         body: "!p-0",
         title: "!text-base !font-semibold !text-gray-800 !pb-3 p-3"

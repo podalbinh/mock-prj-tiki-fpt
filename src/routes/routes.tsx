@@ -11,6 +11,7 @@ import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
 import { categoryLoader } from "./loaders/categoryLoader";
 import { adminDashboardLoader } from "./loaders/adminDashboardLoader";
+import Payment from "@/pages/Payment.tsx";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
         path: "/",
         index: true,
         element: withSuspense(HomePage),
+      },
+      {
+        path: "books/:id",
+        element: withSuspense(lazy(() => import("@/pages/BookDetail"))),
       },
       {
         path: "profile",
@@ -69,6 +74,14 @@ const router = createBrowserRouter([
         element: withSuspense(Cart),
       },
     ],
+  },
+  {
+    path: "/payment",
+    element: (
+        <RequireRoleWrapper role="USER">
+          <Payment />
+        </RequireRoleWrapper>
+    ),
   },
   {
     path: "/admin",

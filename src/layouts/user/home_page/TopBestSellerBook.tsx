@@ -30,7 +30,7 @@ export default function TopBestSellerBook() {
         <ol className={"list-decimal pl-8 flex flex-col gap-2.5"}>
           {books.map((book) => (
             <li key={book.id}>
-              <Link to={""} className="flex gap-2.5 text-sm">
+              <Link to={`/books/${book.id}`} className="flex gap-2.5 text-sm">
                 <span className="text-[#0B74E5] font-[400] hover:text-[#0B74E5]">
                   {book.name}
                 </span>

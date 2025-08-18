@@ -11,12 +11,20 @@ import { Request } from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
 import { useLoading } from "@/hooks/useLoading";
 import type { Product, ProductSearchResponse } from "@/constant/interfaces";
+import { FilterOutlined, LikeFilled } from "@ant-design/icons";
 
 const { Option } = Select;
 
 export interface ProductGridRef {
   handleCategorySelect: (categoryId: number | null) => void;
 }
+
+const tabs = [
+  { id: "popular", label: "Phổ biến" },
+  { id: "bestselling", label: "Bán chạy" },
+  { id: "new", label: "Hàng mới" },
+  { id: "price", label: "Giá" },
+];
 
 const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
   // Loading context
@@ -58,6 +66,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
 
   // Flag để kiểm tra xem có đang reset pagination hay không
   const isResettingRef = useRef(false);
+  const [activeTab, setActiveTab] = useState("popular");
+  const [priceSort, setPriceSort] = useState<"asc" | "desc">("asc");
 
   // Expose methods to parent component
   useImperativeHandle(ref, () => ({
@@ -117,19 +127,19 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         let filteredProducts = response.content;
 
         // Apply client-side filters - chỉ áp dụng khi filter được bật (true)
-        if (filters.hasTikiNow === true) {
+        if (filters.hasTikiNow) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.hasTikiNow === true
+            (product) => product.hasTikiNow
           );
         }
-        if (filters.isTopDeal === true) {
+        if (filters.isTopDeal) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.isTopDeal === true
+            (product) => product.isTopDeal
           );
         }
-        if (filters.isFreeshipXtra === true) {
+        if (filters.isFreeshipXtra) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.isFreeshipXtra === true
+            (product) => product.isFreeshipXtra
           );
         }
 
@@ -227,6 +237,19 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
     }
   };
 
+  const handleTabClick = (tabId: string) => {
+    if (tabId === activeTab && tabId !== "price") return;
+
+    if (tabId === "price") {
+      setPriceSort((prev) => (prev === "desc" ? "asc" : "desc"));
+      setActiveTab(tabId);
+      handleSortChange(`price-${priceSort === "asc" ? "desc" : "asc"}`);
+      return;
+    }
+    setActiveTab(tabId);
+    handleSortChange(tabId as "popular" | "price-asc" | "price-desc");
+  };
+
   // Initial load
   useEffect(() => {
     resetPagination();
@@ -277,22 +300,22 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       }}
     >
       {/* Filter and Sort Section */}
-      <div className="p-4 bg-white rounded-lg shadow-sm border">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">
+      <div className="p-1 lg:p-4 bg-white lg:rounded-lg shadow-sm border">
+        <h2 className="text-lg font-bold text-gray-900 mb-4 hidden lg:block">
           Tất cả sản phẩm
         </h2>
 
-        {/* Category Filter Display */}
+        {/* Category Filter Display
         {selectedCategoryId && (
           <div className="mb-4 p-2 bg-blue-50 border border-blue-200 rounded-lg">
             <span className="text-blue-700 text-sm">
               Đang lọc theo danh mục ID: <strong>{selectedCategoryId}</strong>
             </span>
           </div>
-        )}
+        )} */}
 
         {/* Filter Options */}
-        <div className="flex flex-wrap gap-4 mb-4">
+        <div className="hidden lg:flex flex-wrap gap-4 mb-4">
           <Checkbox
             checked={filters.hasTikiNow}
             onChange={(e) => handleFilterChange("hasTikiNow", e.target.checked)}
@@ -307,7 +330,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
             onChange={(e) => handleFilterChange("isTopDeal", e.target.checked)}
             className="flex items-center"
           >
-            <span className="text-red-500 mr-1">👍</span>
+            <LikeFilled className="text-red-500 mr-1" />
             <span className="text-red-500 font-bold mr-1">TOP DEAL</span>
             <span className="text-gray-700">Siêu rẻ</span>
           </Checkbox>
@@ -334,9 +357,91 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
             <span className="text-gray-700">từ 4 sao</span>
           </Checkbox>
         </div>
+        <div className="w-full bg-white lg:hidden">
+          {/* Navigation Tabs */}
+          <div className="flex mb-4">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabClick(tab.id)}
+                className={`flex-1 py-3 px-4 text-sm font-medium text-center border-b transition-colors ${
+                  activeTab === tab.id
+                    ? " text-blue-600"
+                    : " text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                <div className="flex items-center justify-center gap-1">
+                  {tab.label}
+                  {tab.id === "price" && (
+                    <span
+                      className={`text-xs transition-transform ${
+                        activeTab === tab.id ? "text-blue-600" : "text-gray-400"
+                      }`}
+                    >
+                      {priceSort === "desc" ? "↓" : "↑"}
+                    </span>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Filter Section */}
+          <div className="flex flex-wrap items-center gap-1">
+            {/* Filter Icon */}
+            <button className="flex items-center gap-1 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+              <FilterOutlined />
+              <span className="text-sm">Lọc</span>
+            </button>
+
+            {/* NOW Filter */}
+            <button
+              onClick={() =>
+                handleFilterChange("hasTikiNow", !filters.hasTikiNow)
+              }
+              className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm font-bold transition-all ${
+                filters.hasTikiNow
+                  ? "bg-red-500 text-white shadow-md"
+                  : "bg-slate-100 text-red-500"
+              }`}
+            >
+              NOW
+            </button>
+
+            {/* TOP DEAL Filter */}
+            <button
+              onClick={() =>
+                handleFilterChange("isTopDeal", !filters.isTopDeal)
+              }
+              className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm font-bold transition-all ${
+                filters.isTopDeal
+                  ? "bg-red-500 text-white shadow-md"
+                  : "bg-slate-100 text-red-500"
+              }`}
+            >
+              <LikeFilled className="text-inherit" />
+              TOP DEAL
+            </button>
+
+            {/* FREESHIP XTRA Filter */}
+            <button
+              onClick={() =>
+                handleFilterChange("isFreeshipXtra", !filters.isFreeshipXtra)
+              }
+              className={`flex items-center px-2 py-1 rounded-full text-sm font-bold transition-all ${
+                filters.isFreeshipXtra
+                  ? "bg-blue-200 shadow-md"
+                  : "bg-slate-100"
+              }`}
+            >
+              <span className="text-blue-600">FREESHIP</span>
+              <span className={`ml-1 text-green-600`}>XTRA</span>
+            </button>
+          </div>
+        </div>
 
         {/* Sort Section */}
-        <div className="flex items-center">
+        <div className="lg:flex items-center hidden">
           <span className="text-gray-600 mr-3">Sắp xếp</span>
           <Select
             value={sort}
@@ -352,7 +457,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F5F5FA] mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F5F5FA] lg:mt-4 px-2 md:px-4 lg:px-0">
         {products.map((product) => (
           <div key={product.id} className="rounded-lg">
             <ProductCard product={product} formatPrice={formatPrice} />

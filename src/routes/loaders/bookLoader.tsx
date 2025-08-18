@@ -4,7 +4,7 @@ import type { Book } from "@/constant/interfaces";
 
 export async function bookLoader(): Promise<Book[]> {
   try {
-    const response = await Request.get<Book[]>(API_ENDPOINTS.PRODUCTS, {
+    const response = await Request.get<Book[]>(API_ENDPOINTS.BOOKS, {
       params: {
         _limit: 500,
         _sort: "id",

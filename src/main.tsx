@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@/styles/index.css";
+import "./styles/index.css";
 import "antd/dist/reset.css";
 import { GlobalLoadingWrapper } from "@/components/wrapper/GlobalLoadingWrapper";
 import { ModalProvider } from "@/contexts/ModalProvider";
@@ -9,6 +9,7 @@ import router from "./routes/routes.tsx";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import { App } from "antd";
+import "./main.css"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
