@@ -55,22 +55,27 @@ export default function CarouselCustom({ books, columns, rows }: CarouselCustomP
                 </div>
 
                 {/* Nút trái */}
-                <button
-                    onClick={handlePrevious}
-                    style={{ boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)" }}
-                    className="absolute bg-white rounded-full shadow-xl p-2 left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                    <LeftOutlined className={"text-blue-500 text-2xl font-bold"} />
-                </button>
+                {currentIndex > 0 && (
+                    <button
+                        onClick={handlePrevious}
+                        style={{ boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)" }}
+                        className="absolute bg-white rounded-full shadow-xl p-2 left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    >
+                        <LeftOutlined className="text-blue-500 text-2xl font-bold" />
+                    </button>
+                )}
+
 
                 {/* Nút phải */}
-                <button
-                    onClick={handleNext}
-                    style={{ boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)" }}
-                    className="absolute bg-white rounded-full p-2 right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                    <RightOutlined className={"text-blue-500 text-2xl font-bold"}/>
-                </button>
+                {currentIndex < totalPages - 1 && (
+                    <button
+                        onClick={handleNext}
+                        style={{ boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)" }}
+                        className="absolute bg-white rounded-full p-2 right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    >
+                        <RightOutlined className="text-blue-500 text-2xl font-bold"/>
+                    </button>
+                )}
             </div>
 
             {/* Indicators */}

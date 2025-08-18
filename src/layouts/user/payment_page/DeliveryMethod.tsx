@@ -17,6 +17,7 @@ export default function DeliveryMethod() {
     const location = useLocation();
     const { getBookById } = useBook();
     const [bookCart, setBookCart] = useState<BookSold[]>([]);
+    const [isFast, setIsFast] = useState<boolean>(true);
     const { cartItems } = useCart();
 
     useEffect(() => {
@@ -84,12 +85,40 @@ export default function DeliveryMethod() {
 
     }, [location.state, cartItems]);
 
+    const showDeliveryMethod = () => {
+        if (isFast) return (
+            <div className="flex items-center">
+                <img
+                    src="src/assets/now.svg"
+                    alt="Tiki"
+                    className="h-4 mr-2"
+                />
+                <div>
+                    Giao siêu tốc 2H
+                </div>
+            </div>
+        );
+
+        return (
+            <div>
+                Giao tiết kiệm
+            </div>
+        );
+    }
 
     return (
         <Card className={"rounded"}>
             <p className="text-lg font-bold">Chọn hình thức giao hàng</p>
-            <div className="flex flex-col space-y-2 bg-[#F0F8FF] border rounded-lg p-4 mt-4 w-2/4">
-                <Radio.Group className="flex flex-col space-y-2">
+            <div className="relative flex flex-col space-y-2 bg-[#F0F8FF] border border-[#C2E1FF] rounded-lg p-4 mb-12 mt-4 w-full md:w-3/4 lg:w-2/4
+            after:content-[''] after:absolute after:-bottom-[9px]
+            after:left-1/2 after:-translate-x-1/2
+            after:w-4 after:h-4 after:bg-[#F0F8FF] after:border-b
+            after:border-r after:border-[#C2E1FF] after:rotate-45">
+                <Radio.Group
+                    className="flex flex-col space-y-2"
+                    defaultValue={isFast ? "fast" : "save"}
+                    onChange={(e) => setIsFast(e.target.value === "fast")}
+                >
                     <Radio value="fast">
                         <div className="flex items-center">
                             <img
@@ -108,34 +137,25 @@ export default function DeliveryMethod() {
                 </Radio.Group>
             </div>
 
-            <div className="mt-4 border p-4 rounded-xl border-[#DDDDE3]">
+            <div className="mt-4 border p-4 rounded-xl border-[#DDDDE3] relative">
                 {/*Hiển thị thông tin giao hàng đã chọn*/}
-                <div className="flex items-center">
+                <div className="absolute -top-3 left-4 flex items-center bg-white">
                     <img
                         src="src/assets/package.svg"
                         alt="Tiki"
                         className="h-4 mr-2"
                     />
-                    <div className="text-green-600 bg-white">
-                       Gói: Giao siêu tốc 2h, trước 13h hôm nay
+                    <div className="text-green-600 ">
+                       Gói: {isFast ? "Giao siêu tốc 2h, trước 13h hôm nay" : "Giao tiết kiệm, trước 13h ngày mai"}
                     </div>
                 </div>
 
-                <div className="flex mt-2 w-2/4 items-center">
-                    <div className="flex items-center">
-                        <img
-                            src="src/assets/now.svg"
-                            alt="Tiki"
-                            className="h-4 mr-2"
-                        />
-                        <div>
-                            Giao siêu tốc 2H
-                        </div>
-                    </div>
+                <div className="flex mt-2 items-center w-full md:w-3/4 lg:w-2/4">
+                    { showDeliveryMethod() }
                     <div className={"flex-1"}></div>
                     <div className="flex items-center gap-2 justify-center">
                         <div className={"text-gray-500 line-through text-xs font-medium"}>
-                            {formattedPrice(25000)} ₫
+                            {formattedPrice(isFast ? 25000 : 16000)} ₫
                         </div>
                         <div className="text-green-600 font-medium text-sm font-medium">
                             MIỄN PHÍ
