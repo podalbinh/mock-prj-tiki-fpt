@@ -7,7 +7,7 @@ export default function Payment() {
   return (
     <div className="bg-[#F5F5FA] min-h-screen">
       <PaymentHeader />
-      <div className="max-w-6xl mx-auto grid grid-cols-3 gap-6 mt-6">
+      <div className="max-w-6xl mx-auto md:grid md:grid-cols-3 gap-6 mt-6">
         <div className="col-span-2 space-y-4">
           <LeftSection />
         </div>

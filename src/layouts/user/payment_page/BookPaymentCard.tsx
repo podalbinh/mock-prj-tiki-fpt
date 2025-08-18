@@ -7,7 +7,7 @@ interface BookPaymentCardProps {
 }
 
 export default function BookPaymentCard({book, quantity}: BookPaymentCardProps) {
-    return <div className="flex gap-2 w-2/4">
+    return <div className="flex gap-2 w-full md:w-3/4 lg:w-2/4">
         <div
             style={{
                 width: 48,
@@ -40,6 +40,7 @@ export default function BookPaymentCard({book, quantity}: BookPaymentCardProps) 
                 <div className={"flex-1 text-gray-400"}>
                     SL: x{quantity}
                 </div>
+                <div className={'flex-1'} />
                 <div className="text-gray-400 line-through text-xs">
                     {formattedPrice(quantity * book.originalPrice)} ₫
                 </div>

@@ -63,7 +63,7 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
 
     return (
         <Card>
-            <div className="flex gap-2">
+            <div className="hidden lg:flex">
                 <img
                     src="/src/assets/tiki-logo.svg"
                     alt="ai"
@@ -79,15 +79,16 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
                 </div>
             </div>
 
-            <hr className={"my-4"}/>
-
-            <div className="flex flex-col gap-2 mb-4">
-                <p className="text-sm font-semibold mb-0">Số lượng</p>
-                <Counter min={1} onChange={setQuantity}/>
-            </div>
-            <div className="mb-4">
-                <span className="block font-semibold">Tạm tính</span>
-                <span className="text-2xl font-semibold">{formattedPrice(totalPrice)}<sup>₫</sup></span>
+            <hr className={"my-4 hidden lg:flex"}/>
+            <div className={"flex gap-8 lg:flex-col lg:gap-4"}>
+                <div className="flex flex-col gap-2">
+                    <p className="text-sm font-semibold mb-0">Số lượng</p>
+                    <Counter min={1} onChange={setQuantity}/>
+                </div>
+                <div className="mb-4">
+                    <span className="block font-semibold">Tạm tính</span>
+                    <span className="text-2xl font-semibold">{formattedPrice(totalPrice)}<sup>₫</sup></span>
+                </div>
             </div>
             <div className="flex flex-col gap-2">
                 <Button

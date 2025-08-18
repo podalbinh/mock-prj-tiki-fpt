@@ -82,7 +82,7 @@ export default function PaymentMethod() {
             <p className="text-lg font-bold">Chọn hình thức thanh toán</p>
 
             <div className="flex flex-col space-y-2 p-4 mt-4 w-2/4">
-                <Radio.Group className="flex flex-col space-y-2">
+                <Radio.Group className="flex flex-col space-y-2" defaultValue="cash" >
                     <Radio value="cash">
                         <div className="flex items-center py-4">
                             <img
@@ -122,7 +122,7 @@ export default function PaymentMethod() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-1 m-1">
+                <div className="grid grid-cols-2 gap-2 m-1 lg:grid-cols-3 lg:gap-1">
                     {offers.map((offer, index) => (
                         <OfferCard key={index} {...offer} />
                     ))}

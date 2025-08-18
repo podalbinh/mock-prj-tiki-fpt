@@ -57,14 +57,14 @@ export default function BookDetail() {
       <div className="flex-1">
         <Layout className="bg-transparent">
           <Content className="mb-8 mt-5">
-            <div className="grid grid-cols-12 gap-6">
-              <div className="col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-4">
+              <div className="md:col-span-5 lg:col-span-3">
                 <div className="bg-white rounded-lg p-3 flex flex-col gap-4">
                   <BookImageGallery images={book?.images || []} />
                   <SummaryToggle content={book?.shortDescription || ""} />
                 </div>
               </div>
-              <div className="col-span-6 flex flex-col gap-3">
+              <div className="md:col-span-7 lg:col-span-6 flex flex-col gap-3">
                 <Card>
                   <BookInfo book={book || undefined} />
                 </Card>
@@ -85,8 +85,10 @@ export default function BookDetail() {
                 </Card>
               </div>
 
-              <div className="col-span-3">
-                <PurchaseActions book={book || undefined} />
+              <div className="fixed bottom-0 left-0 w-full z-50 flex justify-center lg:static lg:col-span-3">
+                <div className={"w-full lg:w-full"}>
+                  <PurchaseActions book={book || undefined} />
+                </div>
               </div>
             </div>
           </Content>
