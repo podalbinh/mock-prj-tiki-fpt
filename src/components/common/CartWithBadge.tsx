@@ -17,29 +17,22 @@ const CartWithBadge = () => {
   
   // Update local state khi cartItems thay đổi
   useEffect(() => {
-    console.log('CartWithBadge: cartItems changed, updating local state:', cartItems);
     setLocalCartItems(cartItems);
   }, [cartItems]);
   
   // Sử dụng useMemo để tính toán totalItems và đảm bảo re-render khi localCartItems thay đổi
   const totalItems = useMemo(() => {
     const total = localCartItems.length;
-    console.log('CartWithBadge: useMemo triggered, totalItems:', total, 'localCartItems:', localCartItems);
     return total;
   }, [localCartItems]);
   
-  // Debug log để kiểm tra realtime
-  console.log('CartWithBadge: render, totalItems:', totalItems, 'localCartItems.length:', localCartItems.length);
-  
   // useEffect để đảm bảo component re-render khi localCartItems thay đổi
   useEffect(() => {
-    console.log('CartWithBadge: useEffect triggered, totalItems:', totalItems, 'localCartItems.length:', localCartItems.length);
   }, [totalItems, localCartItems.length]);
 
   // Thêm useEffect để lắng nghe cart-updated event
   useEffect(() => {
     const handleCartUpdated = (e: CustomEvent) => {
-      console.log('CartWithBadge: cart-updated event received:', e.detail);
       if (e.detail && e.detail.cartItems) {
         setLocalCartItems(e.detail.cartItems);
       }

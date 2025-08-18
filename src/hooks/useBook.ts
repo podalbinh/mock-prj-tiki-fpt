@@ -29,12 +29,10 @@ export const useBook = () => {
   const getBookById = async (id: number) => {
     // Check cache first
     if (bookCache.current.has(id)) {
-      console.log(`useBook: Returning cached book for ID ${id}`);
       return bookCache.current.get(id)!;
     }
 
     // Fetch from API if not in cache
-    console.log(`useBook: Fetching book for ID ${id}`);
     const book = await Request.get<Book>(API_ENDPOINTS.BOOK_BY_ID(id));
     
     // Cache the result

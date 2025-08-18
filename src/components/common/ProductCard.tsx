@@ -13,7 +13,7 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
   return (
     <Card
       hoverable
-      bordered
+      variant='outlined'
       className="rounded-lg overflow-hidden hover:shadow-md transition-shadow !border-[#EBEBF0] !bg-white"
       classNames={{ body: '!p-0' }}
       onClick={() => navigate(`/books/${product.id}`)}

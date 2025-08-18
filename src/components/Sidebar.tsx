@@ -48,7 +48,7 @@ export default function Sidebar() {
 
   return (
     <Card
-      bordered={false}
+      variant="borderless"
       title="Khám phá theo danh mục"
       size="small"
       className="!border-none !shadow-none"
