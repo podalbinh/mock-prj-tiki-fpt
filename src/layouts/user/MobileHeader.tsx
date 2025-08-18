@@ -11,7 +11,7 @@ import CartWithBadge from "@/components/common/CartWithBadge";
 
 const MobileHeader: React.FC = () => {
   return (
-    <div className={`w-full sm:hidden bg-slate-50`}>
+    <div className={`w-full sm:hidden bg-slate-100`}>
       {/* Main Header */}
       <div className="bg-blue-400 px-4 py-3 flex items-center gap-3">
         {/* Back Arrow */}

@@ -38,11 +38,11 @@ const HomePage = () => {
       <div className="flex-1">
         <Layout className="bg-transparent">
           <Content>
-            <div className="w-full mx-auto py-6">
+            <div className="w-full mx-auto py-2 sm:py-6">
               <div className="flex flex-col lg:flex-row gap-3 items-start">
                 <Sidebar />
-                <main className="flex-1 overflow-y-auto">
-                  <div className="bg-white rounded-lg">
+                <main className="flex-1 overflow-y-auto w-full">
+                  <div className="bg-white rounded-lg sm:block hidden">
                     <h1 className="text-2xl font-semibold text-black p-4">
                       Nhà Sách Tiki
                     </h1>

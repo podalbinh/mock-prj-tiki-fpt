@@ -35,7 +35,7 @@ export default function ProductCard({ product, formatPrice }: ProductCardProps) 
             </span>
           )}
           {/* Left badges (optional) */}
-          <div className="absolute left-3 top-2 flex items-center gap-2">
+          <div className="absolute left-3 bottom-3 flex items-center gap-2">
             {product.isTopDeal && (
               <img src="/src/assets/top-deal.png" alt="TOP DEAL" className="h-5 rounded" />
             )}
