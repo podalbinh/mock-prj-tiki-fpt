@@ -109,7 +109,11 @@ export default function DeliveryMethod() {
     return (
         <Card className={"rounded"}>
             <p className="text-lg font-bold">Chọn hình thức giao hàng</p>
-            <div className="flex flex-col space-y-2 bg-[#F0F8FF] border rounded-lg p-4 mt-4 w-full md:w-3/4 lg:w-2/4">
+            <div className="relative flex flex-col space-y-2 bg-[#F0F8FF] border border-[#C2E1FF] rounded-lg p-4 mb-12 mt-4 w-full md:w-3/4 lg:w-2/4
+            after:content-[''] after:absolute after:-bottom-[9px]
+            after:left-1/2 after:-translate-x-1/2
+            after:w-4 after:h-4 after:bg-[#F0F8FF] after:border-b
+            after:border-r after:border-[#C2E1FF] after:rotate-45">
                 <Radio.Group
                     className="flex flex-col space-y-2"
                     defaultValue={isFast ? "fast" : "save"}
@@ -133,15 +137,15 @@ export default function DeliveryMethod() {
                 </Radio.Group>
             </div>
 
-            <div className="mt-4 border p-4 rounded-xl border-[#DDDDE3]">
+            <div className="mt-4 border p-4 rounded-xl border-[#DDDDE3] relative">
                 {/*Hiển thị thông tin giao hàng đã chọn*/}
-                <div className="flex items-center">
+                <div className="absolute -top-3 left-4 flex items-center bg-white">
                     <img
                         src="src/assets/package.svg"
                         alt="Tiki"
                         className="h-4 mr-2"
                     />
-                    <div className="text-green-600 bg-white">
+                    <div className="text-green-600 ">
                        Gói: {isFast ? "Giao siêu tốc 2h, trước 13h hôm nay" : "Giao tiết kiệm, trước 13h ngày mai"}
                     </div>
                 </div>

@@ -13,7 +13,7 @@ export default function OfferCard({ title, subtitle, brandLogo }: OfferCardProps
             <div className="flex items-start justify-between">
                 <div className={"w-full"}>
                     <div className="flex items-center gap-2">
-                        <div className="text-lg font-semibold text-[#0D5CB6]">{title}</div>
+                        <div className="text-[17px] font-semibold text-[#0D5CB6]">{title}</div>
                         <div className="flex-1"></div>
                         <div>
                             <img src={brandLogo} alt="logo" className="h-5 ml-2" />
@@ -22,7 +22,7 @@ export default function OfferCard({ title, subtitle, brandLogo }: OfferCardProps
 
                     {subtitle && (
                         <div className="flex items-center gap-1">
-                            <div className="text-xs text-gray-600">{subtitle}</div>
+                            <div className="text-[11px] text-gray-600">{subtitle}</div>
                             <div className={"flex-1"}></div>
                             <InfoCircleOutlined className="text-gray-400" />
                         </div>
@@ -33,7 +33,7 @@ export default function OfferCard({ title, subtitle, brandLogo }: OfferCardProps
 
             <div className="flex items-center justify-between mt-2">
                 <div>
-                    <div className="text-xs text-[#FD820A] italic">
+                    <div className="text-[11px] text-[#FD820A] italic">
                         Không giới hạn
                     </div>
                 </div>
