@@ -157,7 +157,7 @@ const CartPage = () => {
     <>
       <div className="container mx-auto pt-4 max-w-7xl">
         {/* Page Header */}
-        <div className="mb-6 border-gray-200 border-b p-4 bg-white rounded-lg shadow-sm ">
+        <div className="px-4 py-2">
           <h1 className="text-2xl font-bold text-gray-900">GIỎ HÀNG</h1>
         </div>
 

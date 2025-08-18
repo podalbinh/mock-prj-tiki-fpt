@@ -42,7 +42,7 @@ const HomePage = () => {
               <div className="flex flex-col lg:flex-row gap-3 items-start">
                 <Sidebar />
                 <main className="flex-1 overflow-y-auto w-full">
-                  <div className="bg-white rounded-lg sm:block hidden">
+                  <div className="bg-white rounded-lg lg:block hidden">
                     <h1 className="text-2xl font-semibold text-black p-4">
                       Nhà Sách Tiki
                     </h1>
