@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './useAuth';
 import { notification } from 'antd';
-import type {CartItem, Category, CartValidateResponse} from '@/constant/interfaces';
+import type {CartItem, CartValidateResponse} from '@/constant/interfaces';
 import Request from "@/config/api.ts";
 import {API_ENDPOINTS} from "@/constant/endpoint.ts";
 
@@ -15,13 +15,10 @@ export const useCart = () => {
   useEffect(() => {
     if (isInitialized.current) return;
     
-    console.log('useCart: Loading cart items...');
-    
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
         const parsedCart = JSON.parse(savedCart);
-        console.log('useCart: Loaded from localStorage:', parsedCart);
         
         // Validate và normalize dữ liệu từ localStorage
         const validatedCart = parsedCart.map((item: any) => ({
@@ -39,7 +36,6 @@ export const useCart = () => {
         // Cập nhật lại localStorage với dữ liệu đã validate
         if (JSON.stringify(parsedCart) !== JSON.stringify(validatedCart)) {
           localStorage.setItem('cart', JSON.stringify(validatedCart));
-          console.log('useCart: Updated localStorage with validated data');
         }
       } catch (error) {
         console.error('useCart: Error parsing cart items:', error);
@@ -56,7 +52,6 @@ export const useCart = () => {
       if (e.key === 'cart' && e.newValue && e.newValue !== lastCartUpdate.current) {
         try {
           const newCart = JSON.parse(e.newValue);
-          console.log('useCart: localStorage changed externally, new cart:', newCart);
           
           // Validate và normalize dữ liệu từ localStorage
           const validatedCart = newCart.map((item: any) => ({
@@ -78,7 +73,6 @@ export const useCart = () => {
 
     // Lắng nghe custom event cart-updated từ các component khác
     const handleCartUpdated = (e: CustomEvent) => {
-      console.log('useCart: Custom cart-updated event received:', e.detail);
       if (e.detail && e.detail.cartItems) {
         const newCartString = JSON.stringify(e.detail.cartItems);
         if (newCartString !== lastCartUpdate.current) {
@@ -119,8 +113,6 @@ export const useCart = () => {
       return false;
     }
 
-    console.log('useCart: addToCart called with item:', item);
-
     // Validate và normalize dữ liệu CartItem
     const normalizedItem: CartItem = {
       productId: item.productId || 0,
@@ -133,7 +125,6 @@ export const useCart = () => {
 
     // Sử dụng callback pattern để đảm bảo state update đồng bộ
     setCartItems(prev => {
-      console.log('useCart: addToCart - previous cart:', prev);
       const existingItem = prev.find(cartItem => cartItem.productId === normalizedItem.productId);
       let newCart;
       
@@ -147,12 +138,9 @@ export const useCart = () => {
         newCart = [...prev, normalizedItem];
       }
       
-      console.log('useCart: addToCart - new cart:', newCart);
-      
       // Cập nhật localStorage ngay lập tức
       localStorage.setItem('cart', JSON.stringify(newCart));
       lastCartUpdate.current = JSON.stringify(newCart);
-      console.log('useCart: Added to cart, new cart:', newCart);
       
       // Dispatch custom event để thông báo cho các component khác
       window.dispatchEvent(new CustomEvent('cart-updated', { 
@@ -165,13 +153,10 @@ export const useCart = () => {
   }, [isAuthenticated]);
 
   const updateQuantity = useCallback((id: number, quantity: number) => {
-    console.log('useCart: Updating quantity for id:', id, 'to:', quantity);
-    
     // Validate quantity
     const validQuantity = Math.max(1, quantity || 1);
     
     if (validQuantity <= 0) {
-      console.log('useCart: Quantity <= 0, removing item');
       // Xóa item trực tiếp thay vì gọi removeFromCart
       setCartItems(prev => {
         const newCart = prev.filter(item => item.productId !== id);
@@ -179,7 +164,6 @@ export const useCart = () => {
         // Cập nhật localStorage ngay lập tức
         localStorage.setItem('cart', JSON.stringify(newCart));
         lastCartUpdate.current = JSON.stringify(newCart);
-        console.log('useCart: Item removed due to quantity <= 0');
         
         // Dispatch custom event để thông báo cho các component khác
         window.dispatchEvent(new CustomEvent('cart-updated', { 
@@ -200,7 +184,6 @@ export const useCart = () => {
       // Cập nhật localStorage ngay lập tức
       localStorage.setItem('cart', JSON.stringify(newCart));
       lastCartUpdate.current = JSON.stringify(newCart);
-      console.log('useCart: Updated quantity, new cart:', newCart);
       
       // Dispatch custom event để thông báo cho các component khác
       window.dispatchEvent(new CustomEvent('cart-updated', { 
@@ -212,20 +195,14 @@ export const useCart = () => {
   }, []);
 
   const removeFromCart = useCallback((id: number) => {
-    console.log('useCart: Removing item with id:', id);
     
     // Sử dụng callback pattern để đảm bảo state update đồng bộ
     setCartItems(prev => {
-      console.log('useCart: removeFromCart - previous cart:', prev);
       const newCart = prev.filter(item => item.productId !== id);
-      
-      console.log('useCart: removeFromCart - new cart:', newCart);
       
       // Cập nhật localStorage ngay lập tức
       localStorage.setItem('cart', JSON.stringify(newCart));
       lastCartUpdate.current = JSON.stringify(newCart);
-      console.log('useCart: Cart after removal:', newCart);
-      console.log('useCart: localStorage updated after removal');
       
       // Dispatch custom event để thông báo cho các component khác
       window.dispatchEvent(new CustomEvent('cart-updated', { 
@@ -237,18 +214,14 @@ export const useCart = () => {
   }, []); // Không có dependency để tránh re-render
 
   const clearCart = useCallback(() => {
-    console.log('useCart: Clearing cart');
     
     // Sử dụng callback pattern để đảm bảo state update đồng bộ
     setCartItems(prev => {
       if (prev.length === 0) return prev;
       
-      console.log('useCart: Previous cart before clearing:', prev);
-      
       // Cập nhật localStorage ngay lập tức
       localStorage.setItem('cart', JSON.stringify([]));
       lastCartUpdate.current = '[]';
-      console.log('useCart: Cart cleared, localStorage updated');
       
       // Dispatch custom event để thông báo cho các component khác
       window.dispatchEvent(new CustomEvent('cart-updated', { 
@@ -262,7 +235,6 @@ export const useCart = () => {
   const getTotalItems = useCallback(() => {
     // Trả về số lượng sản phẩm khác nhau, không phải tổng quantity
     const total = cartItems.length;
-    console.log('useCart: getTotalItems called, returning:', total, 'cartItems:', cartItems);
     return total;
   }, [cartItems]);
 
@@ -272,7 +244,6 @@ export const useCart = () => {
       const quantity = item.quantity || 1;
       return total + (price * quantity);
     }, 0);
-    console.log('useCart: getTotalPrice called, returning:', total);
     return total;
   }, [cartItems]);
 

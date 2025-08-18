@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // Tạo axios instance đơn giản
 const apiClient = axios.create({
@@ -27,12 +27,12 @@ apiClient.interceptors.request.use(
 // Response interceptor để handle common errors
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  (error: AxiosError) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("authToken");
       // Redirect to login page or handle unauthorized
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data || {});
   }
 );
 

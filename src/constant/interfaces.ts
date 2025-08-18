@@ -106,6 +106,16 @@ export interface OrderCreate {
   quantity: number;
 }
 
+export interface CreateOrderResponse {
+  orderId: number;
+  totalAmount: number;
+  products: {
+    productId: number;
+    productName: string;
+    thumbnailUrl: string;
+  }[];
+}
+
 export interface RegisterRequest {
   email: string;
   password: string;
@@ -242,7 +252,9 @@ export interface CartValidateErrorResponse {
   };
 }
 
-export type CartValidateResponse = CartValidateSuccessResponse | CartValidateErrorResponse;
+export type CartValidateResponse =
+  | CartValidateSuccessResponse
+  | CartValidateErrorResponse;
 
 export interface PagedResponse<T> {
   currentPage: number;
@@ -252,4 +264,14 @@ export interface PagedResponse<T> {
   totalElements: number;
   totalPages: number;
   data: T[];
+}
+
+export interface CustomErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    error: string;
+    message: string;
+  };
 }

@@ -10,7 +10,6 @@ interface BookInfoProps {
 
 export default function BookInfo({ book }: BookInfoProps) {
     const authors = book?.authors || [];
-    console.log(authors);
     const title = book?.name || "";
     const listPrice = book?.listPrice || 0;
     const originalPrice = book?.originalPrice || 0;

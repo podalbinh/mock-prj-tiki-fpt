@@ -11,16 +11,14 @@ const { Content } = Layout;
 
 const HomePage = () => {
   // Ref để truy cập ProductGrid
-  const productGridRef = useRef<{ handleCategorySelect: (categoryId: number | null) => void }>(null);
+  const productGridRef = useRef<{
+    handleCategorySelect: (categoryId: number | null) => void;
+  }>(null);
 
   // Handle category selection
   const handleCategorySelect = (categoryId: number | null) => {
-    console.log('HomePage: handleCategorySelect called with categoryId:', categoryId);
     if (productGridRef.current) {
-      console.log('HomePage: Calling productGridRef.current.handleCategorySelect');
       productGridRef.current.handleCategorySelect(categoryId);
-    } else {
-      console.log('HomePage: productGridRef.current is null');
     }
   };
 

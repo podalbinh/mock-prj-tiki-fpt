@@ -1,11 +1,17 @@
 import React, { useMemo } from "react";
 import { Card, Statistic, Row, Col } from "antd";
-import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import type { Order } from "@/constant/interfaces";
 import { useLoaderData } from "react-router-dom";
 
-
-const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#3688f4ff" ];
+const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#3688f4ff"];
 
 const STATUS_LABELS: Record<string, string> = {
   confirmed: "Đã xác nhận",
@@ -15,7 +21,6 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const OrderDashboard = () => {
-
   const orders = useLoaderData() as Order[];
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
@@ -27,23 +32,22 @@ const OrderDashboard = () => {
       statusCount[o.status] = (statusCount[o.status] || 0) + 1;
     });
     return Object.keys(statusCount).map((status) => ({
-      name:  STATUS_LABELS[status] || status,
+      name: STATUS_LABELS[status] || status,
       value: statusCount[status],
     }));
   }, [orders]);
-
 
   return (
     <div className="p-4 bg-gray-50 rounded-lg">
       {/* Cards thống kê */}
       <Row gutter={16} className="mb-6">
         <Col span={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card variant="borderless" className="shadow-sm">
             <Statistic title="Tổng số đơn" value={totalOrders} />
           </Card>
         </Col>
         <Col span={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card variant="borderless" className="shadow-sm">
             <Statistic
               title="Tổng doanh thu"
               value={totalRevenue}
@@ -53,7 +57,7 @@ const OrderDashboard = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card variant="borderless" className="shadow-sm">
             <Statistic title="Đơn đang chờ" value={pendingOrders} />
           </Card>
         </Col>
@@ -62,7 +66,11 @@ const OrderDashboard = () => {
       <Row gutter={16}>
         {/* Pie Chart */}
         <Col span={12}>
-          <Card title="Tỷ lệ đơn hàng theo trạng thái" bordered={false} className="shadow-sm">
+          <Card
+            title="Tỷ lệ đơn hàng theo trạng thái"
+            variant="borderless"
+            className="shadow-sm"
+          >
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -75,7 +83,10 @@ const OrderDashboard = () => {
                   label
                 >
                   {pieData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />

@@ -1,8 +1,16 @@
 import Request from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
-import type {Order, OrderCreate} from "@/constant/interfaces";
+import type {
+  CreateOrderResponse,
+  Order,
+  OrderCreate,
+} from "@/constant/interfaces";
+import { useAppDispatch } from "@/store";
+import { setRecentOrder } from "@/store/slices/cartSlice";
 
 export const useOrder = () => {
+  const dispatch = useAppDispatch();
+
   const getAllOrders = async () => {
     const response = await Request.get<Order[]>(API_ENDPOINTS.ORDERS);
     return response;
@@ -17,11 +25,13 @@ export const useOrder = () => {
   };
 
   const createOrders = async (ordersData: Partial<OrderCreate[]>) => {
-    return await Request.post<OrderCreate[]>(
+    const response = await Request.post<CreateOrderResponse>(
       API_ENDPOINTS.ORDERS_CREATE,
       ordersData
     );
-  }
+    dispatch(setRecentOrder(response));
+    return response;
+  };
 
   return { getAllOrders, updateOrder, createOrders };
 };
