@@ -24,12 +24,12 @@ const relatedSearches: string[] = [
 export default function RelatedSearches() {
   return (
     <div className="flex flex-col my-2 p-4 bg-white">
-      <h2 className="text-xl font-medium">Tìm kiếm liên quan</h2>
-      <div className="grid grid-cols-6 gap-2">
+      <h2 className="text-xl font-medium mb-3">Tìm kiếm liên quan</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
         {relatedSearches.map((search, index) => (
           <Link
             to={""}
-            className="text-[#0B74E5] font-[400] hover:text-[#0B74E5] truncate"
+            className="text-[#0B74E5] font-normal hover:text-[#0B74E5] truncate"
             key={index}
           >
             {search}
