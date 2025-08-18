@@ -6,8 +6,17 @@ import ProductGrid from "@/components/common/ProductGrid";
 import TopBestSellerBook from "@/layouts/user/home_page/TopBestSellerBook.tsx";
 import RelatedSearches from "@/layouts/user/home_page/RelatedSearches.tsx";
 import { useRef } from "react";
+import CustomBreadcrumb from "@/components/common/Breadcrumb";
 
 const { Content } = Layout;
+const breadcrumbItems = [
+  {
+    title: "Trang chủ",
+  },
+  {
+    title: "Nhà sách tiki",
+  },
+];
 
 const HomePage = () => {
   // Ref để truy cập ProductGrid
@@ -24,6 +33,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen mb-8">
+      <CustomBreadcrumb items={breadcrumbItems} />
       {/* Nội dung */}
       <div className="flex-1">
         <Layout className="bg-transparent">
