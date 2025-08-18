@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@/styles/index.css";
+import "./styles/index.css";
 import "antd/dist/reset.css";
 import { GlobalLoadingWrapper } from "@/components/wrapper/GlobalLoadingWrapper";
 import { ModalProvider } from "@/contexts/ModalProvider";

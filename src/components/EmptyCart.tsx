@@ -7,7 +7,7 @@ const EmptyCart: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="text-center py-20 max-w-md mx-auto">
+        <div className="text-center py-20 max-w-md mx-auto px-4">
             <div className="mb-6">
                 <ShoppingOutlined className="text-6xl text-gray-300" />
             </div>
@@ -22,7 +22,7 @@ const EmptyCart: React.FC = () => {
                 size="large"
                 icon={<ShoppingOutlined />}
                 onClick={() => navigate('/')}
-                className="bg-blue-600 hover:bg-blue-700 border-blue-600"
+                className="bg-blue-600 hover:bg-blue-700 border-blue-600 mt-3"
             >
                 Mua sắm ngay
             </Button>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { notification, Checkbox, Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 import CartItem from "@/components/common/CartItem";
 import CartSummary from "@/components/common/CartSummary";
 import EmptyCart from "@/components/EmptyCart";
@@ -9,6 +7,30 @@ import { LoginModal } from "@/components/forms/LoginModalForm";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
 import { useModal } from "@/hooks/useModal";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+
+const showNotification = (
+  type: "success" | "warning" | "error",
+  message: string,
+  description: string
+) => {
+  // Simple toast notification - you can replace with your preferred notification system
+  const toast = document.createElement("div");
+  toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
+    type === "success"
+      ? "bg-green-500 text-white"
+      : type === "warning"
+      ? "bg-yellow-500 text-white"
+      : "bg-red-500 text-white"
+  }`;
+  toast.innerHTML = `
+    <div class="font-semibold">${message}</div>
+    <div class="text-sm opacity-90">${description}</div>
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => document.body.removeChild(toast), 4000);
+};
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -20,13 +42,11 @@ const CartPage = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      // Hiện notification warning mỗi lần truy cập
-      notification.warning({
-        message: "Yêu cầu đăng nhập",
-        description: "Vui lòng đăng nhập để xem giỏ hàng",
-        duration: 4,
-        placement: "topRight",
-      });
+      showNotification(
+        "warning",
+        "Yêu cầu đăng nhập",
+        "Vui lòng đăng nhập để xem giỏ hàng"
+      );
 
       // Hiện loginModal và redirect về trang chủ
       openLoginModal();
@@ -77,10 +97,7 @@ const CartPage = () => {
 
   const handleRemoveSelected = () => {
     if (selectedItems.size === 0) {
-      notification.warning({
-        message: "Thông báo",
-        description: "Vui lòng chọn sản phẩm để xóa",
-      });
+      showNotification("warning", "Thông báo", "Vui lòng chọn sản phẩm để xóa");
       return;
     }
 
@@ -88,18 +105,16 @@ const CartPage = () => {
     setSelectedItems(new Set());
     setSelectAll(false);
 
-    notification.success({
-      message: "Thành công",
-      description: "Đã xóa các sản phẩm đã chọn",
-    });
+    showNotification("success", "Thành công", "Đã xóa các sản phẩm đã chọn");
   };
 
   const handleCheckout = async () => {
     if (selectedItems.size === 0) {
-      notification.warning({
-        message: "Thông báo",
-        description: "Vui lòng chọn sản phẩm để thanh toán",
-      });
+      showNotification(
+        "warning",
+        "Thông báo",
+        "Vui lòng chọn sản phẩm để thanh toán"
+      );
       return;
     }
 
@@ -125,10 +140,11 @@ const CartPage = () => {
       // Xử lý error message từ API response
       if (error && typeof error === "object" && "data" in error) {
         const apiError = error as any;
-        notification.error({
-          message: "Lỗi xác nhận giỏ hàng",
-          description: apiError.data.data.message,
-        });
+        showNotification(
+          "error",
+          "Lỗi xác nhận giỏ hàng",
+          apiError.data.data.message
+        );
       }
     }
   };
@@ -155,21 +171,25 @@ const CartPage = () => {
 
   return (
     <>
-      <div className="container mx-auto pt-4 max-w-7xl">
+      <div className="container mx-auto p-2 sm:p-4 max-w-7xl">
         {/* Page Header */}
-        <div className="mb-6 border-gray-200 border-b p-4 bg-white rounded-lg shadow-sm ">
-          <h1 className="text-2xl font-bold text-gray-900">GIỎ HÀNG</h1>
+        <div className="mb-2 sm:mb-4 py-2">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
+            GIỎ HÀNG
+          </h1>
         </div>
 
-        {/* Cart Header */}
         <div className="bg-white rounded-lg shadow-sm border mb-4">
-          <div className="p-4 border-b border-gray-200">
+          {/* Desktop Header - Hidden on mobile */}
+          <div className="hidden sm:block p-4 border-b border-gray-200">
             <div className="flex items-center">
               {/* Checkbox */}
               <div className="w-12 flex justify-center">
-                <Checkbox
+                <input
+                  type="checkbox"
                   checked={selectAll}
                   onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                 />
               </div>
 
@@ -192,14 +212,40 @@ const CartPage = () => {
               </div>
               <div className="w-12 flex justify-center">
                 <Button
-                  type="text"
-                  icon={<DeleteOutlined />}
                   onClick={handleRemoveSelected}
                   disabled={selectedItems.size === 0}
-                  className="text-gray-400 hover:text-red-500"
-                  size="small"
-                />
+                  danger
+                  type="text"
+                  className="p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  icon={<DeleteOutlined />}
+                >
+                </Button>
               </div>
+            </div>
+          </div>
+
+          {/* Mobile Header */}
+          <div className="sm:hidden p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={selectAll}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="font-medium text-gray-900">
+                  Tất cả ({cartItems.length} sản phẩm)
+                </span>
+              </div>
+              <button
+                onClick={handleRemoveSelected}
+                disabled={selectedItems.size === 0}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed border rounded-md"
+              >
+                <DeleteOutlined />
+                Xóa đã chọn
+              </button>
             </div>
           </div>
 
@@ -219,7 +265,7 @@ const CartPage = () => {
         </div>
 
         {/* Cart Summary */}
-        <div className="lg:col-span-1 mb-6">
+        <div className="mb-6">
           <CartSummary
             items={cartItems}
             selectedItems={getSelectedItems()}
