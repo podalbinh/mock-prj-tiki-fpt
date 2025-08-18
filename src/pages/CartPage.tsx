@@ -171,17 +171,17 @@ const CartPage = () => {
 
   return (
     <>
-      <div className="container mx-auto p-2 sm:p-4 max-w-7xl">
+      <div className="container mx-auto p-2 md:p-4 max-w-7xl">
         {/* Page Header */}
-        <div className="mb-2 sm:mb-4 py-2">
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
+        <div className="mb-2 md:mb-4 py-2">
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
             GIỎ HÀNG
           </h1>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border mb-4">
           {/* Desktop Header - Hidden on mobile */}
-          <div className="hidden sm:block p-4 border-b border-gray-200">
+          <div className="hidden md:block p-4 border-b border-gray-200">
             <div className="flex items-center">
               {/* Checkbox */}
               <div className="w-12 flex justify-center">
@@ -225,7 +225,7 @@ const CartPage = () => {
           </div>
 
           {/* Mobile Header */}
-          <div className="sm:hidden p-4 border-b border-gray-200">
+          <div className="md:hidden p-4 border-b border-gray-200">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <input

@@ -10,7 +10,7 @@ const UserLayout = () => {
       <FreeshipBanner />
       <Header />
       <MobileHeader />
-      <div className="flex-grow bg-slate-100 sm:px-8">
+      <div className="flex-grow bg-slate-100 md:px-8">
         <Outlet />
       </div>
       <Footer />

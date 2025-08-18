@@ -108,7 +108,7 @@ const FeaturedCollections: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full hidden sm:block">
+    <div className="relative w-full hidden md:block">
       <div className="overflow-hidden bg-[#F5F5FA] relative group">
         <div
           className="flex transition-transform duration-500 ease-in-out"

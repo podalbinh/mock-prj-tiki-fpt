@@ -29,7 +29,7 @@ export default function PaymentConfirmation() {
             {/* Main confirmation card */}
             <div className="lg:col-span-2">
               <div className="relative overflow-hidden border-0 shadow-lg bg-white rounded-md min-h-[500px] flex flex-col">
-                <div className="absolute z-30 top-16 left-10 hidden sm:block">
+                <div className="absolute z-30 top-16 left-10 hidden md:block">
                   <Image src={confirmIcon} preview={false} />
                 </div>
                 <div className="relative">
@@ -39,7 +39,7 @@ export default function PaymentConfirmation() {
                   </div>
 
                   <div className="relative z-10 p-8 text-white flex justify-end">
-                    <div className="w-full sm:w-3/4 pl-4">
+                    <div className="w-full md:w-3/4 pl-4">
                       <h2 className="text-2xl font-bold mb-1">
                         Yay, đặt hàng thành công!
                       </h2>
@@ -51,7 +51,7 @@ export default function PaymentConfirmation() {
                 </div>
 
                 {/* Payment details */}
-                <div className="w-full sm:w-3/4 self-end p-8">
+                <div className="w-full md:w-3/4 self-end p-8">
                   <div className="grid grid-cols-2 border-b border-gray-200 text-gray-600 mb-4">
                     <h3 className="">Phương thức thanh toán</h3>
                     <h3 className="text-right">Thanh toán tiền mặt</h3>

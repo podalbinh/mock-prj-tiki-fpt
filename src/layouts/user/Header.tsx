@@ -48,7 +48,7 @@ const Header = () => {
   };
 
   return (
-    <div className={`flex-col shadow-sm hidden sm:flex`}>
+    <div className={`flex-col shadow-sm hidden md:flex`}>
       <div className="flex gap-4 px-6 py-3">
         <Link to="/" className="mx-4 max-h-min">
           <Image src={logo} alt="Logo" preview={false} />
@@ -91,7 +91,7 @@ const Header = () => {
           <CartWithBadge />
         </div>
       </div>
-      <div className="flex gap-2 py-2 border-t-[1px] px-6">
+      <div className="hidden lg:flex gap-2 py-2 border-t-[1px] px-6">
         <div className="font-semibold text-blue-800">Cam kết</div>
         <div className="px-4 border-r-2 flex items-center">
           <img src={commitment} alt="" className="inline-block mr-1" />

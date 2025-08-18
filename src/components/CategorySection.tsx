@@ -42,10 +42,10 @@ export default function CategorySection({
   return (
     <Card
       title="Khám phá theo danh mục"
-      className="mb-6 hidden sm:block"
+      className="mb-6 hidden md:block"
       classNames={{ header: "!border-b-0", body: "!pt-0" }}
     >
-      <div className="grid sm:grid-cols-6 gap-1 justify-items-left">
+      <div className="grid md:grid-cols-6 gap-1 justify-items-left">
         {categories && categories.length > 0 ? (
           categories.map((category) => (
             <div

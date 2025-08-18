@@ -48,9 +48,9 @@ const CartItem: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center py-4 border-b border-gray-200 gap-2 sm:gap-0 p-4">
+    <div className="flex flex-col md:flex-row md:items-center py-4 border-b border-gray-200 gap-2 md:gap-0 p-4">
       {/* Desktop: Checkbox */}
-      <div className="hidden sm:flex w-12 justify-center">
+      <div className="hidden md:flex w-12 justify-center">
         <input
           type="checkbox"
           checked={isSelected}
@@ -60,9 +60,9 @@ const CartItem: React.FC<Props> = ({
       </div>
 
       {/* Product Info */}
-      <div className="flex-1 sm:mr-4 flex items-center">
+      <div className="flex-1 md:mr-4 flex items-center">
         {/* Mobile: Checkbox */}
-        <div className="flex items-center sm:hidden">
+        <div className="flex items-center md:hidden">
           <input
             type="checkbox"
             checked={isSelected}
@@ -76,7 +76,7 @@ const CartItem: React.FC<Props> = ({
           onClick={handleProductClick}
         >
           {/* Product Image */}
-          <div className="w-16 sm:w-20 mr-3 sm:mr-4 flex-shrink-0 shadow-md rounded-sm">
+          <div className="w-16 md:w-20 mr-3 md:mr-4 flex-shrink-0 shadow-md rounded-sm">
             <img
               src={item.thumbnailUrl || "/placeholder.svg"}
               alt={item.name || "Product"}
@@ -86,11 +86,11 @@ const CartItem: React.FC<Props> = ({
 
           {/* Product Details */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-sm sm:text-base text-gray-900 mb-1 line-clamp-2 hover:text-blue-600 transition-colors">
+            <h3 className="font-medium text-sm md:text-base text-gray-900 mb-1 line-clamp-2 hover:text-blue-600 transition-colors">
               {item.name || "Unnamed Product"}
             </h3>
             {/* Mobile: Show price here */}
-            <div className="sm:hidden mt-2">
+            <div className="md:hidden mt-2">
               <div className="flex flex-col">
                 <span className="font-semibold text-red-600 text-sm">
                   {(item.price || 0).toLocaleString()}₫
@@ -109,14 +109,14 @@ const CartItem: React.FC<Props> = ({
         {/* Mobile: Remove button */}
         <button
           onClick={() => onRemove(item.productId || 0)}
-          className="sm:hidden flex w-7 h-8 flex-shrink-0 items-center justify-center text-gray-400 hover:text-red-500 transition-colors rounded-md border"
+          className="md:hidden flex w-7 h-8 flex-shrink-0 items-center justify-center text-gray-400 hover:text-red-500 transition-colors rounded-md border"
         >
           <DeleteOutlined />
         </button>
       </div>
 
       {/* Mobile: Quantity and Total in one row */}
-      <div className="flex items-center justify-between sm:hidden px-2">
+      <div className="flex items-center justify-between md:hidden px-2">
         {/* Quantity Control */}
         <div className="flex items-center">
           <span className="text-sm text-gray-600 mr-3">Số lượng:</span>
@@ -150,7 +150,7 @@ const CartItem: React.FC<Props> = ({
       </div>
 
       {/* Desktop: Unit Price */}
-      <div className="hidden sm:block w-32 text-center">
+      <div className="hidden md:block w-32 text-center">
         <div className="flex flex-col items-center">
           <span className="font-semibold text-red-600">
             {(item.price || 0).toLocaleString()}₫
@@ -164,7 +164,7 @@ const CartItem: React.FC<Props> = ({
       </div>
 
       {/* Desktop: Quantity Control */}
-      <div className="hidden sm:flex w-32 items-center justify-center">
+      <div className="hidden md:flex w-32 items-center justify-center">
         <div className="flex items-center border border-gray-300 rounded">
           <button
             onClick={handleDecrement}
@@ -186,14 +186,14 @@ const CartItem: React.FC<Props> = ({
       </div>
 
       {/* Desktop: Subtotal */}
-      <div className="hidden sm:block w-32 text-center">
+      <div className="hidden md:block w-32 text-center">
         <span className="font-semibold text-red-600">
           {((item.price || 0) * quantity).toLocaleString()}₫
         </span>
       </div>
 
       {/* Desktop: Remove Button */}
-      <div className="hidden sm:flex w-12 justify-center">
+      <div className="hidden md:flex w-12 justify-center">
         <button
           onClick={() => onRemove(item.productId || 0)}
           className="p-2 text-gray-400 hover:text-red-500 transition-colors"

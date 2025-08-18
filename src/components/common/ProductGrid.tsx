@@ -300,8 +300,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       }}
     >
       {/* Filter and Sort Section */}
-      <div className="p-1 sm:p-4 bg-white sm:rounded-lg shadow-sm border">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 hidden sm:block">
+      <div className="p-1 md:p-4 bg-white md:rounded-lg shadow-sm border">
+        <h2 className="text-lg font-bold text-gray-900 mb-4 hidden md:block">
           Tất cả sản phẩm
         </h2>
 
@@ -315,7 +315,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         )} */}
 
         {/* Filter Options */}
-        <div className="hidden sm:flex flex-wrap gap-4 mb-4">
+        <div className="hidden md:flex flex-wrap gap-4 mb-4">
           <Checkbox
             checked={filters.hasTikiNow}
             onChange={(e) => handleFilterChange("hasTikiNow", e.target.checked)}
@@ -357,7 +357,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
             <span className="text-gray-700">từ 4 sao</span>
           </Checkbox>
         </div>
-        <div className="w-full bg-white sm:hidden">
+        <div className="w-full bg-white md:hidden">
           {/* Navigation Tabs */}
           <div className="flex mb-4">
             {tabs.map((tab) => (
@@ -441,7 +441,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         </div>
 
         {/* Sort Section */}
-        <div className="sm:flex items-center hidden">
+        <div className="md:flex items-center hidden">
           <span className="text-gray-600 mr-3">Sắp xếp</span>
           <Select
             value={sort}
@@ -457,7 +457,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F5F5FA] sm:mt-4 px-2 sm:px-0">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-2 pt-4 bg-[#F5F5FA] md:mt-4 px-2 md:px-0">
         {products.map((product) => (
           <div key={product.id} className="rounded-lg">
             <ProductCard product={product} formatPrice={formatPrice} />
