@@ -265,3 +265,13 @@ export interface PagedResponse<T> {
   totalPages: number;
   data: T[];
 }
+
+export interface CustomErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    error: string;
+    message: string;
+  };
+}

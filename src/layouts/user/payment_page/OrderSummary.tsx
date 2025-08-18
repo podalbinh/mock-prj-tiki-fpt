@@ -7,7 +7,7 @@ import { formattedPrice } from "@/utils/priceHelper.ts";
 import { useNavigate } from "react-router-dom";
 import { useOrder } from "@/hooks/useOrder.ts";
 import { useCart } from "@/hooks/useCart.ts";
-import type { CartItem } from "@/constant/interfaces";
+import type { CartItem, CustomErrorResponse } from "@/constant/interfaces";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function OrderSummary() {
@@ -43,7 +43,6 @@ export default function OrderSummary() {
 
   // Memoize the total calculation function - remove getBookById from dependencies
   const calculateTotal = useCallback(async () => {
-
     if (!selectedItems || selectedItems.length === 0) {
       setTotal(0);
       return;
@@ -140,9 +139,10 @@ export default function OrderSummary() {
 
         await createOrders(data);
       }
-    } catch (e) {
-      console.error(e);
-      message.error("Lưu đơn hàng thất bại");
+    } catch (e: unknown) {
+      const axiosError = e as CustomErrorResponse;
+      console.error(axiosError.data?.message || "Có lỗi xảy ra");
+      message.error(axiosError.data?.message || "Lưu đơn hàng thất bại");
       return;
     }
     message.success("Lưu đơn hàng thành công");

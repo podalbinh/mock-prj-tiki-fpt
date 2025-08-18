@@ -4,12 +4,19 @@ import FreeshipBanner from "@/components/common/FreeshipBanner";
 import PaymentFooter from "@/layouts/user/payment/PaymentFooter";
 import confirmPaymentBg from "@/assets/confirm-payment-bg.png";
 import confirmIcon from "@/assets/icon-confirm-payment.png";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useNavigate } from "react-router-dom";
+import { clearRecentOrder } from "@/store/slices/cartSlice";
 
 export default function PaymentConfirmation() {
   const recentOrder = useAppSelector((state) => state.cart.recentOrder);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const onNavigate = (url: string) => {
+    dispatch(clearRecentOrder());
+    navigate(url);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -67,7 +74,7 @@ export default function PaymentConfirmation() {
                       color="primary"
                       variant="outlined"
                       className="w-full h-10 rounded-sm"
-                      onClick={() => navigate("/")}
+                      onClick={() => onNavigate("/")}
                     >
                       Quay về trang chủ
                     </Button>
@@ -86,7 +93,13 @@ export default function PaymentConfirmation() {
                       {recentOrder.orderId}
                     </span>
                   </div>
-                  <Button type="link" className="p-0 h-auto text-blue-500">
+                  <Button
+                    type="link"
+                    className="p-0 h-auto text-blue-500"
+                    onClick={() =>
+                      onNavigate(`/profile/orders/${recentOrder.orderId}`)
+                    }
+                  >
                     Xem đơn hàng
                   </Button>
                 </div>
@@ -126,7 +139,7 @@ export default function PaymentConfirmation() {
               color="primary"
               variant="outlined"
               className="min-w-32 h-10 rounded-md"
-              onClick={() => navigate("/")}
+              onClick={() => onNavigate("/")}
             >
               Quay về trang chủ
             </Button>
