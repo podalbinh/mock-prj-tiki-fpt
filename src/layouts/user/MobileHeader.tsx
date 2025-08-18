@@ -8,19 +8,28 @@ import {
   LeftOutlined,
 } from "@ant-design/icons";
 import CartWithBadge from "@/components/common/CartWithBadge";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import MobileSidebar from "./MobileSidebar";
 
 const MobileHeader: React.FC = () => {
+  const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <div className={`w-full sm:hidden bg-slate-100`}>
       {/* Main Header */}
       <div className="bg-blue-400 px-4 py-3 flex items-center gap-3">
         {/* Back Arrow */}
-        <button className="text-white text-lg">
+        <button className="text-white text-lg" onClick={() => navigate(-1)}>
           <LeftOutlined />
         </button>
 
         {/* Menu Icon */}
-        <button className="text-white text-lg">
+        <button
+          className="text-white text-lg"
+          onClick={() => setOpenMenu(true)}
+        >
           <MenuOutlined />
         </button>
 
@@ -49,6 +58,8 @@ const MobileHeader: React.FC = () => {
         </div>
         <RightOutlined className="text-gray-600" />
       </div>
+
+      <MobileSidebar isOpen={openMenu} onClose={() => setOpenMenu(false)} />
     </div>
   );
 };

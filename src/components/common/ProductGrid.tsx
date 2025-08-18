@@ -11,7 +11,7 @@ import { Request } from "@/config/api";
 import { API_ENDPOINTS } from "@/constant/endpoint";
 import { useLoading } from "@/hooks/useLoading";
 import type { Product, ProductSearchResponse } from "@/constant/interfaces";
-import { FilterOutlined } from "@ant-design/icons";
+import { FilterOutlined, LikeFilled } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -127,19 +127,19 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         let filteredProducts = response.content;
 
         // Apply client-side filters - chỉ áp dụng khi filter được bật (true)
-        if (filters.hasTikiNow === true) {
+        if (filters.hasTikiNow) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.hasTikiNow === true
+            (product) => product.hasTikiNow
           );
         }
-        if (filters.isTopDeal === true) {
+        if (filters.isTopDeal) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.isTopDeal === true
+            (product) => product.isTopDeal
           );
         }
-        if (filters.isFreeshipXtra === true) {
+        if (filters.isFreeshipXtra) {
           filteredProducts = filteredProducts.filter(
-            (product) => product.isFreeshipXtra === true
+            (product) => product.isFreeshipXtra
           );
         }
 
@@ -238,6 +238,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
   };
 
   const handleTabClick = (tabId: string) => {
+    if (tabId === activeTab && tabId !== "price") return;
+
     if (tabId === "price") {
       setPriceSort((prev) => (prev === "desc" ? "asc" : "desc"));
       setActiveTab(tabId);
@@ -328,7 +330,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
             onChange={(e) => handleFilterChange("isTopDeal", e.target.checked)}
             className="flex items-center"
           >
-            <span className="text-red-500 mr-1">👍</span>
+            <LikeFilled className="text-red-500 mr-1" />
             <span className="text-red-500 font-bold mr-1">TOP DEAL</span>
             <span className="text-gray-700">Siêu rẻ</span>
           </Checkbox>
@@ -417,7 +419,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
                   : "bg-slate-100 text-red-500"
               }`}
             >
-              <span className="text-xs">👍</span>
+              <LikeFilled className="text-inherit" />
               TOP DEAL
             </button>
 
