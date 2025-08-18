@@ -51,7 +51,7 @@ export default function Sidebar() {
       variant="borderless"
       title="Khám phá theo danh mục"
       size="small"
-      className="!border-none !shadow-none hidden md:block"
+      className="!border-none !shadow-none hidden lg:block"
       classNames={{
         body: "!p-0",
         title: "!text-base !font-semibold !text-gray-800 !pb-3 p-3"

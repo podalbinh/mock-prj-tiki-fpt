@@ -9,7 +9,7 @@ export interface CustomBreadcrumbProps {
 const CustomBreadcrumb = ({ items }: CustomBreadcrumbProps) => {
   return (
     <Breadcrumb
-      className="pt-4 hidden md:block"
+      className="pt-4 hidden lg:block"
       separator={<RightOutlined />}
       items={items.map((item, index) => ({
         title: item.href ? (

@@ -63,7 +63,7 @@ const CartWithBadge = () => {
   return (
     <div onClick={handleCartClick} className="cursor-pointer">
       <Badge count={isAuthenticated ? totalItems : 0} size="small">
-        <ShoppingCartOutlined className="text-[20px] p-1 md:text-blue-600 text-white" />
+        <ShoppingCartOutlined className="text-[20px] p-1 lg:text-blue-600 text-white" />
       </Badge>
     </div>
   );

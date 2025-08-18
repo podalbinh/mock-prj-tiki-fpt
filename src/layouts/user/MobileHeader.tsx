@@ -17,7 +17,7 @@ const MobileHeader: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={`w-full md:hidden bg-slate-100`}>
+    <div className={`w-full lg:hidden bg-slate-100`}>
       {/* Main Header */}
       <div className="bg-blue-400 px-4 py-3 flex items-center gap-3">
         {/* Back Arrow */}
