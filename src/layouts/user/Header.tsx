@@ -6,7 +6,12 @@ import shipping from "@/assets/shipping.svg";
 import refund from "@/assets/refund.svg";
 import returnPolicy from "@/assets/return.svg";
 
-import { HomeOutlined, LogoutOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  LogoutOutlined,
+  SearchOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import CartWithBadge from "@/components/common/CartWithBadge";
 import { LoginModal } from "@/components/forms/LoginModalForm";
@@ -26,9 +31,9 @@ const Header = () => {
     "potter",
     "lịch treo tường 2024",
     "nguyễn nhật ánh",
-  ]
+  ];
 
-  const { openLoginModal } = useModal()
+  const { openLoginModal } = useModal();
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -62,14 +67,17 @@ const Header = () => {
     <div className="flex flex-col shadow-sm w-full">
       <div className="flex justify-between px-6 py-3 w-full">
         <div className="w-[10%]">
-          <img src={logo} alt="Logo"/>
+          <img src={logo} alt="Logo" />
         </div>
 
         <div className="flex flex-col w-[90%]">
           <div className="flex  items-center justify-between">
             <div className="w-[70%] border rounded-lg">
               <div className="flex items-center w-full">
-                <SearchOutlined className="text-gray-400 mr-2 px-3 py-2"  aria-hidden="true" />
+                <SearchOutlined
+                  className="text-gray-400 mr-2 px-3 py-2"
+                  aria-hidden="true"
+                />
                 <input
                   type="text"
                   placeholder="100% hàng thật"
@@ -85,7 +93,10 @@ const Header = () => {
               </div>
             </div>
             <div className="flex">
-              <Link to="/" className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap">
+              <Link
+                to="/"
+                className="mx-4 max-h-min flex items-center gap-1 whitespace-nowrap"
+              >
                 <HomeOutlined className="text-[20px] p-1 flex-shrink-0" />
                 Trang chủ
               </Link>
@@ -117,7 +128,10 @@ const Header = () => {
                 </button>
               )}
 
-              <Link to="/cart" className="border-l-2 max-h-min px-4 flex items-center">
+              <Link
+                to="/cart"
+                className="border-l-2 max-h-min px-4 flex items-center"
+              >
                 <CartWithBadge />
               </Link>
             </div>
@@ -125,14 +139,14 @@ const Header = () => {
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
             {suggestions.map((s, i) => (
-                <button
-                    key={i}
-                    type="button"
-                    aria-label={`Tìm nhanh: ${s}`}
-                    title={s}
-                >
-                    {s}
-                </button>
+              <button
+                key={i}
+                type="button"
+                aria-label={`Tìm nhanh: ${s}`}
+                title={s}
+              >
+                {s}
+              </button>
             ))}
           </div>
         </div>

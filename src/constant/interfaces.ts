@@ -2,12 +2,13 @@ export interface User {
   id: number;
   email: string;
   password: string;
-  fullName?: string;
-  phone?: string;
-  avatarUrl?: string | null;
+  fullName: string;
+  phone: string;
+  avatarUrl: string | null;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+  address: string;
   role: "ADMIN" | "USER";
 }
 
@@ -37,7 +38,7 @@ export interface QuantitySold {
   value: number;
 }
 
-export interface Image {
+export interface ImageBook {
   baseUrl: string;
   isGallery: boolean;
   label: string;
@@ -63,7 +64,7 @@ export interface Book {
   name: string;
   authors: Author[];
   description: string;
-  images: Image[];
+  images: ImageBook[];
   originalPrice: number;
   listPrice: number;
   ratingAverage: number;
@@ -71,13 +72,15 @@ export interface Book {
   publisherVn: string;
   publicationDate: string;
   dimensions: string;
+  dichGia: string;
+  manufacturer: string;
   bookCover: string;
   numberOfPage: string;
   stockQuantity: number;
   isActive: boolean;
   categoriesId: number;
   quantitySold: number;
-  thumbnail: string;
+  thumbnailUrl: string;
 }
 
 export interface Item {
@@ -85,6 +88,7 @@ export interface Item {
   quantity: number;
   name: string;
   price: number;
+  thumbnail?: string;
 }
 
 export interface Order {
@@ -93,7 +97,25 @@ export interface Order {
   products: Item[];
   totalPrice: number;
   status: string;
+  createdAt?: string;
+  address?: string;
 }
+
+export interface OrderCreate {
+  productId: number;
+  quantity: number;
+}
+
+export interface CreateOrderResponse {
+  orderId: number;
+  totalAmount: number;
+  products: {
+    productId: number;
+    productName: string;
+    thumbnailUrl: string;
+  }[];
+}
+
 export interface RegisterRequest {
   email: string;
   password: string;
@@ -160,4 +182,96 @@ export interface PageableParams {
   size?: number;
   sort?: string;
   keyword?: string;
+}
+
+export interface CartItem {
+  productId: number;
+  name: string;
+  thumbnailUrl: string;
+  price: number;
+  originalPrice?: number;
+  quantity: number;
+}
+
+// Thống kê tổng quan
+export interface StatsData {
+  totalUsers: number;
+  totalProducts: number;
+  totalOrders: number;
+  totalRevenue: number;
+  monthlyGrowth: number; // %
+  todayOrders: number;
+}
+
+// Dữ liệu thống kê theo tháng
+export interface MonthlyData {
+  name: string; // ví dụ: "T1", "T2"
+  users: number;
+  orders: number;
+  revenue: number;
+  books: number;
+}
+
+// Dữ liệu phân loại sản phẩm
+export interface CategoryData {
+  name: string;
+  value: number;
+}
+
+// Dữ liệu đơn hàng gần đây
+export interface RecentOrdersData {
+  name: string; // ví dụ: "Hôm nay", "Hôm qua"
+  orders: number;
+  revenue: number;
+}
+
+// Interface bao gộp toàn bộ dữ liệu trả về từ API
+export interface DashboardData {
+  statsData: StatsData;
+  monthlyData: MonthlyData[];
+  categoryData: CategoryData[];
+  recentOrdersData: RecentOrdersData[];
+}
+
+export interface CartValidateSuccessResponse {
+  device: string;
+  code: number;
+  data: {
+    message: string;
+  };
+}
+
+export interface CartValidateErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    path: string;
+    error: string;
+    message: string;
+  };
+}
+
+export type CartValidateResponse =
+  | CartValidateSuccessResponse
+  | CartValidateErrorResponse;
+
+export interface PagedResponse<T> {
+  currentPage: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  data: T[];
+}
+
+export interface CustomErrorResponse {
+  device: string;
+  code: number;
+  data: {
+    timestamp: string;
+    error: string;
+    message: string;
+  };
 }

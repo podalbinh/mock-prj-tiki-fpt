@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import AdminTable from "@/components/common/Table";
 import type { CustomTableColumn } from "@/components/common/Table";
 import type { Order } from "@/constant/interfaces";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRevalidator } from "react-router-dom";
 import {  Button, Input, Select, Tag } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import ModalDetailOrder from "../modals/ModalDetailOrder";
@@ -12,6 +12,23 @@ const OrderManagementTable = () => {
   const { Option } = Select;
 
   const rawOrders = useLoaderData() as Order[];
+  const revalidator = useRevalidator();
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "confirmed":
+        return "Đã xác nhận";
+      case "pending":
+        return "Đang giao hàng";
+      case "completed":
+        return "Đã giao hàng";
+      case "cancelled":
+        return "Đã hủy";
+      default:
+        return status;
+    }
+  };
+
   
   const columns: CustomTableColumn<Order>[] = [
     { key: "customerName", title: "Customer", dataIndex: "customerName" },
@@ -41,13 +58,13 @@ const OrderManagementTable = () => {
         color = "default";
     }
 
-    return <Tag color={color} style={{ textTransform: "capitalize" }}>{status}</Tag>;
+    return <Tag color={color} style={{ textTransform: "capitalize" }}>{getStatusText(status)}</Tag>;
   },
 }
   ];
 
   const actionColumn: CustomTableColumn<Order> = {
-    title: "Thao tác",
+    title: "Actions",
     key: "actions",
     align: "center",
     dataIndex: "status",
@@ -105,10 +122,10 @@ const OrderManagementTable = () => {
               onChange={(value) => setStatusFilter(value || null)}
               style={{ width: 180 }}
             >
-              <Option value="confirmed">Confirmed</Option>
-              <Option value="pending">Pending</Option>
-              <Option value="cancelled">Cancelled</Option>
-              <Option value="completed">Completed</Option>
+              <Option value="confirmed">Đã xác nhận</Option>
+              <Option value="pending">Đang giao hàng</Option>
+              <Option value="completed">Đã giao hàng</Option>
+              <Option value="cancelled">Đã hủy</Option>
             </Select>
 
             <Button
@@ -134,6 +151,7 @@ const OrderManagementTable = () => {
         onCancel={() => setOpenDetailModal(false)}
         open={openDetailModal}
         order={selectedOrder}
+        onUpdate={() => revalidator.revalidate()}
       />
     </>
   );

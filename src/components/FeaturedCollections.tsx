@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { FeaturedCollectionData } from "@/constant/interfaces";
 import { useBook } from "@/hooks/useBook.ts";
+import {useLoading} from "@/hooks/useLoading.ts";
 
 const FeaturedCollections: React.FC = () => {
+  const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
   const { getBookFeaturedCollections } = useBook();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [allCards, setAllCards] = useState<FeaturedCollectionData[]>([]);
@@ -49,6 +53,12 @@ const FeaturedCollections: React.FC = () => {
     restartAutoSlide();
   };
 
+  const handleProductClick = (productId: number) => {
+    showLoading("Đang chuyển hướng...");
+    navigate(`/books/${productId}`);
+    hideLoading()
+  };
+
   const renderCard = (cardData: FeaturedCollectionData, index: number) => (
     <div
       key={index}
@@ -73,6 +83,7 @@ const FeaturedCollections: React.FC = () => {
                 src={product.url}
                 alt={`Product ${product.id}`}
                 className="w-[64px] h-[64px] object-cover rounded border shadow-sm group-hover:shadow-md transition-shadow"
+                onClick={() => handleProductClick(product.id)}
               />
               {product.discountPercent > 0 && (
                 <div className="absolute right-[5px] bottom-[5px] bg-red-500 text-white text-[10px] px-1 pl-1 rounded-full font-semibold shadow">
@@ -97,7 +108,7 @@ const FeaturedCollections: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full hidden lg:block">
       <div className="overflow-hidden bg-[#F5F5FA] relative group">
         <div
           className="flex transition-transform duration-500 ease-in-out"

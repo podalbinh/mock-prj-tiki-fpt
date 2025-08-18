@@ -1,13 +1,15 @@
-import React from "react";
-import { Modal, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, message, Modal, Select, Table } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import type { Order } from "@/constant/interfaces";
+import { useOrder } from "@/hooks/useOrder";
 
 interface OrderModalProps {
   title: string;
   order: Order | null;
   open: boolean;
   onCancel: () => void;
+  onUpdate?: () => void;
   cancelText?: string;
   loading?: boolean;
 }
@@ -19,7 +21,34 @@ const ModalDetailOrder: React.FC<OrderModalProps> = ({
   onCancel,
   cancelText = "Đóng",
   loading = false,
+  onUpdate
 }) => {
+
+  const [status, setStatus] = useState<string>();
+  const { updateOrder } = useOrder();
+  
+  useEffect(() => {
+    if (open) {
+      setStatus(order?.status);
+    }
+  }, [order, open]);
+
+   const handleUpdate = async () => {
+    if (!order || !status) return;
+
+    try {
+       await updateOrder(order.id, {
+           status
+        });
+      message.success("Cập nhật trạng thái thành công");
+      onCancel();
+      onUpdate?.();
+    } catch (error) {
+      console.error(error);
+      message.error("Có lỗi xảy ra khi cập nhật đơn hàng");
+    }
+  };
+  
   const productColumns = [
     {
       title: "Tên sản phẩm",
@@ -60,16 +89,26 @@ const ModalDetailOrder: React.FC<OrderModalProps> = ({
       centered
       width={700}
       className="confirm-modal"
-      okButtonProps={{ className: "hidden" }}
-      cancelButtonProps={{
-        className:
-          "border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-800 font-medium px-6 py-2 h-10 rounded-md transition-colors duration-200",
-      }}
+      footer={null}
     >
       {order && (
         <div className="py-4">
           <p><strong>Khách hàng:</strong> {order.customerName}</p>
-          <p><strong>Trạng thái:</strong> {order.status}</p>
+          
+          <div className="mb-3">
+            <strong>Trạng thái:</strong>{" "}
+            <Select
+              value={status}
+              onChange={(value) => setStatus(value)}
+              style={{ width: 200 }}
+            >
+              <Select.Option value="pending">Đang giao hàng</Select.Option>
+              <Select.Option value="confirmed">Đã xác nhận</Select.Option>
+              <Select.Option value="completed">Đã giao hàng</Select.Option>
+              <Select.Option value="cancelled">Đã hủy</Select.Option>
+            </Select>
+          </div>
+
           <p><strong>Tổng tiền:</strong> {order.totalPrice.toLocaleString()} đ</p>
 
           <h4 className="mt-4 mb-2 font-bold">Danh sách sản phẩm:</h4>
@@ -79,6 +118,13 @@ const ModalDetailOrder: React.FC<OrderModalProps> = ({
             rowKey="id"
             pagination={false}
           />
+
+          <div className="flex justify-end gap-3 mt-6">
+            <Button onClick={onCancel}>Hủy</Button>
+            <Button type="primary" onClick={handleUpdate}>
+              Lưu thay đổi
+            </Button>
+          </div>
         </div>
       )}
     </Modal>

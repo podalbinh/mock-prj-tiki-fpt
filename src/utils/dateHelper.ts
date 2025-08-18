@@ -14,3 +14,12 @@ export function parseDate(dateString: string): dayjs.Dayjs | null {
   const parsed = dayjs(dateString, "DD/MM/YYYY");
   return parsed.isValid() ? parsed : null;
 }
+
+export function randomDeliveryDate(): string {
+  const today = dayjs();
+  const randomDays = Math.floor(Math.random() * 5) + 1;
+  const deliveryDate = today.add(randomDays, "day");
+  const randomHour = Math.floor(Math.random() * 11) + 8; // Random hour between 8 and 18
+  const dateStr = deliveryDate.format("DD/MM");
+  return `Giao thứ ${deliveryDate.format("d")}, trước ${randomHour}h, ${dateStr}`;
+}

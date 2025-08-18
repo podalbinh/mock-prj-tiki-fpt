@@ -9,8 +9,8 @@ export const API_ENDPOINTS = {
   USER_BY_ID: (id: number) => `/users/${id}`,
 
   // Book API endpoints
-  // BOOKS: "/books",
-  // BOOK_BY_ID: (id: number) => `/books/${id}`,
+  BOOKS: "/products",
+  BOOK_BY_ID: (id: number) => `/products/${id}`,
 
   // Product API endpoints
   PRODUCTS: "/products",
@@ -28,9 +28,19 @@ export const API_ENDPOINTS = {
   CATEGORIES_WITH_SUB: "/categories/with-subcategories",
   // Order API endpoints
   ORDERS: "/orders",
+  ORDERS_CREATE: "/orders/create",
+  ORDER_BY_ID: (id: number) => `/orders/${id}`,
+  MY_ORDERS:"/orders/me",
+
   GET_BOOK_FEATURED_COLLECTIONS: "/featured-collections",
 
   // Image upload endpoint
   UPLOAD_IMAGE: "images/upload",
   DELETE_IMAGE: (fileId: string) => `images/delete/${fileId}`,
+
+  // Dashboard API endpoints
+  ADMIN_DASHBOARD: "admin/dashboard",
+
+  // Cart
+  VALIDATE_CART: "carts/validate"
 };

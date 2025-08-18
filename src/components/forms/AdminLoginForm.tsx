@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Form, Input, Button, Card, Typography, Alert } from "antd";
+import { Form, Input, Button, Card, Typography, Alert, Image } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import logo from "@/assets/logo.svg";
 
 const { Title, Text } = Typography;
 
@@ -38,10 +39,11 @@ export default function AdminLoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center py-12 px-4 md:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <Card className="shadow-lg">
-          <div className="text-center mb-8">
+          <div className="flex flex-col justify-center items-center mb-8">
+            <Image src={logo} preview={false} className="my-2"/>
             <Title level={2}>Đăng nhập Admin</Title>
             <Text type="secondary">Vui lòng đăng nhập để tiếp tục</Text>
           </div>
