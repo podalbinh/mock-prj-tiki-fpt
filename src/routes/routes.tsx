@@ -5,7 +5,11 @@ import UserLayout from "@/layouts/user/UserLayout";
 import AdminLayout from "@/layouts/admin/AdminLayout";
 import { userLoader } from "./loaders/userLoader";
 import { bookLoader } from "@/routes/loaders/bookLoader.tsx";
-import { myOrderLoader, orderDetailLoader, orderLoader } from "./loaders/orderLoader";
+import {
+  myOrderLoader,
+  orderDetailLoader,
+  orderLoader,
+} from "./loaders/orderLoader";
 import RequireRoleWrapper from "@/components/wrapper/RequireRoleWrapper";
 import Error403 from "@/pages/403";
 import Error404 from "@/pages/404";
@@ -66,21 +70,25 @@ const router = createBrowserRouter([
             path: "orders/:orderId",
             element: withSuspense(lazy(() => import("@/pages/OrderDetail"))),
             loader: ({ params }) => orderDetailLoader(Number(params.orderId)),
-          }
+          },
         ],
       },
       {
         path: "cart",
         element: withSuspense(Cart),
       },
+      {
+        path: "search",
+        element: withSuspense(lazy(() => import("@/pages/SearchByName"))),
+      },
     ],
   },
   {
     path: "/payment",
     element: (
-        <RequireRoleWrapper role="USER">
-          <Payment />
-        </RequireRoleWrapper>
+      <RequireRoleWrapper role="USER">
+        <Payment />
+      </RequireRoleWrapper>
     ),
   },
   {

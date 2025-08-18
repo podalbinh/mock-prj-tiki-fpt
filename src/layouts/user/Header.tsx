@@ -19,6 +19,7 @@ import { useModal } from "@/hooks/useModal";
 import { SignupModal } from "@/components/forms/SignUpModalForm";
 import { Avatar, Dropdown, Space } from "antd";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const Header = () => {
   const suggestions = [
@@ -35,6 +36,7 @@ const Header = () => {
 
   const { openLoginModal } = useModal();
   const { user, isAuthenticated, logout } = useAuth();
+  const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
 
   const userMenuItems = [
@@ -63,6 +65,19 @@ const Header = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
+
   return (
     <div className="flex flex-col shadow-sm w-full">
       <div className="flex justify-between px-6 py-3 w-full">
@@ -81,10 +96,14 @@ const Header = () => {
                 <input
                   type="text"
                   placeholder="100% hàng thật"
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   className="flex-1 outline-none text-sm placeholder-gray-400"
                 />
                 <button
                   type="submit"
+                  onClick={handleSearch}
                   aria-label="Tìm kiếm"
                   className="text-blue-500 text-sm font-normal rounded-r-lg border-l px-3 py-2 pl-2 hover:bg-blue-100"
                 >
