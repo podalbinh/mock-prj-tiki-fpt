@@ -48,7 +48,7 @@ const Header = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-sm">
+    <div className={`flex-col shadow-sm hidden sm:flex`}>
       <div className="flex gap-4 px-6 py-3">
         <Link to="/" className="mx-4 max-h-min">
           <Image src={logo} alt="Logo" preview={false} />
