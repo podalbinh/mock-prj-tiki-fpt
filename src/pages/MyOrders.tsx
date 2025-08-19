@@ -6,6 +6,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { Button, Select, Tag } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { OrderStatus, OrderStatusLabel } from "@/constant/enums"; // import enum bạn tạo
 
 const OrderListTable = () => {
   const { Option } = Select;
@@ -13,33 +14,36 @@ const OrderListTable = () => {
   const rawOrders = useLoaderData() as Order[];
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  const handleDetail = useCallback((order: Order) => {
-    navigate(`/profile/orders/${order.id}`);
-  }, [navigate]);
+  const handleDetail = useCallback(
+    (order: Order) => {
+      navigate(`/profile/orders/${order.id}`);
+    },
+    [navigate]
+  );
 
   const filteredOrders = rawOrders?.filter((order: Order) => {
     return statusFilter ? order.status === statusFilter : true;
   });
 
-  const getStatusText = (status: string) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "Đã xác nhận";
-      case "pending":
-        return "Đang giao hàng";
-      case "completed":
-        return "Đã giao hàng";
-      case "cancelled":
-        return "Đã hủy";
+      case OrderStatus.CONFIRMED:
+        return "blue";
+      case OrderStatus.DELIVERED:
+        return "orange";
+      case OrderStatus.COMPLETED:
+        return "green";
+      case OrderStatus.CANCELLED:
+        return "red";
       default:
-        return status;
+        return "default";
     }
   };
 
   const columns: CustomTableColumn<Order>[] = [
     {
       key: "id",
-      dataIndex:"id",
+      dataIndex: "id",
       title: "STT",
       render: (_: any, __: Order, index: number) => index + 1,
       align: "center",
@@ -62,31 +66,12 @@ const OrderListTable = () => {
       title: "Trạng thái",
       dataIndex: "status",
       align: "center",
-      render: (status: any) => {
-        let color = "";
-        switch (status) {
-          case "pending":
-            color = "orange";
-            break;
-          case "confirmed":
-            color = "blue";
-            break;
-          case "completed":
-            color = "green";
-            break;
-          case "cancelled":
-            color = "red";
-            break;
-          default:
-            color = "default";
-        }
-
-        return (
-          <Tag color={color} style={{ textTransform: "capitalize" }}>
-            {getStatusText(status)}
-          </Tag>
-        );
-      },
+      render: (status: any) => (
+        <Tag color={getStatusColor(status)} style={{ textTransform: "capitalize" }}>
+          {OrderStatusLabel[status.toUpperCase() as keyof typeof OrderStatusLabel] ||
+            status}
+        </Tag>
+      ),
     },
     {
       title: "Thao tác",
@@ -105,42 +90,42 @@ const OrderListTable = () => {
   ];
 
   return (
-    <>
-      <div className="bg-white rounded-lg shadow-sm py-5 px-7">
-        <h3 className="text-lg font-semibold text-gray-900 mb-10">
-          Danh sách đơn hàng
-        </h3>
+    <div className=" bg-white rounded-lg shadow-sm py-5 px-7">
+      <h3 className="text-lg font-semibold text-gray-900 !mb-10">
+        Danh sách đơn hàng
+      </h3>
 
-        <div className="flex gap-3 mb-4">
-          <Select
-            placeholder="Lọc theo trạng thái"
-            allowClear
-            value={statusFilter || undefined}
-            onChange={(value) => setStatusFilter(value || null)}
-            style={{ width: 200 }}
-          >
-            <Option value="confirmed">Đã xác nhận</Option>
-            <Option value="pending">Đang giao hàng</Option>
-            <Option value="completed">Đã giao hàng</Option>
-            <Option value="cancelled">Đã hủy</Option>
-          </Select>
+      <div className="flex gap-3 mb-4">
+        <Select
+          placeholder="Lọc theo trạng thái"
+          allowClear
+          value={statusFilter || undefined}
+          onChange={(value) => setStatusFilter(value || null)}
+          style={{ width: 200 }}
+        >
+          <Option value={OrderStatus.CONFIRMED}>
+            {OrderStatusLabel.CONFIRMED}
+          </Option>
+          <Option value={OrderStatus.DELIVERED}>
+            {OrderStatusLabel.DELIVERED}
+          </Option>
+          <Option value={OrderStatus.COMPLETED}>
+            {OrderStatusLabel.COMPLETED}
+          </Option>
+          <Option value={OrderStatus.CANCELLED}>
+            {OrderStatusLabel.CANCELLED}
+          </Option>
+        </Select>
 
-          <Button
-            onClick={() => {
-              setStatusFilter(null);
-            }}
-          >
-            Bỏ lọc
-          </Button>
-        </div>
-
-        <AdminTable<Order>
-          data={filteredOrders}
-          columns={columns}
-          showActions={false}
-        />
+        <Button onClick={() => setStatusFilter(null)}>Bỏ lọc</Button>
       </div>
-    </>
+
+      <AdminTable<Order>
+        data={filteredOrders}
+        columns={columns}
+        showActions={false}
+      />
+    </div>
   );
 };
 

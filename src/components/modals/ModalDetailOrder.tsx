@@ -102,7 +102,7 @@ const ModalDetailOrder: React.FC<OrderModalProps> = ({
               onChange={(value) => setStatus(value)}
               style={{ width: 200 }}
             >
-              <Select.Option value="pending">Đang giao hàng</Select.Option>
+              <Select.Option value="delivered">Đang giao hàng</Select.Option>
               <Select.Option value="confirmed">Đã xác nhận</Select.Option>
               <Select.Option value="completed">Đã giao hàng</Select.Option>
               <Select.Option value="cancelled">Đã hủy</Select.Option>
