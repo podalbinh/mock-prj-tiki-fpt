@@ -79,7 +79,7 @@ const Header = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-sm w-full">
+    <div className="flex-col shadow-sm w-full hidden lg:flex">
       <div className="flex justify-between px-6 py-3 w-full">
         <div className="w-[10%]">
           <img src={logo} alt="Logo" />

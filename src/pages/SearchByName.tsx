@@ -1,6 +1,6 @@
 import ListProductsSearch from "@/components/common/ListProductsSearch";
 import Sidebar from "@/components/Sidebar";
-import { Alert, Layout } from "antd";
+import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useSearchParams } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const SearchByName = () => {
   const keyword = searchParams.get("keyword") ?? "";
 
   return (
-    <div className="flex flex-col min-h-screen mb-8">
+    <div className="flex flex-col min-h-screen mb-8 p-2 md:p-4 lg:p-6">
       {/* Nội dung */}
       <div className="flex-1">
         <Layout className="bg-transparent">
