@@ -85,8 +85,8 @@ export default function BookDetail() {
                 </Card>
               </div>
 
-              <div className="fixed bottom-0 left-0 w-full z-50 flex justify-center lg:static lg:col-span-3">
-                <div className={"w-full lg:w-full"}>
+              <div className="fixed bottom-0 left-0 w-full z-50 lg:static lg:col-span-3">
+                <div className={"w-full"}>
                   <PurchaseActions book={book || undefined} />
                 </div>
               </div>
