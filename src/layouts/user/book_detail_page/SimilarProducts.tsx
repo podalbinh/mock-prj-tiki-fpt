@@ -13,6 +13,7 @@ export default function SimilarProducts({book}: SimilarProductsProps) {
     const [allBooks, setAllBooks] = useState<Book[]>([]);
     const { getAllBooks } = useBook();
     const isLg = useMediaQuery({ minWidth: 1024 });
+    const isMd = useMediaQuery({ minWidth: 768 });
 
     // Chỉ chạy 1 lần để lấy toàn bộ sách
     useEffect(() => {
@@ -39,7 +40,7 @@ export default function SimilarProducts({book}: SimilarProductsProps) {
             <div>
                 <p className={"text-md font-semibold mb-0"} >Sản phẩm tương tự</p>
             </div>
-            <CarouselCustom books={books} columns={isLg ? 4 : 3} rows={2}/>
+            <CarouselCustom books={books} columns={isLg ? 4 : isMd ? 3 : 2} rows={2}/>
         </div>
     );
 }

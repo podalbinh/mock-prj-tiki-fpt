@@ -110,7 +110,7 @@ export default function PaymentMethod() {
                 </Radio.Group>
             </div>
 
-            <div className="bg-[#F5F5FA] p-4 rounded-lg w-4/5">
+            <div className="bg-[#F5F5FA] p-4 rounded-lg w-full md:w-4/5">
                 <div className="flex items-center">
                     <img
                         src="src/assets/discount-card.svg"

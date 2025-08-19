@@ -9,6 +9,7 @@ export default function TopDeals() {
     const [books, setBooks] = useState<Book[]>([]);
     const { getTopSellingBooks } = useBook();
     const isLg = useMediaQuery({ minWidth: 1024 });
+    const isMd = useMediaQuery({ minWidth: 768 });
 
     // Chỉ chạy 1 lần để lấy toàn bộ sách
     useEffect(() => {
@@ -24,7 +25,7 @@ export default function TopDeals() {
             <div>
                 <p className={"text-md font-semibold mb-0"} >Top Deals</p>
             </div>
-            <CarouselCustom books={books} columns={isLg ? 4 : 3} rows={1}/>
+            <CarouselCustom books={books} columns={isLg ? 4 : isMd ? 3 : 2} rows={1}/>
         </div>
     );
 }
