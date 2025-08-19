@@ -81,9 +81,9 @@ const Header = () => {
   return (
     <div className="flex-col shadow-sm w-full hidden lg:flex">
       <div className="flex justify-between px-6 py-3 w-full">
-        <div className="w-[10%]">
+        <Link to="/" className="flex items-center">
           <img src={logo} alt="Logo" />
-        </div>
+        </Link>
 
         <div className="flex flex-col w-[90%]">
           <div className="flex  items-center justify-between">
