@@ -14,7 +14,21 @@ import MobileSidebar from "./MobileSidebar";
 
 const MobileHeader: React.FC = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
 
   return (
     <div className={`w-full lg:hidden bg-slate-100`}>
@@ -40,6 +54,8 @@ const MobileHeader: React.FC = () => {
             prefix={<SearchOutlined className="text-gray-400" />}
             className="rounded-md border-0 p-2"
             size="middle"
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
 
