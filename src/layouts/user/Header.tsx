@@ -1,10 +1,10 @@
-import logo from "@/assets/logo.svg";
-import commitment from "@/assets/commitment.svg";
-import ticket from "@/assets/ticket.svg";
-import fastDelivery from "@/assets/fast-shipping.svg";
-import shipping from "@/assets/shipping.svg";
-import refund from "@/assets/refund.svg";
-import returnPolicy from "@/assets/return.svg";
+import logo from "../../../public/assets/logo.svg";
+import commitment from "../../../public/assets/commitment.svg";
+import ticket from "../../../public/assets/ticket.svg";
+import fastDelivery from "../../../public/assets/fast-shipping.svg";
+import shipping from "../../../public/assets/shipping.svg";
+import refund from "../../../public/assets/refund.svg";
+import returnPolicy from "../../../public/assets/return.svg";
 
 import {
   HomeOutlined,

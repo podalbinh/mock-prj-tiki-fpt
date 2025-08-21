@@ -133,11 +133,11 @@ const FeaturedCollections: React.FC = () => {
         </div>
 
         <button onClick={handlePrevious} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <img src="/src/assets/arrow-next.svg" alt="previous" className="rotate-180" />
+          <img src="/assets/arrow-next.svg" alt="previous" className="rotate-180" />
         </button>
 
         <button onClick={handleNext} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <img src="/src/assets/arrow-next.svg" alt="next" />
+          <img src="/assets/arrow-next.svg" alt="next" />
         </button>
       </div>
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useModal } from '@/hooks/useModal'
 import { useLoading } from '@/hooks/useLoading'
-import signupPicture from '@/assets/login-picture.svg'
-import closeModal from '@/assets/close-modal.svg'
-import loginArrow from "@/assets/login-arrow.svg";
+import signupPicture from '../../../public/assets/login-picture.svg'
+import closeModal from '../../../public/assets/close-modal.svg'
+import loginArrow from "../../../public/assets/login-arrow.svg";
 import { Button, Input, Modal, notification } from 'antd'
 import 'antd/dist/reset.css'
 import {useRegister} from "@/hooks/useRegister.ts";

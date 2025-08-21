@@ -65,14 +65,14 @@ export default function PurchaseActions({ book }: PurchaseActionsProps) {
         <Card>
             <div className="hidden lg:flex">
                 <img
-                    src="/src/assets/tiki-logo.svg"
+                    src="/assets/tiki-logo.svg"
                     alt="ai"
                     style={{ width: 40, height: 40 }}
                 />
                 <div>
                     <div>Tiki Trading</div>
                     <img
-                        src="/src/assets/offical.svg"
+                        src="/assets/offical.svg"
                         alt="ai"
                         style={{ height: 20 }}
                     />

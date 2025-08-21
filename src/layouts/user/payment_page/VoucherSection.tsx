@@ -18,7 +18,7 @@ export default function VoucherSection() {
                 <div className="relative inline-block">
                     {/* SVG nền */}
                     <img
-                        src="src/assets/freeship.svg"
+                        src="../../../../public/assets/freeship.svg"
                         alt="Tiki"
                         className="h-[60px] w-full"
                     />
@@ -27,7 +27,7 @@ export default function VoucherSection() {
                     <div className="absolute inset-0 flex items-center justify-between px-3">
                         <div className="flex items-center justify-center">
                             <img
-                                src="src/assets/freeship-car.svg"
+                                src="../../../../public/assets/freeship-car.svg"
                                 alt="freeship"
                                 className="w-11 h-11"
                             />
@@ -46,7 +46,7 @@ export default function VoucherSection() {
             {/* Link chọn mã khác */}
             <div className="flex items-center text-[#0A68FF] cursor-pointer">
                 <img
-                    src="src/assets/discount.svg"
+                    src="../../../../public/assets/discount.svg"
                     alt="Tiki"
                     className="h-4 mr-2"
                 />

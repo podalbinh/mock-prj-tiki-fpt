@@ -86,7 +86,7 @@ export default function PaymentMethod() {
                     <Radio value="cash">
                         <div className="flex items-center py-4">
                             <img
-                                src="src/assets/payment.svg"
+                                src="../../../../public/assets/payment.svg"
                                 alt="Tiki"
                                 className="h-8 mr-2"
                             />
@@ -98,7 +98,7 @@ export default function PaymentMethod() {
                     <Radio value="viettel">
                         <div className="flex items-center py-4">
                             <img
-                                src="src/assets/viettel.svg"
+                                src="../../../../public/assets/viettel.svg"
                                 alt="Tiki"
                                 className="h-8 mr-2"
                             />
@@ -113,7 +113,7 @@ export default function PaymentMethod() {
             <div className="bg-[#F5F5FA] p-4 rounded-lg w-full md:w-4/5">
                 <div className="flex items-center">
                     <img
-                        src="src/assets/discount-card.svg"
+                        src="../../../../public/assets/discount-card.svg"
                         alt="Tiki"
                         className="h-4 mr-2"
                     />

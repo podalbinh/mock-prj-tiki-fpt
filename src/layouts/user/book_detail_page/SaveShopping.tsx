@@ -19,7 +19,7 @@ export default function SaveShopping() {
             <div className={"flex flex-col"}>
                 <div className={"flex gap-1 p-2"}>
                     <img
-                        src="/src/assets/check.svg" // icon bên trái
+                        src="/assets/check.svg" // icon bên trái
                         alt="ai"
                         style={{ width: 20, height: 20 }}
                     />
@@ -28,7 +28,7 @@ export default function SaveShopping() {
                 <hr/>
                 <div className={"flex gap-1 p-2"}>
                     <img
-                        src="/src/assets/refund.svg" // icon bên trái
+                        src="/assets/refund.svg" // icon bên trái
                         alt="ai"
                         style={{ width: 20, height: 20 }}
                     />
@@ -37,7 +37,7 @@ export default function SaveShopping() {
                 <hr/>
                 <div className={"flex gap-1 p-2"}>
                     <img
-                        src="/src/assets/return.svg" // icon bên trái
+                        src="/assets/return.svg" // icon bên trái
                         alt="ai"
                         style={{ width: 20, height: 20 }}
                     />

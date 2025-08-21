@@ -126,7 +126,7 @@ export default function ProductCard({
           {product.hasTikiNow ? (
             <>
               <img
-                src="src/assets/now.png"
+                src="../../../public/assets/now.png"
                 alt="NOW"
                 className="h-[18px] mr-1"
               />

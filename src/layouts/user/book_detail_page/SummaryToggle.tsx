@@ -27,7 +27,7 @@ export default function SummaryToggle({ content }: SummaryToggleProps) {
             >
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <img
-                        src="/src/assets/ai.svg" // icon bên trái
+                        src="/assets/ai.svg" // icon bên trái
                         alt="ai"
                         style={{ width: 20, height: 20 }}
                     />

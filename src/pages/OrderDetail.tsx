@@ -173,7 +173,7 @@ const OrderDetail = () => {
                                 </span>
                               </div>
                               <img
-                                src="/src/assets/return_badge.png"
+                                src="/assets/return_badge.png"
                                 alt="RETURN_BADGE"
                                 className="size-fit"
                               />
