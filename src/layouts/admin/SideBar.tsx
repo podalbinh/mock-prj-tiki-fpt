@@ -6,6 +6,7 @@ import {
   AppstoreOutlined,
   UserOutlined,
   ShoppingCartOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -20,54 +21,24 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
 
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/admin",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },
     {
-      key: "products",
+      key: "/admin/products",
       icon: <ShoppingOutlined />,
       label: "Quản lý sản phẩm",
-      children: [
-        {
-          key: "/admin/products",
-          label: "Danh sách sản phẩm",
-        },
-        {
-          key: "/admin/products/create",
-          label: "Thêm sản phẩm",
-        },
-      ],
     },
     {
-      key: "categories",
+      key: "/admin/categories",
       icon: <AppstoreOutlined />,
       label: "Quản lý danh mục",
-      children: [
-        {
-          key: "/admin/categories",
-          label: "Danh sách danh mục",
-        },
-        {
-          key: "/admin/categories/create",
-          label: "Thêm danh mục",
-        },
-      ],
     },
     {
-      key: "users",
+      key: "/admin/users",
       icon: <UserOutlined />,
       label: "Quản lý người dùng",
-      children: [
-        {
-          key: "/admin/users",
-          label: "Danh sách người dùng",
-        },
-        {
-          key: "/admin/users/create",
-          label: "Thêm người dùng",
-        },
-      ],
     },
     {
       key: "orders",
@@ -75,14 +46,19 @@ export default function AdminSidebar({ collapsed }: AdminSidebarProps) {
       label: "Quản lý đơn hàng",
       children: [
         {
+          key: "/admin/orders/statistics",
+          label: "Thống kê đơn hàng",
+        },
+        {
           key: "/admin/orders",
           label: "Danh sách đơn hàng",
         },
-        {
-          key: "/admin/orders/pending",
-          label: "Đơn hàng chờ xử lý",
-        },
       ],
+    },
+    {
+      key: "/admin/profile",
+      icon: <ProfileOutlined />,
+      label: "Thông tin cá nhân",
     },
   ];
 

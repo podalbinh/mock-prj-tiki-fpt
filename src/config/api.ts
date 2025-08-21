@@ -1,5 +1,11 @@
+import type { CustomErrorResponse } from "@/constant/interfaces";
 import apiClient from "./apiClient";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
+
+export type CustomResponse<T = unknown> = {
+  code: number;
+  data: T;
+};
 
 // Request class chứa tất cả HTTP methods
 export class Request {
@@ -8,25 +14,14 @@ export class Request {
     config: AxiosRequestConfig
   ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await apiClient(config);
-      return response.data;
+      const response: AxiosResponse<CustomResponse<T>> = await apiClient(
+        config
+      );
+      return response.data.data;
     } catch (error: unknown) {
-      const axiosError = error as {
-        response?: {
-          data?: { message?: string };
-          status?: number;
-        };
-        message?: string;
-      };
+      const axiosError = error as CustomErrorResponse;
 
-      throw {
-        message:
-          axiosError.response?.data?.message ||
-          axiosError.message ||
-          "Có lỗi xảy ra",
-        status: axiosError.response?.status,
-        data: axiosError.response?.data,
-      };
+      throw axiosError;
     }
   }
 
@@ -97,5 +92,4 @@ export class Request {
   }
 }
 
-// Export default để có thể import theo kiểu: import Request from '@/config/api'
 export default Request;

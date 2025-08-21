@@ -4,9 +4,9 @@ import { useLoading } from '@/hooks/useLoading'
 import signupPicture from '@/assets/login-picture.svg'
 import closeModal from '@/assets/close-modal.svg'
 import loginArrow from "@/assets/login-arrow.svg";
-import { notification } from 'antd'
-import 'antd/dist/reset.css'; // hoặc 'antd/dist/antd.css' nếu dùng antd < 5
-import { useUser } from "@/hooks/useUser";
+import { Button, Input, Modal, notification } from 'antd'
+import 'antd/dist/reset.css'
+import {useRegister} from "@/hooks/useRegister.ts";
 
 export function SignupModal() {
     const { isSignupModalOpen, closeSignupModal, openLoginModal } = useModal()
@@ -14,10 +14,10 @@ export function SignupModal() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
+    // local visibility toggles handled by AntD Input.Password, keep defaults hidden
     const [error, setError] = useState('')
-    const { register, error: userError, setError: setUserError } = useUser();
+    const { register, error: userError, setError: setUserError } = useRegister();
 
     React.useEffect(() => {
         if (error) {
@@ -55,6 +55,7 @@ export function SignupModal() {
         }
     
         try {
+            setSubmitting(true)
             showLoading('Đang tạo tài khoản...')
             const success = await register(email, password, confirmPassword)
     
@@ -74,389 +75,122 @@ export function SignupModal() {
             }
         } finally {
             hideLoading()
+            setSubmitting(false)
         }
     }
     
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black bg-opacity-50"
-                style={{ zIndex: 1 }} onClick={closeSignupModal}
-            />
-
-            {/* Close Button - OUTSIDE modal container */}
-            <button
-                onClick={closeSignupModal}
-                style={{
-                    position: 'fixed',
-                    width: '42px',
-                    height: '42px',
-                    left: '50%',
-                    top: 'calc(50% - 240.45px)', 
-                    marginLeft: '379px', 
-                    background: '#FFFFFF',
-                    borderRadius: '50%',
-                    border: 'none',
-                    color: '#787878',
-                    fontSize: '20px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 99999,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                }}
-            >
-                <img src={closeModal} alt="Close" />
-            </button>
-
-            {/* Modal Container */}
-            <div 
-                className="relative flex overflow-hidden"
-                style={{
-                    width: '800px',
-                    height: '442.91px',
-                    background: '#F8F8F8',
-                    borderRadius: '20px',
-                    zIndex: 2
-                }}
-            >
-                {/* Left Side - Form */}
-                <div 
-                    className="relative bg-white"
-                    style={{
-                        width: '500px',
-                        height: '100%',
-                        borderRadius: '20px 0px 0px 20px'
-                    }}
+        <Modal
+            open={isSignupModalOpen}
+            onCancel={closeSignupModal}
+            footer={null}
+            centered
+            width={800}
+            closable={false}
+            maskClosable
+            className="signup-modal"
+            rootClassName="z-[1500] [&_.ant-modal-mask]:!bg-[rgba(0,0,0,0.5)]"
+            classNames={{ content: '!p-0 !bg-transparent !shadow-none !z-[1600]', body: '!p-0' }}
+        >
+            <div className="relative rounded-2xl overflow-visible bg-[#F8F8F8] h-[442.91px]">
+                {/* Custom close button */}
+                <button
+                    onClick={closeSignupModal}
+                    className="absolute -right-6 -top-6 z-50 w-[42px] h-[42px] rounded-full bg-white shadow flex items-center justify-center text-gray-500"
                 >
-                    {/* Back Arrow */}
-                    <button
-                        onClick={() => {
-                            closeSignupModal();
-                            openLoginModal();
-                        }}
-                        className="absolute bg-none border-none cursor-pointer text-gray-500"
-                        style={{
-                            width: '21px',
-                            height: '21px',
-                            left: '45px',
-                            top: '40px',
-                            fontSize: '24px'
-                        }}
-                    >
-                        <img src={loginArrow} alt="Login Arrow" />
-                    </button>
+                    <img src={closeModal} alt="Close" />
+                </button>
 
-                    {/* Heading */}
-                    <h4 
-                        className="absolute font-medium text-gray-900"
-                        style={{
-                            width: '256.59px',
-                            height: '29.5px',
-                            left: '45px',
-                            top: '93.09px',
-                            fontFamily: 'Inter',
-                            fontSize: '24px',
-                            lineHeight: '28px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            color: '#242424'
-                        }}
-                    >
-                        Tạo tài khoản mới
-                    </h4>
-
-                    {/* Subtitle */}
-                    <div 
-                        className="absolute text-gray-600"
-                        style={{
-                            width: '268.43px',
-                            height: '20px',
-                            left: '45px',
-                            top: '131.69px',
-                            fontFamily: 'Inter',
-                            fontWeight: '400',
-                            fontSize: '15px',
-                            lineHeight: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            color: '#242424'
-                        }}
-                    >
-                        Nhập thông tin để tạo tài khoản Tiki
-                    </div>
-
-                    {/* Form */}
-                    <form 
-                        onSubmit={handleRegister}
-                        className="absolute"
-                        style={{
-                            height: '280px',
-                            left: '45px',
-                            right: '45px',
-                            top: '171.69px'
-                        }}
-                    >
-                        {/* Email Input */}
-                        <div 
-                            className="absolute bg-white"
-                            style={{
-                                height: '36.09px',
-                                left: '0px',
-                                right: '0px',
-                                top: '0px'
-                            }}
-                        >
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="acb@email.com"
-                                className="w-full h-full border-none outline-none bg-transparent"
-                                style={{
-                                    fontFamily: 'Inter',
-                                    fontWeight: '400',
-                                    fontSize: '14px',
-                                    lineHeight: '17px',
-                                    color: email ? '#242424' : '#999999'
-                                }}
-                                required
-                            />
-                            {/* Divider */}
-                            <div 
-                                className="absolute bg-gray-300"
-                                style={{
-                                    height: '1px',
-                                    left: '0%',
-                                    right: '0%',
-                                    bottom: '0px'
-                                }}
-                            />
-                        </div>
-
-                        {/* Password Input */}
-                        <div 
-                            className="absolute bg-white"
-                            style={{
-                                height: '36.09px',
-                                left: '0px',
-                                right: '0px',
-                                top: '51.09px'
-                            }}
-                        >
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Mật khẩu"
-                                className="w-full h-full border-none outline-none bg-transparent"
-                                style={{
-                                    fontFamily: 'Inter',
-                                    fontWeight: '400',
-                                    fontSize: '14px',
-                                    lineHeight: '17px',
-                                    color: password ? '#242424' : '#999999'
-                                }}
-                                required
-                            />
-                            {/* Hiện/Ẩn Button */}
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute bg-none border-none cursor-pointer"
-                                style={{
-                                    width: '30.61px',
-                                    height: '17px',
-                                    left: '379.77px',
-                                    top: '9.5px',
-                                    fontFamily: 'Inter',
-                                    fontWeight: '400',
-                                    fontSize: '14px',
-                                    lineHeight: '16px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    color: '#0D5CB6'
-                                }}
-                            >
-                                {showPassword ? 'Ẩn' : 'Hiện'}
-                            </button>
-                            {/* Divider */}
-                            <div 
-                                className="absolute bg-gray-300"
-                                style={{
-                                    height: '1px',
-                                    left: '0%',
-                                    right: '0%',
-                                    bottom: '0px'
-                                }}
-                            />
-                        </div>
-
-                        {/* Confirm Password Input */}
-                        <div 
-                            className="absolute bg-white"
-                            style={{
-                                height: '36.09px',
-                                left: '0px',
-                                right: '0px',
-                                top: '102.18px'
-                            }}
-                        >
-                            <input
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Xác nhận mật khẩu"
-                                className="w-full h-full border-none outline-none bg-transparent"
-                                style={{
-                                    fontFamily: 'Inter',
-                                    fontWeight: '400',
-                                    fontSize: '14px',
-                                    lineHeight: '17px',
-                                    color: confirmPassword ? '#242424' : '#999999'
-                                }}
-                                required
-                            />
-                            {/* Hiện/Ẩn Button */}
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute bg-none border-none cursor-pointer"
-                                style={{
-                                    width: '30.61px',
-                                    height: '17px',
-                                    left: '379.77px',
-                                    top: '9.5px',
-                                    fontFamily: 'Inter',
-                                    fontWeight: '400',
-                                    fontSize: '14px',
-                                    lineHeight: '16px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    color: '#0D5CB6'
-                                }}
-                            >
-                                {showConfirmPassword ? 'Ẩn' : 'Hiện'}
-                            </button>
-                            {/* Divider */}
-                            <div 
-                                className="absolute bg-gray-300"
-                                style={{
-                                    height: '1px',
-                                    left: '0%',
-                                    right: '0%',
-                                    bottom: '0px'
-                                }}
-                            />
-                        </div>
-
-                        {/* Signup Button */}
+                <div className="flex h-full">
+                    {/* Left Side - Form */}
+                    <div className="relative w-[500px] h-full bg-white rounded-l-2xl">
+                        {/* Back Arrow */}
                         <button
-                            type="submit"
-                            className="absolute border-none cursor-pointer text-white flex items-center justify-center"
-                            style={{
-                                height: '49px',
-                                left: '0px',
-                                right: '0px',
-                                top: '160px',
-                                background: '#FF424E',
-                                borderRadius: '4px',
-                                fontFamily: 'Inter',
-                                fontWeight: '400',
-                                fontSize: '20px',
-                                lineHeight: '23px'
-                            }}
+                            onClick={() => { closeSignupModal(); openLoginModal(); }}
+                            className="absolute left-[45px] top-10 text-gray-500"
                         >
-                            Tạo tài khoản
+                            <img src={loginArrow} alt="Login Arrow" />
                         </button>
-                    </form>
 
-                    {/* Footer Links */}
-                    <div 
-                        className="absolute"
-                        style={{
-                            left: '45px',
-                            top: '400px',
-                            fontFamily: 'Inter',
-                            fontWeight: '400',
-                            fontSize: '13px',
-                            lineHeight: '15px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            color: '#787878'
-                        }}
-                    >
-                        <span>Đã có tài khoản? </span>
-                        <span
-                            onClick={openLoginModal}
-                            className="cursor-pointer"
-                            style={{
-                                color: '#0D5CB6',
-                                marginLeft: '4px'
-                            }}
-                        >
-                            Đăng nhập
-                        </span>
+                        <h4 className="absolute left-[45px] top-[93.09px] font-medium text-[24px] leading-[28px] text-[#242424]">
+                            Tạo tài khoản mới
+                        </h4>
+                        <div className="absolute left-[45px] top-[131.69px] text-[15px] leading-5 text-[#242424]">
+                            Nhập thông tin để tạo tài khoản Tiki
+                        </div>
+
+                        {/* Form */}
+                        <form onSubmit={handleRegister} className="absolute left-[45px] right-[45px] top-[171.69px]">
+                            <div className="pb-2 border-b border-gray-300">
+                                <Input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="acb@email.com"
+                                    variant="borderless"
+                                    className="!p-0 text-[14px] leading-[17px] text-[#242424] placeholder:text-[#999999]"
+                                    disabled={submitting}
+                                    required
+                                />
+                            </div>
+
+                            <div className="pt-4 pb-2 border-b border-gray-300 relative">
+                                <Input.Password
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Mật khẩu"
+                                    variant="borderless"
+                                    className="!p-0 text-[14px] leading-[17px] text-[#242424] placeholder:text-[#999999] [&_.ant-input-password-icon]:!text-[#0D5CB6] [&_.ant-input-password-icon:hover]:!text-[#0D5CB6]"
+                                    visibilityToggle
+                                    iconRender={(visible) => (
+                                        <span className="text-[#0D5CB6] text-[14px] leading-4 inline-flex items-center">{visible ? 'Ẩn' : 'Hiện'}</span>
+                                    )}
+                                    disabled={submitting}
+                                />
+                            </div>
+
+                            <div className="pt-4 pb-2 border-b border-gray-300 relative">
+                                <Input.Password
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Xác nhận mật khẩu"
+                                    variant="borderless"
+                                    className="!p-0 text-[14px] leading-[17px] text-[#242424] placeholder:text-[#999999] [&_.ant-input-password-icon]:!text-[#0D5CB6] [&_.ant-input-password-icon:hover]:!text-[#0D5CB6]"
+                                    visibilityToggle
+                                    iconRender={(visible) => (
+                                        <span className="text-[#0D5CB6] text-[14px] leading-4 inline-flex items-center">{visible ? 'Ẩn' : 'Hiện'}</span>
+                                    )}
+                                    disabled={submitting}
+                                />
+                            </div>
+
+                            <Button
+                                htmlType="submit"
+                                className="mt-4 w-full !h-[49px] !bg-[#FF424E] !border-[#FF424E] hover:!bg-[#FF424E] hover:!border-[#FF424E] !text-white text-[20px] leading-[23px]"
+                                loading={submitting}
+                                disabled={submitting}
+                            >
+                                Tạo tài khoản
+                            </Button>
+                        </form>
+
+                        <div className="absolute left-[45px] top-[400px] text-[13px] leading-[15px] text-[#787878]">
+                            <span>Đã có tài khoản? </span>
+                            <button type="button" onClick={openLoginModal} className="text-[#0D5CB6] ml-1">Đăng nhập</button>
+                        </div>
                     </div>
-                </div>
 
-                {/* Right Side - Background */}
-                <div 
-                    className="flex-1 flex flex-col items-center justify-center"
-                    style={{
-                        background: '#DEEBFF',
-                        borderRadius: '0px 20px 20px 0px'
-                    }}
-                >
-                    {/* Picture Container */}
-                    <div 
-                        className="flex items-center justify-center"
-                        style={{
-                            width: '200px',
-                            height: '200px',
-                            borderRadius: '10px',
-                            marginBottom: '30px'
-                        }}
-                    >
-                        <img 
-                            src={signupPicture} 
-                            alt="Signup Robot" 
-                            className="w-40 h-40 object-contain"
-                        />
-                    </div>
-
-                    {/* Heading */}
-                    <h4 
-                        className="font-medium text-center mb-2"
-                        style={{
-                            fontFamily: 'Inter',
-                            fontWeight: '500',
-                            fontSize: '18px',
-                            lineHeight: '24px',
-                            color: '#0A68FF'
-                        }}
-                    >
-                        Chào mừng đến Tiki
-                    </h4>
-
-                    {/* Subtitle */}
-                    <div 
-                        className="text-center"
-                        style={{
-                            fontFamily: 'Inter',
-                            fontWeight: '400',
-                            fontSize: '14px',
-                            lineHeight: '20px',
-                            color: '#0A68FF'
-                        }}
-                    >
-                        Khám phá thế giới mua sắm
+                    {/* Right Side */}
+                    <div className="flex-1 flex flex-col items-center justify-center bg-[#DEEBFF] rounded-r-2xl">
+                        <div className="w-[200px] h-[200px] rounded-[10px] mb-[30px] flex items-center justify-center">
+                            <img src={signupPicture} alt="Signup Robot" className="w-40 h-40 object-contain" />
+                        </div>
+                        <h4 className="text-[#0A68FF] font-medium text-[18px] leading-6 mb-2 text-center">Chào mừng đến Tiki</h4>
+                        <div className="text-[#0A68FF] text-[14px] leading-5 text-center">Khám phá thế giới mua sắm</div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Modal>
     )
 }

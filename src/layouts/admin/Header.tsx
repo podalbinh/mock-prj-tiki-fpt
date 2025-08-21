@@ -1,18 +1,12 @@
-import {
-  Layout,
-  Avatar,
-  Dropdown,
-  Space,
-  Typography,
-  Button,
-} from "antd";
+import { Layout, Avatar, Dropdown, Space, Typography, Button } from "antd";
 import {
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
@@ -23,20 +17,9 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({ collapsed, onToggle }: AdminHeaderProps) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const userMenuItems = [
-    {
-      key: "profile",
-      icon: <UserOutlined />,
-      label: "Thông tin cá nhân",
-    },
-    {
-      key: "settings",
-      icon: <SettingOutlined />,
-      label: "Cài đặt",
-    },
-    {
-      type: "divider" as const,
-    },
     {
       key: "logout",
       icon: <LogoutOutlined />,
@@ -48,13 +31,8 @@ export default function AdminHeader({ collapsed, onToggle }: AdminHeaderProps) {
   const handleMenuClick = ({ key }: { key: string }) => {
     switch (key) {
       case "logout":
-        console.log("Đăng xuất");
-        break;
-      case "profile":
-        console.log("Xem thông tin cá nhân");
-        break;
-      case "settings":
-        console.log("Cài đặt");
+        logout();
+        navigate("/admin/login");
         break;
     }
   };
@@ -80,9 +58,9 @@ export default function AdminHeader({ collapsed, onToggle }: AdminHeaderProps) {
           arrow
         >
           <Space className="cursor-pointer px-2">
-            <Avatar icon={<UserOutlined />} />
+            <Avatar icon={<UserOutlined />} src={user?.avatarUrl} />
             <div className="flex flex-col items-start">
-              <Text strong>Admin User</Text>
+              <Text strong>{user?.fullName}</Text>
               <Text type="secondary" className="text-xs">
                 Quản trị viên
               </Text>

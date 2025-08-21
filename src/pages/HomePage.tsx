@@ -1,38 +1,64 @@
-import CategorySection from "@/components/CategorySection";
-import FeaturedCollections from "@/components/FeaturedCollections";
-import ProductGrid from "@/components/ProductGrid";
-import PromoBanner from "@/components/PromoBanner";
+import { Layout } from "antd";
 import Sidebar from "@/components/Sidebar";
-import { Route, Routes } from "react-router-dom";
+import FeaturedCollections from "@/components/FeaturedCollections";
+import CategorySection from "@/components/CategorySection";
+import ProductGrid from "@/components/common/ProductGrid";
+import TopBestSellerBook from "@/layouts/user/home_page/TopBestSellerBook.tsx";
+import RelatedSearches from "@/layouts/user/home_page/RelatedSearches.tsx";
+import { useRef } from "react";
+import CustomBreadcrumb from "@/components/common/Breadcrumb";
 
-
-
+const { Content } = Layout;
+const breadcrumbItems = [
+  {
+    title: "Trang chủ",
+  },
+  {
+    title: "Nhà sách tiki",
+  },
+];
 
 const HomePage = () => {
+  // Ref để truy cập ProductGrid
+  const productGridRef = useRef<{
+    handleCategorySelect: (categoryId: number | null) => void;
+  }>(null);
+
+  // Handle category selection
+  const handleCategorySelect = (categoryId: number | null) => {
+    if (productGridRef.current) {
+      productGridRef.current.handleCategorySelect(categoryId);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
-        <PromoBanner />
-        
-        <div className="container mx-auto px-6 py-6" style={{ zIndex: 1 }}>
-          <div className="flex gap-6">
-            <Sidebar />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={
-                  <>
-                    <div className="bg-white rounded-lg p-4 mb-6">
-                      <h1 className="text-2xl font-semibold text-black">Nhà Sách Tiki</h1>
-                    </div>
-                    <FeaturedCollections />
-                    <CategorySection />
-                    <ProductGrid />
-                  </>
-                } />
-              </Routes>
-            </main>
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen mb-8">
+      <CustomBreadcrumb items={breadcrumbItems} />
+      {/* Nội dung */}
+      <div className="flex-1">
+        <Layout className="bg-transparent">
+          <Content>
+            <div className="w-full mx-auto py-2 md:py-6">
+              <div className="flex flex-col lg:flex-row gap-3 items-start">
+                <Sidebar />
+                <main className="flex-1 overflow-y-auto w-full">
+                  <div className="bg-white rounded-lg lg:block hidden">
+                    <h1 className="text-2xl font-semibold text-black p-4">
+                      Nhà Sách Tiki
+                    </h1>
+                  </div>
+                  <FeaturedCollections />
+                  <CategorySection onCategorySelect={handleCategorySelect} />
+                  <ProductGrid ref={productGridRef} />
+                </main>
+              </div>
+            </div>
+          </Content>
+        </Layout>
+      </div>
+
+      <RelatedSearches />
+      <TopBestSellerBook />
     </div>
   );
 };
