@@ -143,7 +143,7 @@ const CartPage = () => {
         showNotification(
           "error",
           "Lỗi xác nhận giỏ hàng",
-          apiError.data.data.message
+          apiError.data.message
         );
       }
     }

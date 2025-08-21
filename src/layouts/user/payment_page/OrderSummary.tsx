@@ -16,7 +16,7 @@ export default function OrderSummary() {
   const { createOrders } = useOrder();
   const { getBookById } = useBook();
   const [total, setTotal] = useState<number>(0);
-  const { cartItems, clearCart } = useCart();
+  const { cartItems, removeItemsFromCart } = useCart();
   const { user } = useAuth();
   const { message } = App.useApp();
 
@@ -146,9 +146,28 @@ export default function OrderSummary() {
       return;
     }
     message.success("Lưu đơn hàng thành công");
-    clearCart();
+    
+    // Xóa các sản phẩm đã đặt hàng thành công
+    if (location.state?.selectedCartItems) {
+      removeItemsFromCart(location.state.selectedCartItems);
+    } else if (location.state?.bookId) {
+      // Nếu là mua ngay, xóa sản phẩm tương ứng
+      const bookItem: CartItem = {
+        productId: location.state.bookId,
+        quantity: location.state.quantity || 1,
+        name: '',
+        thumbnailUrl: '',
+        price: 0,
+        originalPrice: 0
+      };
+      removeItemsFromCart([bookItem]);
+    } else if (cartItems.length > 0) {
+      // Nếu không có state, xóa toàn bộ giỏ hàng (fallback)
+      removeItemsFromCart(cartItems);
+    }
+    
     navigate("/confirm");
-  }, [location.state, cartItems, createOrders, clearCart, navigate, message]);
+  }, [location.state, cartItems, createOrders, removeItemsFromCart, navigate, message]);
 
   // Memoize shipping fee and discount calculations
   const shippingFee = useMemo(() => 25000, []);

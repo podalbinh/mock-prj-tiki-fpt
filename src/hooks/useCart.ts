@@ -232,6 +232,45 @@ export const useCart = () => {
     });
   }, []);
 
+
+  // Function để xóa các sản phẩm đã đặt hàng thành công
+  const removeItemsFromCart = useCallback((itemsToRemove: CartItem[]) => {
+    setCartItems(prev => {
+      // Tạo map để dễ dàng tìm kiếm sản phẩm cần xóa
+      const itemsToRemoveMap = new Map(
+        itemsToRemove.map(item => [item.productId, item.quantity])
+      );
+      
+      const newCart = prev.filter(item => {
+        const removeQuantity = itemsToRemoveMap.get(item.productId);
+        if (removeQuantity === undefined) {
+          // Sản phẩm không có trong danh sách cần xóa
+          return true;
+        }
+        
+        if (removeQuantity >= item.quantity) {
+          // Xóa toàn bộ sản phẩm này
+          return false;
+        } else {
+          // Giảm số lượng sản phẩm
+          item.quantity = item.quantity - removeQuantity;
+          return true;
+        }
+      });
+      
+      // Cập nhật localStorage ngay lập tức
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      lastCartUpdate.current = JSON.stringify(newCart);
+      
+      // Dispatch custom event để thông báo cho các component khác
+      window.dispatchEvent(new CustomEvent('cart-updated', { 
+        detail: { cartItems: newCart, action: 'removeItems', removedItems: itemsToRemove } 
+      }));
+      
+      return newCart;
+    });
+  }, []);
+
   const getTotalItems = useCallback(() => {
     // Trả về số lượng sản phẩm khác nhau, không phải tổng quantity
     const total = cartItems.length;
@@ -260,6 +299,7 @@ export const useCart = () => {
     updateQuantity,
     removeFromCart,
     clearCart,
+    removeItemsFromCart,
     getTotalItems,
     getTotalPrice,
     isAuthenticated,

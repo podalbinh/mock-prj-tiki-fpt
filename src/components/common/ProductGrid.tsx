@@ -78,7 +78,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       resetPagination();
 
       // Call fetchProducts directly with the categoryId parameter
-      fetchProductsWithCategory(0, sort, false, categoryId);
+      fetchProductsWithCategory(0, sort, false, categoryId, filters);
     },
   }));
 
@@ -91,7 +91,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
     page: number,
     sortBy: string,
     append: boolean = false,
-    categoryId: number | null = null
+    categoryId: number | null = null,
+    currentFilters: typeof filters // Pass filters as an argument
   ) => {
     try {
       setLoading(true);
@@ -109,8 +110,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       };
 
       // Chỉ thêm minRating khi người dùng chọn filter này (minRating > 0)
-      if (filters.minRating > 0) {
-        params.minRating = filters.minRating;
+      if (currentFilters.minRating > 0) {
+        params.minRating = currentFilters.minRating;
       }
 
       // Thêm categoryId nếu có category được chọn
@@ -127,17 +128,17 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
         let filteredProducts = response.content;
 
         // Apply client-side filters - chỉ áp dụng khi filter được bật (true)
-        if (filters.hasTikiNow) {
+        if (currentFilters.hasTikiNow) {
           filteredProducts = filteredProducts.filter(
             (product) => product.hasTikiNow
           );
         }
-        if (filters.isTopDeal) {
+        if (currentFilters.isTopDeal) {
           filteredProducts = filteredProducts.filter(
             (product) => product.isTopDeal
           );
         }
-        if (filters.isFreeshipXtra) {
+        if (currentFilters.isFreeshipXtra) {
           filteredProducts = filteredProducts.filter(
             (product) => product.isFreeshipXtra
           );
@@ -167,7 +168,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
     sortBy: string,
     append: boolean = false
   ) => {
-    return fetchProductsWithCategory(page, sortBy, append, selectedCategoryId);
+    return fetchProductsWithCategory(page, sortBy, append, selectedCategoryId, filters);
   };
 
   // Reset pagination when filters or sort change
@@ -195,18 +196,21 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
     // Reset pagination và đợi state cập nhật
     resetPagination();
 
-    // Cập nhật filter state
-    setFilters((prev) => ({
-      ...prev,
+    // Tạo filter mới với giá trị mới
+    const newFilters = {
+      ...filters,
       [filterName]: value,
-    }));
+    };
+
+    // Cập nhật filter state
+    setFilters(newFilters);
 
     try {
       // Thêm delay nhỏ để người dùng nhìn thấy loading
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Luôn gọi API với page 0 sau khi thay đổi filter
-      await fetchProducts(0, sort, false);
+      // Gọi API với filter mới trực tiếp
+      await fetchProductsWithCategory(0, sort, false, selectedCategoryId, newFilters);
     } finally {
       // Ẩn loading overlay
       hideLoading();
@@ -230,7 +234,7 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // Luôn gọi API với page 0 sau khi thay đổi sort
-      await fetchProducts(0, value, false);
+      await fetchProductsWithCategory(0, value, false, selectedCategoryId, filters);
     } finally {
       // Ẩn loading overlay
       hideLoading();
