@@ -188,7 +188,7 @@ const UserManagementTable = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTableChange = (
     newPagination: any,
-    filters: any,
+    _filters: any,
     newSorter: any
   ) => {
     setPagination((prev) => ({

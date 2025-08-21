@@ -8,7 +8,7 @@ type Props = {
   onCheckout: () => void;
 };
 
-const CartSummary: React.FC<Props> = ({ items, selectedItems, onCheckout }) => {
+const CartSummary: React.FC<Props> = ({  selectedItems, onCheckout }) => {
   const totalItems = selectedItems.length; // Số lượng sản phẩm khác nhau đã chọn
   const subtotal = selectedItems.reduce(
     (acc, item) => acc + (item.price || 0) * (item.quantity || 1),

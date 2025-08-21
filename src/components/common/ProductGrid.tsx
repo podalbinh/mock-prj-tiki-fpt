@@ -26,7 +26,7 @@ const tabs = [
   { id: "price", label: "Giá" },
 ];
 
-const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
+const ProductGrid = forwardRef<ProductGridRef>((_, ref) => {
   // Loading context
   const { showLoading, hideLoading } = useLoading();
 
@@ -34,8 +34,8 @@ const ProductGrid = forwardRef<ProductGridRef>((props, ref) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+  const [, setCurrentPage] = useState(0);
+  const [, setTotalElements] = useState(0);
 
   // Category filter
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(

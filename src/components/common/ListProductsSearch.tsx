@@ -11,7 +11,7 @@ const ListProductsSearch: React.FC<{ keyword: string }> = ({ keyword }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [, setCurrentPage] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
 
   // Pagination config
