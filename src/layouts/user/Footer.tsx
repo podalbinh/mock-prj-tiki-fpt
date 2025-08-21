@@ -1,24 +1,24 @@
 import { Image } from "antd";
-import logo2 from "../../../public/assets/bo-cong-thuong.svg";
-import logo1 from "../../../public/assets/bo-cong-thuong-2.svg";
-import logo3 from "../../../public/assets/bo-cong-thuong-3.svg";
-import payment0 from "../../../public/assets/payment-0.svg";
-import payment1 from "../../../public/assets/payment-1.svg";
-import payment2 from "../../../public/assets/payment-2.svg";
-import payment3 from "../../../public/assets/payment-3.svg";
-import payment4 from "../../../public/assets/payment-4.svg";
-import payment5 from "../../../public/assets/payment-5.svg";
-import payment6 from "../../../public/assets/payment-6.svg";
-import payment7 from "../../../public/assets/payment-7.svg";
-import payment8 from "../../../public/assets/payment-8.svg";
-import payment9 from "../../../public/assets/payment-9.svg";
-import payment10 from "../../../public/assets/payment-10.svg";
-import appstore from "../../../public/assets/appstore.svg";
-import googleplay from "../../../public/assets/googleplay.svg";
-import zalo from "../../../public/assets/zalo.svg";
-import facebook from "../../../public/assets/facebook.svg";
-import youtube from "../../../public/assets/youtube.svg";
-import tikiQr from "../../../public/assets/tiki-qr.svg";
+import logo2 from "/assets/bo-cong-thuong.svg";
+import logo1 from "/assets/bo-cong-thuong-2.svg";
+import logo3 from "/assets/bo-cong-thuong-3.svg";
+import payment0 from "/assets/payment-0.svg";
+import payment1 from "assets/payment-1.svg";
+import payment2 from "assets/payment-2.svg";
+import payment3 from "/assets/payment-3.svg";
+import payment4 from "/assets/payment-4.svg";
+import payment5 from "/assets/payment-5.svg";
+import payment6 from "/assets/payment-6.svg";
+import payment7 from "/assets/payment-7.svg";
+import payment8 from "/assets/payment-8.svg";
+import payment9 from "/assets/payment-9.svg";
+import payment10 from "/assets/payment-10.svg";
+import appstore from "/assets/appstore.svg";
+import googleplay from "/assets/googleplay.svg";
+import zalo from "/assets/zalo.svg";
+import facebook from "/assets/facebook.svg";
+import youtube from "/assets/youtube.svg";
+import tikiQr from "/assets/tiki-qr.svg";
 
 export default function Footer() {
   return (

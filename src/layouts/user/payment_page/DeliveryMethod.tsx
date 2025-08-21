@@ -89,7 +89,7 @@ export default function DeliveryMethod() {
         if (isFast) return (
             <div className="flex items-center">
                 <img
-                    src="../../../../public/assets/now.svg"
+                    src="..//assets/now.svg"
                     alt="Tiki"
                     className="h-4 mr-2"
                 />
@@ -122,7 +122,7 @@ export default function DeliveryMethod() {
                     <Radio value="fast">
                         <div className="flex items-center">
                             <img
-                                src="../../../../public/assets/now.svg"
+                                src="..//assets/now.svg"
                                 alt="Tiki"
                                 className="h-4 mr-2"
                             />
@@ -141,7 +141,7 @@ export default function DeliveryMethod() {
                 {/*Hiển thị thông tin giao hàng đã chọn*/}
                 <div className="absolute -top-3 left-4 flex items-center bg-white">
                     <img
-                        src="../../../../public/assets/package.svg"
+                        src="..//assets/package.svg"
                         alt="Tiki"
                         className="h-4 mr-2"
                     />
@@ -162,7 +162,7 @@ export default function DeliveryMethod() {
                         </div>
                     </div>
                     <img
-                        src="../../../../public/assets/info.svg"
+                        src="..//assets/info.svg"
                         alt="Tiki"
                         className="h-3 mx-1"
                     />
@@ -186,7 +186,7 @@ export default function DeliveryMethod() {
 
             <div className={"flex items-center"}>
                 <img
-                    src="../../../../public/assets/discount.svg"
+                    src="..//assets/discount.svg"
                     alt="Tiki"
                     className="h-4 mr-2"
                 />

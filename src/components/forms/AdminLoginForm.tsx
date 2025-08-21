@@ -3,7 +3,7 @@ import { Form, Input, Button, Card, Typography, Alert, Image } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import logo from "../../../public/assets/logo.svg";
+import logo from "/assets/logo.svg";
 
 const { Title, Text } = Typography;
 
